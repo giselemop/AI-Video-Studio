@@ -35,6 +35,14 @@
 | UI 验收 | Passed | Chrome 实际打开质量验收页；数据库/ComfyUI/GPU 状态正确；Approved Episode、锁定状态和 Master 导出按钮正确显示 |
 | 文档与日志 | Passed | `install_log.txt`、本报告、`FIX_HISTORY.md`、QA 报告均已生成 |
 
+## Git 与长期维护基线
+
+- 分支：`main`
+- 基线提交：`f5a98b9 chore: establish long-term AI Video Studio baseline`
+- Remote：无（未创建或猜测远程仓库）
+- staged 文件检查：Passed；未包含 `config/local.env`、真实凭据、模型、媒体、备份、日志、发布产物或前端依赖。
+- 后续文档修订提交后，以 `git log -1 --oneline` 作为最新提交证据。
+
 ## 三镜头真实产物
 
 项目：`Acceptance 3Shot 20260809_104019`  
