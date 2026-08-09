@@ -1,0 +1,30 @@
+{
+  "_note": "仅供配置结构参考；本项目实际密码从 config/local.env 读取，不要把真实密码写入此文件。",
+  "Database": {
+    "Host": "127.0.0.1",
+    "Port": 3306,
+    "Name": "ai_video_studio",
+    "User": "root",
+    "Password": "set-in-config-local-env"
+  },
+  "ComfyUI": {
+    "BaseUrl": "http://127.0.0.1:8188",
+    "Root": "C:\\install\\AI\\ComfyUI",
+    "Input": "C:\\install\\AI\\ComfyUI\\input",
+    "Output": "C:\\install\\AI\\ComfyUI\\output"
+  },
+  "Paths": {
+    "Models": "C:\\install\\AI\\Models",
+    "Workflows": "C:\\install\\AI\\Workflows",
+    "Data": "C:\\install\\AI\\Data"
+  },
+  "Queue": {
+    "Concurrency": 1,
+    "MinFreeVramMiB": 1024,
+    "PollMilliseconds": 1500
+  },
+  "Ffmpeg": {
+    "Path": "C:\\install\\FFmpeg\\bin\\ffmpeg.exe",
+    "ProbePath": "C:\\install\\FFmpeg\\bin\\ffprobe.exe"
+  }
+}

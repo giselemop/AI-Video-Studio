@@ -1,0 +1,41 @@
+# .NET build and publish output
+server/bin/
+server/obj/
+server/publish/
+**/bin/
+**/obj/
+
+# Frontend dependencies and build output
+web/node_modules/
+web/dist/
+
+# Runtime state and generated content
+logs/
+**/logs/
+temp/
+**/temp/
+backup/
+Data/
+data/
+models/
+*.pid
+*.sqlite
+
+# Local secrets and machine-specific configuration
+config/local.env
+config/config.local.json
+config/*.local.json
+*.secret
+*.secrets
+*.key
+*.pem
+
+# IDE and operating-system files
+.vs/
+.vscode/
+.idea/
+*.user
+*.suo
+Thumbs.db
+Desktop.ini
+.DS_Store
