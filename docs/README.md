@@ -6,6 +6,7 @@
 | `..\PROJECT_STATE.md` | 当前实际运行时、数据库、模型、任务和证据 |
 | `..\NEXT_STAGE.md` | 带验收标准的后续 P0/P1/P2 任务 |
 | `..\CHANGELOG.md` | 已落地版本变化 |
+| `CONVERSATION_CONTEXT.md` | 此前对话迁移后的项目背景、决策、验收和修复摘要 |
 | `ARCHITECTURE.md` | 实际模块边界与生产链路 |
 | `DATABASE.md` | MySQL 表、迁移、备份和状态恢复 |
 | `COMFYUI_API.md` | ComfyUI HTTP API 与工作流参数 |

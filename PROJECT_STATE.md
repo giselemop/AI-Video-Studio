@@ -7,6 +7,7 @@
 - 项目：`AI Video Studio`
 - 阶段：本地 AI 短剧生产链 + Video QA 发布闸门 + 长期维护基线
 - 阶段状态：`Passed`（已验收核心生产链；长期增强仍按 `NEXT_STAGE.md` 排队）
+- 对话上下文：已迁移到 `docs\CONVERSATION_CONTEXT.md`；敏感凭据未迁移。
 - 最后核验日期：2026-08-09
 - 项目根目录：`C:\install\AI\VideoStudio`
 - 服务地址：`http://127.0.0.1:18080`

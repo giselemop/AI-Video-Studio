@@ -9,6 +9,7 @@ AI Video Studio 是运行在现有本地 ComfyUI 之上的 AI 短剧生产管理
 - 当前硬件基线：RTX 4070 12GB，GPU 任务并发 1；视频源优先 512×320、24 FPS、3-5 秒，最终由 FFmpeg 输出 1080P/30 FPS。
 - 当前模型目录没有 LoRA、IP-Adapter、ControlNet 资产，严格角色一致性仍是下一阶段增强项，不能把它写成现有能力。
 - 当前项目状态、真实测试证据和已知限制见 [PROJECT_STATE.md](PROJECT_STATE.md)。
+- 此前对话迁移后的背景与关键决策见 [docs\CONVERSATION_CONTEXT.md](docs/CONVERSATION_CONTEXT.md)。
 
 ## 目录
 
