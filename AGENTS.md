@@ -5,6 +5,7 @@
 ## 1. 权威来源与项目边界
 
 - 实际源代码、运行中的 API、数据库现状、ComfyUI 返回值和真实测试结果优先于旧文档、聊天记录和计划文字。
+- 长期项目动态档案以根目录的中文项目状态、待办、变更、需求、架构、技术决策、验收标准和开发说明文件为权威入口；PROJECT_STATE.md、NEXT_STAGE.md、CHANGELOG.md 和英文技术文档保留为兼容入口或详细证据。
 - 项目根目录固定为 `C:\install\AI\VideoStudio`。不重新安装或复制已有 ComfyUI、Python、Git、FFmpeg、模型和工作流。
 - AI 根目录为 `C:\install\AI`；模型为 `C:\install\AI\Models`，工作流为 `C:\install\AI\Workflows`，媒体与生产数据为 `C:\install\AI\Data`。
 - 现有 ComfyUI、模型和外部媒体不属于本 Git 仓库内容。仓库只保存源码、数据库结构、脚本、工作流元数据和文档。
@@ -56,6 +57,8 @@
 
 ## 7. Session Recovery Protocol
 
+中文项目档案必须先于历史聊天和旧状态快照阅读；动态状态以项目状态.md、待办事项.md、变更记录.md 为准，实际代码和可验证运行结果可以纠正文档。
+
 每次新会话接管前按以下顺序执行：
 
 1. 阅读 `AGENTS.md`、`PROJECT_STATE.md`、`NEXT_STAGE.md`、`CHANGELOG.md` 和相关验收/修复记录。
@@ -65,6 +68,8 @@
 5. 先复现失败项，记录失败类别和证据路径，再修改最小范围。
 
 ## 8. Session Completion Protocol
+
+每次完成重要任务时，先更新中文权威档案；只有发生对应技术或验收变化时才同步英文兼容文档。
 
 结束一个开发阶段前必须：
 

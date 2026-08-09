@@ -64,6 +64,23 @@ powershell -NoProfile -ExecutionPolicy Bypass -File C:\install\AI\VideoStudio\sc
 
 `test_production_pipeline.ps1 -RunRealGeneration` 才会占用 GPU 生成真实视频；正常回归不重复生成已通过的 Shot。严格验收规则、状态和证据见 [docs\质量验收说明.md](docs/质量验收说明.md)、[docs\ACCEPTANCE_REPORT.md](docs/ACCEPTANCE_REPORT.md) 和 [docs\FIX_HISTORY.md](docs/FIX_HISTORY.md)。
 
+## 中文项目档案
+
+长期开发与跨会话恢复以以下中文档案为入口：
+
+- 当前状态：[项目状态.md](项目状态.md)
+- 当前任务：[待办事项.md](待办事项.md)
+- 历史变更：[变更记录.md](变更记录.md)
+- 项目需求：[docs/项目需求.md](docs/项目需求.md)
+- 系统架构：[docs/系统架构.md](docs/系统架构.md)
+- 技术决策：[docs/技术决策.md](docs/技术决策.md)
+- 验收标准：[docs/验收标准.md](docs/验收标准.md)
+- 开发说明：[docs/开发说明.md](docs/开发说明.md)
+
+根目录原有的 PROJECT_STATE.md、NEXT_STAGE.md、CHANGELOG.md 和 docs 下英文技术文档保留为兼容入口、详细证据或历史记录；动态项目状态、待办和变更分别以中文档案为准。
+
 ## 长期维护
+
+恢复项目时先读取中文项目档案，再阅读 AGENTS.md 和英文兼容文档，并检查 Git 与实际代码。
 
 开始新会话先读 [AGENTS.md](AGENTS.md)、[PROJECT_STATE.md](PROJECT_STATE.md) 和 [NEXT_STAGE.md](NEXT_STAGE.md)。任何失败都必须记录原因、做最小修复、重新测试并回归相关链路；只有 `Passed` 才能继续，三轮相同外部阻塞才允许标记 `Blocked`。
