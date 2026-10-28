@@ -1,0 +1,182 @@
+{
+  "intro": "六张新关键帧、首尾帧动作对照、两秒近景重演与QHD对照已完成技术核验。请观看比较身份、细节和自然度。",
+  "reference": "VisualValidation20261024/inputs/female-reference.png",
+  "keyframes": [
+    {
+      "label": "同角度 · 中性闭口",
+      "path": "Artifacts/project-38/image/task-1309/v0001/v0001_task_1309_task_1309_attempt_1_c645bfd9_00001__b58ada7e1e7c.png",
+      "selectedForPilot": true,
+      "note": "本轮用于小样 · 身份与质感待人工复核"
+    },
+    {
+      "label": "同角度 · 极轻闭口微笑",
+      "path": "Artifacts/project-38/image/task-1310/v0001/v0001_task_1310_task_1310_attempt_1_1d071c43_00001__a8318a08f12e.png",
+      "selectedForPilot": true,
+      "note": "本轮用于小样 · 身份与质感待人工复核"
+    },
+    {
+      "label": "轻微转角 A",
+      "path": "Artifacts/project-38/image/task-1311/v0001/v0001_task_1311_task_1311_attempt_1_a36729ec_00001__e8e117816b16.png",
+      "selectedForPilot": false,
+      "note": "转角超过预期，保留结果供对照，未用于连续动作"
+    },
+    {
+      "label": "轻微转角 B",
+      "path": "Artifacts/project-38/image/task-1312/v0001/v0001_task_1312_task_1312_attempt_1_61c9e787_00001__7ec505ec3261.png",
+      "selectedForPilot": false,
+      "note": "保留候选，未选入本轮视频"
+    },
+    {
+      "label": "近景 · 中性",
+      "path": "Artifacts/project-38/image/task-1313/v0001/v0001_task_1313_task_1313_attempt_1_c4dec5b2_00001__282382577f8c.png",
+      "selectedForPilot": true,
+      "note": "本轮用于小样 · 身份与质感待人工复核"
+    },
+    {
+      "label": "近景 · 微笑",
+      "path": "Artifacts/project-38/image/task-1314/v0001/v0001_task_1314_task_1314_attempt_1_9f261777_00001__28e66c0a5adc.png",
+      "selectedForPilot": false,
+      "note": "保留候选，未选入本轮视频"
+    }
+  ],
+  "groups": [
+    {
+      "key": "h3",
+      "title": "首尾帧动作",
+      "seconds": 5.166666666666667,
+      "frames": 124,
+      "fps": 24,
+      "note": "两版均为本轮新生成，同一首帧、提示词、种子、模型与规格。右侧增加目标尾帧约束；请看收尾表情、身份和中间运动。",
+      "before": {
+        "title": "仅首帧 · 新生成基线",
+        "path": "Artifacts/project-38/video/task-1315/v0001/v0001_task_1315_task_1315_attempt_1_5a489382_00001__1825e5f1bce8.mp4",
+        "spec": "H3原生864×480 · 24FPS · 124帧"
+      },
+      "after": {
+        "title": "首尾双帧 · 本轮实验",
+        "path": "Artifacts/project-38/video/task-1316/v0001/v0001_task_1316_task_1316_attempt_1_ca8defa9_00001__f2b1adba3c6b.mp4",
+        "spec": "原生864×480 · 24FPS · 首尾帧约束"
+      },
+      "moments": [
+        {
+          "label": "0.000 秒",
+          "frame": 0,
+          "compare": "VisualValidation20261024/comparisons/face-h3-000.png"
+        },
+        {
+          "label": "1.250 秒",
+          "frame": 30,
+          "compare": "VisualValidation20261024/comparisons/face-h3-030.png"
+        },
+        {
+          "label": "2.542 秒",
+          "frame": 61,
+          "compare": "VisualValidation20261024/comparisons/face-h3-061.png"
+        },
+        {
+          "label": "3.833 秒",
+          "frame": 92,
+          "compare": "VisualValidation20261024/comparisons/face-h3-092.png"
+        },
+        {
+          "label": "5.125 秒",
+          "frame": 123,
+          "compare": "VisualValidation20261024/comparisons/face-h3-123.png"
+        }
+      ]
+    },
+    {
+      "key": "acting",
+      "title": "近景表演",
+      "seconds": 2,
+      "frames": 48,
+      "fps": 24,
+      "note": "左侧为上一轮自有生成素材；右侧把它的动作驱动到本轮新关键帧。它不是新真人表演。两版保持2秒时长，统一24FPS展示；观察外观与时序，口型准确性仍需人工判断。",
+      "before": {
+        "title": "既有近景 · 对照输入",
+        "path": "Artifacts/project-38/video/task-1319/v0001/v0001_visual_acting_original_2s_24fps_ae683eade2cd.mp4",
+        "spec": "旧task1293取2秒 · 统一720p/24FPS"
+      },
+      "after": {
+        "title": "新关键帧＋本地表演重演",
+        "path": "Artifacts/project-38/video/task-1320/v0001/v0001_visual_acting_new_2s_24fps_5ff1e27bd822.mp4",
+        "spec": "LivePortrait原生1024×576/25FPS · 转24FPS展示"
+      },
+      "moments": [
+        {
+          "label": "0.000 秒",
+          "frame": 0,
+          "compare": "VisualValidation20261024/comparisons/face-acting-000.png"
+        },
+        {
+          "label": "0.500 秒",
+          "frame": 12,
+          "compare": "VisualValidation20261024/comparisons/face-acting-012.png"
+        },
+        {
+          "label": "1.000 秒",
+          "frame": 24,
+          "compare": "VisualValidation20261024/comparisons/face-acting-024.png"
+        },
+        {
+          "label": "1.500 秒",
+          "frame": 36,
+          "compare": "VisualValidation20261024/comparisons/face-acting-036.png"
+        },
+        {
+          "label": "1.958 秒",
+          "frame": 47,
+          "compare": "VisualValidation20261024/comparisons/face-acting-047.png"
+        }
+      ]
+    },
+    {
+      "key": "qhd",
+      "title": "QHD精修",
+      "seconds": 2,
+      "frames": 48,
+      "fps": 24,
+      "note": "同一段本轮表演结果，右侧进行SeedVR2逐帧时序修复与超分。QHD为后期输出，不代表原生2K或恢复真实毛孔。",
+      "before": {
+        "title": "本轮表演 · 精修前",
+        "path": "Artifacts/project-38/video/task-1320/v0001/v0001_visual_acting_new_2s_24fps_5ff1e27bd822.mp4",
+        "spec": "1280×720 · 24FPS · 48帧"
+      },
+      "after": {
+        "title": "本轮表演 · QHD精修",
+        "path": "Artifacts/project-38/video/task-1321/v0001/v0001_seedvr2_restored_df31d9f65e4a.mp4",
+        "spec": "2560×1440 · 24FPS · 48帧 · 强度0.30"
+      },
+      "moments": [
+        {
+          "label": "0.000 秒",
+          "frame": 0,
+          "compare": "VisualValidation20261024/comparisons/face-qhd-000.png"
+        },
+        {
+          "label": "0.500 秒",
+          "frame": 12,
+          "compare": "VisualValidation20261024/comparisons/face-qhd-012.png"
+        },
+        {
+          "label": "1.000 秒",
+          "frame": 24,
+          "compare": "VisualValidation20261024/comparisons/face-qhd-024.png"
+        },
+        {
+          "label": "1.500 秒",
+          "frame": 36,
+          "compare": "VisualValidation20261024/comparisons/face-qhd-036.png"
+        },
+        {
+          "label": "1.958 秒",
+          "frame": 47,
+          "compare": "VisualValidation20261024/comparisons/face-qhd-047.png"
+        }
+      ]
+    }
+  ],
+  "technicalStatus": "Passed",
+  "contentStatus": "NeedReview",
+  "publicationStatus": "Blocked"
+}

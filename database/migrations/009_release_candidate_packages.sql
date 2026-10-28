@@ -1,0 +1,41 @@
+CREATE TABLE IF NOT EXISTS release_candidate_packages (
+    id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    project_id BIGINT UNSIGNED NOT NULL,
+    episode_id BIGINT UNSIGNED NOT NULL,
+    version INT UNSIGNED NOT NULL,
+    status VARCHAR(32) NOT NULL,
+    technical_status VARCHAR(32) NOT NULL,
+    content_status VARCHAR(32) NOT NULL,
+    release_eligibility VARCHAR(32) NOT NULL,
+    source_manifest_json LONGTEXT NOT NULL,
+    source_manifest_sha256 CHAR(64) NOT NULL,
+    license_evidence_json LONGTEXT NULL,
+    ai_disclosure_json LONGTEXT NULL,
+    reviewer VARCHAR(128) NULL,
+    note VARCHAR(1000) NULL,
+    idempotency_key VARCHAR(128) NULL,
+    export_task_id BIGINT UNSIGNED NULL,
+    expired_at DATETIME(3) NULL,
+    expired_reason VARCHAR(1000) NULL,
+    created_at DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    UNIQUE KEY uq_release_candidate_episode_version (episode_id, version),
+    UNIQUE KEY uq_release_candidate_episode_idempotency (episode_id, idempotency_key),
+    KEY ix_release_candidate_status (episode_id, status, version),
+    KEY ix_release_candidate_project_episode (project_id, episode_id, created_at)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE IF NOT EXISTS character_reference_reviews (
+    id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    character_id BIGINT UNSIGNED NOT NULL,
+    reference_id BIGINT UNSIGNED NOT NULL,
+    decision VARCHAR(24) NOT NULL,
+    asset_version INT UNSIGNED NOT NULL,
+    asset_sha256 CHAR(64) NOT NULL,
+    reviewer VARCHAR(128) NOT NULL,
+    note VARCHAR(1000) NULL,
+    created_at DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    KEY ix_character_reference_reviews_reference (reference_id, created_at),
+    KEY ix_character_reference_reviews_character (character_id, created_at),
+    CONSTRAINT fk_character_reference_reviews_character FOREIGN KEY (character_id) REFERENCES characters (id) ON DELETE CASCADE,
+    CONSTRAINT fk_character_reference_reviews_reference FOREIGN KEY (reference_id) REFERENCES character_references (id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;

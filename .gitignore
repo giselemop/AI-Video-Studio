@@ -8,6 +8,8 @@ server/publish/
 # Frontend dependencies and build output
 web/node_modules/
 web/dist/
+web/test-results/
+web/playwright-report/
 
 # Runtime state and generated content
 logs/
@@ -20,6 +22,8 @@ data/
 models/
 *.pid
 *.sqlite
+**/__pycache__/
+*.pyc
 
 # Local secrets and machine-specific configuration
 config/local.env

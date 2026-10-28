@@ -28,13 +28,25 @@ if ((Test-Path $MysqlDump) -and (Test-Path $Config)) {
             $databaseName = if ($values['AI_VIDEO_STUDIO_DB_NAME']) { $values['AI_VIDEO_STUDIO_DB_NAME'] } else { 'ai_video_studio' }
             $databaseExists = $false
             if (Test-Path -LiteralPath $Mysql) {
-                $databaseExists = -not [string]::IsNullOrWhiteSpace((& $Mysql --protocol=TCP -h $hostName -P $port -u $user -N -B -e "SHOW DATABASES LIKE '$databaseName';" 2>$null))
+                $databaseList = @(& $Mysql --protocol=TCP -h $hostName -P $port -u $user -N -B -e 'SHOW DATABASES;' 2>$null)
                 if ($LASTEXITCODE -ne 0) { throw "mysql database precheck exit code: $LASTEXITCODE" }
+                $databaseExists = $databaseList -contains $databaseName
             }
             if ($databaseExists) {
                 $dumpFile = Join-Path $Target 'ai_video_studio.sql'
-                & $MysqlDump --protocol=TCP -h $hostName -P $port -u $user --single-transaction --routines --events $databaseName "--result-file=$dumpFile"
+                # The least-privileged application DB user cannot read tablespaces or events.
+                # Keep the backup usable without requesting broader database privileges.
+                & $MysqlDump --protocol=TCP -h $hostName -P $port -u $user --single-transaction --no-tablespaces --skip-events $databaseName "--result-file=$dumpFile"
                 if ($LASTEXITCODE -ne 0) { throw "mysqldump exit code: $LASTEXITCODE" }
+                if (-not (Test-Path -LiteralPath $dumpFile -PathType Leaf) -or (Get-Item -LiteralPath $dumpFile).Length -lt 128) { throw "mysqldump produced no usable output" }
+                $dumpHash = (Get-FileHash -LiteralPath $dumpFile -Algorithm SHA256).Hash.ToLowerInvariant()
+                Set-Content -LiteralPath (Join-Path $Target 'backup-manifest.txt') -Encoding UTF8 -Value @(
+                    "backup_created_at=$([DateTimeOffset]::Now.ToString('o'))",
+                    "database_name=$databaseName",
+                    "database_dump=ai_video_studio.sql",
+                    "database_dump_sha256=$dumpHash",
+                    "database_dump_bytes=$((Get-Item -LiteralPath $dumpFile).Length)"
+                )
             } else {
                 Write-Host "Database backup skipped: $databaseName does not exist yet; configuration and migration files were preserved." -ForegroundColor Yellow
             }

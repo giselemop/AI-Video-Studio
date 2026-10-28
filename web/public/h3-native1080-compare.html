@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>校园1080p实验对照</title>
+  <style>
+    *{box-sizing:border-box}body{margin:0;background:#10141c;color:#e9eef7;font:16px/1.6 system-ui,"Microsoft YaHei",sans-serif}
+    main{max-width:1480px;margin:28px auto;padding:0 20px}h1{font-size:26px;margin:0 0 4px}p{color:#a7b4c8;margin:0 0 18px}
+    .pair{display:grid;grid-template-columns:1fr 1fr;gap:16px}.card{min-width:0}h2{font-size:18px;margin:0 0 8px}
+    video{display:block;width:100%;aspect-ratio:1376/768;background:#000;border:1px solid #334157;border-radius:10px;cursor:pointer;object-fit:contain}
+    .controls{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:20px 0 12px}button{background:#254b6e;color:#e9eef7;border:1px solid #5681a5;border-radius:7px;padding:8px 18px;font:inherit;cursor:pointer}button:disabled{opacity:.5;cursor:wait}
+    label{color:#bac6d8}input[type=range]{display:block;width:100%;accent-color:#7dd3fc;cursor:pointer;margin:8px 0 16px}
+    #message{min-height:26px;color:#a7b4c8}#message.error{color:#fca5a5}.links{display:flex;gap:24px;margin-top:16px}a{color:#b9e0ff}
+    @media(max-width:900px){.pair{grid-template-columns:1fr}main{margin-top:18px}}
+  </style>
+</head>
+<body>
+<main>
+  <h1>校园1080p实验对照</h1>
+  <p>左侧为原生768p，右侧为原生1920×1088裁切后的1080p，均为24 FPS、约5.17秒。同一首帧和种子；新版也调整了运动提示词和编码，不能把差异全部归因于分辨率。</p>
+  <div class="pair">
+    <section class="card"><h2>原生768p：前移与枝叶运动</h2><video id="before" aria-label="768p校园视频" muted loop playsinline preload="auto"></video></section>
+    <section class="card"><h2>1080p实验：较慢前移与清晰枝叶提示</h2><video id="after" aria-label="1080p校园视频" muted loop playsinline preload="auto"></video></section>
+  </div>
+  <div class="controls"><button id="play" disabled>播放对照</button><button id="restart" disabled>从头播放</button><label><input id="sound" type="checkbox"> 听新版声音</label><span id="time">0.00 / 5.17 秒</span></div>
+  <label for="seek">播放位置</label><input id="seek" type="range" min="0" max="5.17" step="0.041666667" value="0" disabled>
+  <div id="message" role="status">正在加载两段视频…</div>
+  <div class="links"><a id="oldLink" target="_blank" rel="noopener">单独看旧版</a><a id="newLink" target="_blank" rel="noopener">单独看新版</a></div>
+</main>
+<script>
+  const before=document.querySelector('#before'),after=document.querySelector('#after');
+  const play=document.querySelector('#play'),restart=document.querySelector('#restart'),seek=document.querySelector('#seek'),message=document.querySelector('#message');
+  let ready=false,playing=false,autoTried=false,playRequest=0;
+  const params=new URLSearchParams(location.search);
+  const media=key=>{
+    const path=params.get(key)||'';
+    if(!/^Artifacts\/[^?#]+\.mp4$/i.test(path)||path.split('/').includes('..')||path.includes('\\'))throw Error('缺少有效的视频路径，请从本次1080p实验对照链接打开。');
+    return '/api/media?assetPath='+encodeURIComponent(path);
+  };
+  const pause=()=>{playRequest++;before.pause();after.pause();playing=false;play.textContent='播放对照';};
+  const showError=text=>{pause();message.className='error';message.textContent=text;};
+  const start=async()=>{
+    if(!ready)return;
+    const request=++playRequest;
+    after.currentTime=before.currentTime;
+    try{await Promise.all([before.play(),after.play()]);if(request!==playRequest)return;playing=true;play.textContent='暂停';message.className='';message.textContent='正在循环播放。可点击画面暂停；开启“听新版声音”可听原生音轨。';}
+    catch{if(request!==playRequest)return;pause();message.textContent='视频已就绪，点击“播放对照”开始。';}
+  };
+  const loaded=()=>{
+    if(before.readyState<2||after.readyState<2)return;
+    if(!Number.isFinite(before.duration)||Math.abs(before.duration-after.duration)>.04){showError('两段视频时长不一致，无法同步对照。');return;}
+    ready=true;play.disabled=false;restart.disabled=false;seek.disabled=false;seek.max=before.duration;
+    if(!autoTried){autoTried=true;start();}
+  };
+  try{before.src=media('before');after.src=media('after');document.querySelector('#oldLink').href=before.src;document.querySelector('#newLink').href=after.src;}
+  catch(error){showError(error.message);}
+  for(const video of [before,after]){
+    video.addEventListener('loadeddata',loaded);
+    video.addEventListener('error',()=>showError('视频加载失败，请确认本机服务和媒体文件可用。'));
+    video.addEventListener('click',()=>playing?pause():start());
+  }
+  play.addEventListener('click',()=>playing?pause():start());
+  restart.addEventListener('click',()=>{pause();before.currentTime=0;after.currentTime=0;start();});
+  seek.addEventListener('input',()=>{pause();before.currentTime=Number(seek.value);after.currentTime=Number(seek.value);message.textContent='已暂停在选定位置，点击播放继续。';});
+  document.querySelector('#sound').addEventListener('change',event=>{after.muted=!event.target.checked;});
+  function update(){
+    if(ready){seek.value=before.currentTime;document.querySelector('#time').textContent=before.currentTime.toFixed(2)+' / '+before.duration.toFixed(2)+' 秒';
+      if(playing&&Math.abs(before.currentTime-after.currentTime)>.08)after.currentTime=before.currentTime;}
+    requestAnimationFrame(update);
+  }
+  update();
+</script>
+</body>
+</html>

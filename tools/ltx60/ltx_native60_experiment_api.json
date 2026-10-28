@@ -1,0 +1,15 @@
+{
+  "38": { "class_type": "CLIPLoader", "inputs": { "clip_name": "t5xxl_fp8_e4m3fn_scaled.safetensors", "type": "ltxv" } },
+  "44": { "class_type": "CheckpointLoaderSimple", "inputs": { "ckpt_name": "ltxv-2b-0.9.8-distilled-fp8.safetensors" } },
+  "6": { "class_type": "CLIPTextEncode", "inputs": { "text": "A university courtyard with natural moving leaves and a slow stable camera push.", "clip": ["38", 0] } },
+  "7": { "class_type": "CLIPTextEncode", "inputs": { "text": "flicker, jitter, deformed architecture, motion smear, watermark", "clip": ["38", 0] } },
+  "78": { "class_type": "LoadImage", "inputs": { "image": "campus_keyframe.png" } },
+  "77": { "class_type": "LTXVImgToVideo", "inputs": { "positive": ["6", 0], "negative": ["7", 0], "vae": ["44", 2], "image": ["78", 0], "width": 512, "height": 320, "length": 305, "batch_size": 1, "strength": 1.0 } },
+  "69": { "class_type": "LTXVConditioning", "inputs": { "positive": ["77", 0], "negative": ["77", 1], "frame_rate": 60 } },
+  "71": { "class_type": "LTXVScheduler", "inputs": { "steps": 8, "max_shift": 2.05, "base_shift": 0.95, "stretch": true, "terminal": 0.1, "latent": ["77", 2] } },
+  "73": { "class_type": "KSamplerSelect", "inputs": { "sampler_name": "euler" } },
+  "72": { "class_type": "SamplerCustom", "inputs": { "model": ["44", 0], "add_noise": true, "noise_seed": 2026101912, "cfg": 3, "positive": ["69", 0], "negative": ["69", 1], "sampler": ["73", 0], "sigmas": ["71", 0], "latent_image": ["77", 2] } },
+  "8": { "class_type": "VAEDecode", "inputs": { "samples": ["72", 0], "vae": ["44", 2] } },
+  "90": { "class_type": "CreateVideo", "inputs": { "images": ["8", 0], "fps": 60, "bit_depth": 8 } },
+  "41": { "class_type": "SaveVideo", "inputs": { "video": ["90", 0], "filename_prefix": "ltx_native60_experiment/video", "format": "mp4", "codec": "h264", "codec.encoding": "re-encode", "codec.encoding.crf": 16 } }
+}

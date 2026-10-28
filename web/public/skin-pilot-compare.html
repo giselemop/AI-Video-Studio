@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>两秒肤质小样 · 三版同步对比</title>
+<style>
+:root{color-scheme:dark;font-family:system-ui,"Microsoft YaHei",sans-serif;background:#10151c;color:#edf3fa}body{max-width:1600px;margin:auto;padding:28px}h1{font-size:27px;margin:0 0 12px}p{color:#b1bfd0;line-height:1.7}.toolbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:18px 0}button,select,a.button{font:inherit;color:inherit;background:#223247;border:1px solid #4a6080;border-radius:8px;padding:10px 14px;cursor:pointer;text-decoration:none}button:hover,a.button:hover{background:#334d6b}.primary{background:#246dc2}button:disabled{opacity:.5;cursor:wait}.players{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}.players article{min-width:0;background:#192332;border:1px solid #36495f;border-radius:12px;overflow:hidden}h2{font-size:18px;margin:15px 16px 7px}.players p{font-size:13px;margin:0 16px 12px}.frame{aspect-ratio:16/9;overflow:hidden;background:#05090e}video{width:100%;height:100%;display:block;object-fit:contain;transform:scale(var(--zoom,1));transform-origin:62% 59%}#seek{flex:1;min-width:180px;accent-color:#91c1ff}#clock{font-variant-numeric:tabular-nums}#status{min-height:24px;color:#c4dcf6}img{max-width:100%;display:block;border-radius:10px;margin:18px auto}.details{margin-top:28px}.tag{font-size:13px;background:#224337;color:#b7e7d0;border-radius:18px;padding:5px 10px}a{color:#a4cdff}.notice{font-size:14px;max-width:1150px}[hidden]{display:none!important}@media(max-width:900px){body{padding:16px}h1{font-size:23px}}
+.players.face-zoom .frame{aspect-ratio:1;position:relative}.players.face-zoom video{position:absolute;width:285.714286%;height:160.714286%;left:-126.897321%;top:-44.196429%;object-fit:fill;transform:none}@media(max-width:600px){.players{grid-template-columns:1fr}}
+</style>
+<h1>两秒肤质小样 · 原版 / 当前 2K / 局部优化</h1>
+<p id="intro">正在读取本地小样…</p>
+<main id="ready" hidden>
+<div class="toolbar"><button id="play" class="primary">三版同步播放</button><button id="pause">暂停</button><button id="restart">从头播放</button><button id="previous">前一帧</button><button id="next">后一帧</button>
+<label>速度 <select id="speed"><option value="1">正常</option><option value="0.5">半速</option></select></label>
+<label>声音 <select id="sound"><option value="optimized">优化版原声</option><option value="original">原版原声</option><option value="qhd">当前 2K 原声</option><option value="mute">静音</option></select></label>
+<label>查看 <select id="zoom"><option value="1">完整画面</option><option value="face">脸部放大</option></select></label></div>
+<div class="players">
+<article><h2>原版 · 720p</h2><p>原三镜头成片的同一段对白</p><div class="frame"><video id="original" preload="auto" playsinline muted></video></div></article>
+<article><h2>当前 2K · 2560×1440</h2><p>上一轮 SeedVR2 修复与超分</p><div class="frame"><video id="qhd" preload="auto" playsinline muted></video></div></article>
+<article><h2>局部优化 · 2560×1440</h2><p>皮肤区域重建 + 纹理跨帧稳定</p><div class="frame"><video id="optimized" preload="auto" playsinline></video></div></article>
+</div>
+<div class="toolbar"><input id="seek" type="range" min="0" max="47" step="1" value="0" aria-label="三版共同播放帧"><output id="clock">0.000 / 2.000 秒</output><span class="tag">同人物 · 同台词 · 原口型</span></div>
+<div id="status" role="status"></div>
+<p class="notice">台词：女方“哟，约会回来了？” · 取自原片 0.208–2.208 秒，共 48 帧 / 24 FPS。三版使用同一段原声。局部优化只处理皮肤纹理，眼睛、嘴唇、牙齿和脸型边界保留原画面；面部真实感仍需观看判断。</p>
+<div class="toolbar"><a class="button" id="openOriginal">打开原版小样</a><a class="button" id="openQhd">打开当前 2K 小样</a><a class="button" id="openOptimized">打开优化小样</a><a href="/dialogue-2k-compare.html">完整 10 秒原版 / 2K 对比</a></div>
+<div class="details"><h2>相同时间、相同脸部范围</h2><p>左：原版 · 中：当前 2K · 右：局部优化。原版按相同视野放大，便于比较。建议先看正常速度，再检查局部。</p>
+<label>对照时刻 <select id="sample"><option value="0">0.000 秒</option><option value="6">0.250 秒</option><option value="12">0.500 秒</option><option value="18">0.750 秒</option><option value="24" selected>1.000 秒</option><option value="30">1.250 秒</option><option value="36">1.500 秒</option><option value="42">1.750 秒</option><option value="47">1.958 秒</option></select></label><img id="faces" alt="原版、当前2K、优化版同帧脸部对照"></div>
+</main>
+<script>
+const $=s=>document.querySelector(s),ids=['original','qhd','optimized'],videos=ids.map(id=>$('#'+id)),a=videos[0];
+let data,playing=false,loaded=false,lastSync=0;
+function asset(path,prefix){if(typeof path!=='string'||!path.startsWith(prefix)||path.includes('..')||path.includes('\\'))throw Error('无效的本地媒体路径');return '/api/media?assetPath='+encodeURIComponent(path)}
+const url=path=>asset(path,'Artifacts/'),image=path=>asset(path,'SkinPilot20261024/');
+function sound(){videos.forEach((v,i)=>{v.muted=ids[i]!==$('#sound').value;v.volume=1})}
+function status(extra=''){loaded=videos.every(v=>v.readyState>=2);$('#play').disabled=!loaded;$('#restart').disabled=!loaded;$('#status').textContent=extra||(loaded?'三版已就绪 · 音量 100% · 只播放所选一路声音':'正在读取三版本地视频…')}
+function pause(){playing=false;videos.forEach(v=>v.pause());status()}
+function seek(frame){pause();const t=Math.max(0,Math.min(47,frame))/24;videos.forEach(v=>v.currentTime=t);$('#seek').value=Math.round(t*24);$('#clock').textContent=t.toFixed(3)+' / 2.000 秒'}
+async function play(restart=false){if(!loaded)return;if(restart||a.ended)videos.forEach(v=>v.currentTime=0);else videos.slice(1).forEach(v=>v.currentTime=a.currentTime);sound();try{await Promise.all(videos.map(v=>v.play()));playing=true;status('三版同步播放中')}catch(error){pause();status('播放未启动，请再次点击播放')}}
+$('#play').onclick=()=>play();$('#restart').onclick=()=>play(true);$('#pause').onclick=pause;
+$('#previous').onclick=()=>seek(Math.round(a.currentTime*24)-1);$('#next').onclick=()=>seek(Math.round(a.currentTime*24)+1);$('#seek').oninput=e=>seek(Number(e.target.value));
+$('#speed').onchange=()=>videos.forEach(v=>v.playbackRate=Number($('#speed').value));$('#sound').onchange=()=>{sound();status()};$('#zoom').onchange=()=>document.querySelector('.players').classList.toggle('face-zoom',$('#zoom').value==='face');
+$('#sample').onchange=()=>{$('#faces').src=image(data.samplesPrefix+$('#sample').value.padStart(3,'0')+'.png');seek(Number($('#sample').value))};
+videos.forEach(v=>{v.onloadeddata=()=>status();v.oncanplay=()=>{if(!playing)status()};v.onseeked=()=>{if(!playing)status()};v.onerror=()=>{loaded=false;pause();status('视频读取失败，可刷新页面或打开单独小样')};v.onended=()=>{if(videos.every(v=>v.ended)){playing=false;status('三版完整 2 秒播放结束')}}});
+a.ontimeupdate=()=>{$('#seek').value=Math.min(47,Math.round(a.currentTime*24));$('#clock').textContent=a.currentTime.toFixed(3)+' / 2.000 秒';if(playing&&performance.now()-lastSync>250){videos.slice(1).forEach(v=>{if(Math.abs(v.currentTime-a.currentTime)>.09)v.currentTime=a.currentTime});lastSync=performance.now()}};
+fetch('/skin-pilot-compare.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('本地数据读取失败');return r.json()}).then(value=>{data=value;if(data.technicalStatus!=='Passed')throw Error('技术验收尚未完成');ids.forEach((id,i)=>videos[i].src=url(data.outputs[id]));$('#openOriginal').href=videos[0].src;$('#openQhd').href=videos[1].src;$('#openOptimized').href=videos[2].src;$('#faces').src=image(data.samplesPrefix+'024.png');$('#intro').textContent='纯本地完成 · 同一段两秒对白 · 支持同步播放、逐帧、半速与脸部放大。';$('#ready').hidden=false;sound();status()}).catch(error=>$('#intro').textContent='暂时无法展示：'+error.message);
+</script></html>

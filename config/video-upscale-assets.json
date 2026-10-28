@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "provider": "RealESRGAN-x2plus-local",
+  "workflowFile": "realesrgan_x2_video_api.json",
+  "workflowVersion": "realesrgan-x2-video-v1",
+  "model": {
+    "file": "RealESRGAN_x2plus.pth",
+    "target": "upscale_models/RealESRGAN_x2plus.pth",
+    "sourceUrl": "https://github.com/xinntao/Real-ESRGAN/releases/download/v0.2.1/RealESRGAN_x2plus.pth",
+    "size": 67061725,
+    "sha256": "49fafd45f8fd7aa8d31ab2a22d14d91b536c34494a5cfe31eb5d89c2fa266abb",
+    "license": "BSD-3-Clause; verify output rights separately",
+    "licenseUrl": "https://github.com/xinntao/Real-ESRGAN/blob/master/LICENSE"
+  },
+  "sourceMedia": { "width": 512, "height": 320, "fps": 24, "frames": 121 },
+  "outputMedia": { "width": 1024, "height": 640, "fps": 24, "frames": 121 },
+  "productionEligible": false
+}

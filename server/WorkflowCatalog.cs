@@ -7,12 +7,14 @@ public sealed class WorkflowCatalog
 {
     private readonly StudioSettings _settings;
     private readonly StudioRepository _repository;
+    private readonly WorkflowContractService _contracts;
     private readonly ILogger<WorkflowCatalog> _logger;
 
-    public WorkflowCatalog(StudioSettings settings, StudioRepository repository, ILogger<WorkflowCatalog> logger)
+    public WorkflowCatalog(StudioSettings settings, StudioRepository repository, WorkflowContractService contracts, ILogger<WorkflowCatalog> logger)
     {
         _settings = settings;
         _repository = repository;
+        _contracts = contracts;
         _logger = logger;
     }
 
@@ -26,7 +28,7 @@ public sealed class WorkflowCatalog
                 try
                 {
                     var name = Path.GetFileNameWithoutExtension(file);
-                    var type = InferType(name);
+                    var type = _contracts.Find(file)?.WorkflowType ?? InferType(name);
                     var model = ExtractModel(file);
                     await _repository.UpsertWorkflowAsync(name, type, file, model, MappingFor(type), ct);
                     count++;
@@ -41,13 +43,23 @@ public sealed class WorkflowCatalog
                 try { await _repository.UpsertModelAsync(Path.GetFileName(file), InferModelType(file), file, new FileInfo(file).Length, ct); } catch (Exception ex) { _logger.LogDebug(ex, "扫描模型失败"); }
             }
         }
+        var loraRoot = Path.Combine(_settings.ModelsPath, "loras");
+        if (Directory.Exists(loraRoot))
+        {
+            foreach (var file in Directory.EnumerateFiles(loraRoot, "*.*", SearchOption.AllDirectories).Where(IsModelFile))
+            {
+                try { await _repository.UpsertLoraAsync(Path.GetFileName(file), file, ct); }
+                catch (Exception ex) { _logger.LogDebug(ex, "LoRA catalog scan failed"); }
+            }
+        }
         return count;
     }
 
     private static string InferType(string name)
     {
         var n = name.ToLowerInvariant();
-        if (n.Contains("i2v") || n.Contains("image to video") || n.Contains("video")) return "ImageToVideo";
+        if (n.Contains("i2v") || n.Contains("image to video") || n.Contains("video") || n.Contains("character_lock") || n.Contains("face_stable")) return "ImageToVideo";
+        if (n.Contains("controlnet")) return "Image";
         if (n.Contains("upscale") || n.Contains("enhance")) return "Enhancement";
         if (n.Contains("pose") || n.Contains("motion")) return "Motion";
         if (n.Contains("inpaint") || n.Contains("edit")) return "ImageEdit";
@@ -60,7 +72,7 @@ public sealed class WorkflowCatalog
         {
             var root = JsonNode.Parse(File.ReadAllText(file));
             foreach (var node in Enumerate(root))
-                if (node is JsonValue value && value.TryGetValue<string>(out var text) && (text.EndsWith(".safetensors", StringComparison.OrdinalIgnoreCase) || text.EndsWith(".gguf", StringComparison.OrdinalIgnoreCase) || text.EndsWith(".ckpt", StringComparison.OrdinalIgnoreCase))) return text;
+                if (node is JsonValue value && value.TryGetValue<string>(out var text) && (text.EndsWith(".safetensors", StringComparison.OrdinalIgnoreCase) || text.EndsWith(".gguf", StringComparison.OrdinalIgnoreCase) || text.EndsWith(".ckpt", StringComparison.OrdinalIgnoreCase) || text.EndsWith(".pth", StringComparison.OrdinalIgnoreCase) || text.EndsWith(".bin", StringComparison.OrdinalIgnoreCase))) return text;
         }
         catch { }
         return null;
@@ -82,5 +94,5 @@ public sealed class WorkflowCatalog
     };
 
     private static bool IsModelFile(string path) => new[] { ".safetensors", ".ckpt", ".pt", ".pth", ".bin", ".gguf", ".onnx" }.Contains(Path.GetExtension(path), StringComparer.OrdinalIgnoreCase);
-    private static string InferModelType(string path) => new DirectoryInfo(Path.GetDirectoryName(path)!).Name.ToLowerInvariant() switch { "checkpoints" => "checkpoint", "diffusion_models" => "diffusion", "vae" => "vae", "loras" => "lora", "controlnet" => "controlnet", "video_models" => "video", _ => "model" };
+    private static string InferModelType(string path) => new DirectoryInfo(Path.GetDirectoryName(path)!).Name.ToLowerInvariant() switch { "checkpoints" => "checkpoint", "diffusion_models" => "diffusion", "vae" => "vae", "text_encoders" => "text_encoder", "loras" => "lora", "ipadapter" => "ipadapter", "controlnet" => "controlnet", "video_models" => "video", _ => "model" };
 }

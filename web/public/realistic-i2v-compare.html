@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>写实首帧 · 本地图生视频对照</title>
+<style>*{box-sizing:border-box}body{margin:0;background:#0c1420;color:#edf3fc;font:16px/1.6 system-ui,"Microsoft YaHei",sans-serif}main{max-width:1400px;padding:24px;margin:auto}h1{font-size:28px;margin:0 0 8px}h2{font-size:20px;margin:12px 0}p{color:#b8c8db}.panel{background:#152235;border:1px solid #334761;border-radius:12px;padding:18px;margin:18px 0}.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}.frame{aspect-ratio:16/9;overflow:hidden;background:#000;border-radius:8px}video{width:100%;height:100%;object-fit:contain;display:block}.zoom video{transform:scale(2);transform-origin:50% 55%}#final{width:100%;aspect-ratio:16/9;max-height:660px;background:#000;border-radius:10px}button,select{font:inherit;color:#eff5fd;background:#244d70;border:1px solid #6a98c1;padding:8px 18px;border-radius:8px;cursor:pointer}button:disabled{opacity:.45;cursor:wait}.controls{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin:16px 0}input[type=range]{flex:1;min-width:200px;accent-color:#91c6f3}img{display:block;width:100%;max-width:900px;margin:12px auto;border-radius:8px}a{color:#9fcaff}.error{color:#ffbcbc}#time{font-variant-numeric:tabular-nums;min-width:120px}small{color:#9db1c9}.pending{min-height:36px}@media(max-width:800px){.grid{grid-template-columns:1fr}main{padding:14px}}</style>
+</head><body><main>
+<h1>写实首帧 · 本地图生视频对照</h1>
+<p>同一张首帧、同一个动作、同一个种子，对比20步与30步的脸部、手与笔记本稳定性。</p>
+<p id="status" class="pending" role="status">正在读取本地任务…</p>
+<section id="final-section" class="panel" hidden><h2>选片后的10秒成片</h2><video id="final" controls playsinline preload="metadata" aria-label="写实优化10秒成片"></video><div class="controls"><button id="play-final">播放完整成片</button><a id="final-link" target="_blank" rel="noopener">单独播放完整视频</a></div><p id="selection"></p></section>
+<section class="panel"><div class="grid">
+<article><h2>D · 20步</h2><div class="frame"><video id="v20" controls playsinline preload="auto" muted aria-label="20步源视频"></video></div><p id="s20">等待生成</p></article>
+<article><h2>E · 30步</h2><div class="frame"><video id="v30" controls playsinline preload="auto" muted aria-label="30步源视频"></video></div><p id="s30">等待生成</p></article>
+</div><div class="controls"><button id="play" disabled>同步播放</button><button id="reset" disabled>回到开头</button><input id="seek" type="range" min="0" max="123" step="1" value="0" disabled aria-label="源视频对照帧"><span id="time">0.00 / 5.17秒</span></div>
+<div class="controls"><button id="zoom" aria-pressed="false">局部放大</button><label>播放速度 <select id="speed"><option value="1">正常</option><option value="0.5">半速观察</option></select></label></div><small>两路源视频原生1080p、24FPS，约5.17秒；此处静音对照动作。完整成片接入Qwen中文旁白。</small></section>
+<details class="panel"><summary>查看选定的写实首帧</summary><img id="reference" alt="选定的SDXL写实首帧" hidden></details>
+<section id="candidates-section" class="panel" hidden><h2>首帧生成记录</h2><p>以下保留实际生成结果和构图检查。只有合格首帧才会送入图生视频。</p><div id="candidates" class="grid"></div></section>
+<p>重点观察手与书是否接触、书的形状和数量是否稳定、脸部与背包是否变化。画面效果和听感仍待你审核。</p>
+</main><script>
+const $=s=>document.querySelector(s),videos=[$('#v20'),$('#v30')],status=$('#status'),play=$('#play'),seek=$('#seek'),reset=$('#reset'),final=$('#final');
+let playing=false,ready=false,failed=false,polling=false;
+function media(path,ext){if(typeof path!=='string'||!path.startsWith('Artifacts/')||!path.toLowerCase().endsWith(ext)||path.split('/').includes('..')||/[\\:%?#]/.test(path))throw Error('视频或图片路径无效');return '/api/media?assetPath='+encodeURIComponent(path)}
+function pause(){playing=false;videos.forEach(v=>v.pause());play.textContent='同步播放'}
+function label(t){$('#time').textContent=`${Math.max(0,t).toFixed(2)} / 5.17秒`}
+function position(t){videos.forEach(v=>{v.currentTime=t});seek.value=Math.min(123,Math.round(t*24));label(t)}
+function updateReady(){ready=videos.every(v=>v.readyState>0);if(ready&&videos.some(v=>v.videoWidth!==1920||v.videoHeight!==1080||Math.abs(v.duration-124/24)>.06)){error('源视频规格不一致');return}play.disabled=reset.disabled=seek.disabled=!ready}
+function error(message){failed=true;pause();status.className='error';status.textContent=message;videos.forEach(v=>v.removeAttribute('src'));final.removeAttribute('src');$('#reference').removeAttribute('src');play.disabled=reset.disabled=seek.disabled=true}
+async function task(id){if(!id)return '等待生成';const r=await fetch('/api/tasks/'+id);if(!r.ok)return '任务状态暂不可读';const data=await r.json();const names={Pending:'排队中',Running:'生成中',Succeeded:'已完成',Failed:'生成失败',Cancelled:'已取消'};return `任务 ${id} · ${names[data.task.status]||data.task.status}`}
+async function load(){if(polling||failed)return;polling=true;try{const r=await fetch('/api/minimax/local/realistic-preview',{cache:'no-store'});if(!r.ok)throw Error('本地对照尚未就绪');const data=await r.json();
+ const sources=[data.video20,data.video30];const urls=sources.map(p=>p?media(p,'.mp4'):null);const ref=data.reference?media(data.reference,'.png'):null;const full=data.finalVideo?media(data.finalVideo,'.mp4'):null;
+ const candidates=(Array.isArray(data.referenceCandidates)?data.referenceCandidates:[]).slice(0,5).map(c=>({...c,url:media(c.path,'.png')}));
+ const signature=JSON.stringify(candidates);if($('#candidates').dataset.signature!==signature){const cards=candidates.map(c=>{const card=document.createElement('article'),title=document.createElement('h3'),picture=document.createElement('img'),review=document.createElement('p');title.textContent=`首帧${c.candidate} · 任务${c.taskId}`;picture.src=c.url;picture.alt=`首帧候选${c.candidate}`;picture.loading='eager';review.textContent=c.review||'等待构图检查';card.append(title,picture,review);return card});$('#candidates').replaceChildren(...cards);$('#candidates').dataset.signature=signature;$('#candidates-section').hidden=candidates.length===0}
+ videos.forEach((v,i)=>{if(urls[i]&&v.dataset.path!==sources[i]){v.dataset.path=sources[i];v.src=urls[i];v.load()}});
+ if(ref){$('#reference').src=ref;$('#reference').hidden=false}if(full&&final.dataset.path!==data.finalVideo){final.dataset.path=data.finalVideo;final.src=full;$('#final-link').href=full;$('#final-section').hidden=false;$('#selection').textContent=`采用${data.selectedSteps||''}步路线，完整中文旁白，1920×1080 · 24FPS · 10秒。`}
+ const states=await Promise.all([task(data.task20),task(data.task30)]);$('#s20').textContent=states[0];$('#s30').textContent=states[1];
+ status.className=['Blocked','Failed'].includes(data.stage)?'error':'pending';
+ status.textContent=data.stage==='Blocked'?'当前生成受阻，尚未完成新成片；请查看本地任务与验收记录。':data.stage==='Failed'?'当前生成失败，已保留实际任务记录。':data.stage==='ReadyForUserPreview'?'本地生成与播放检查完成，等待审片。':full?'成片已生成，正在核对声音与播放。':data.video20&&data.video30?'两段源视频已完成，正在选片与制作成片。':'本地任务进行中，页面会自动更新。';updateReady();
+ }catch(e){if(e.message.includes('路径无效'))error(e.message);else status.textContent='本地状态暂不可读，稍后自动重试。'}finally{polling=false}}
+videos.forEach(v=>{v.addEventListener('loadedmetadata',updateReady);v.addEventListener('error',()=>error('源视频暂时无法播放，请检查本地服务。'))});
+videos[0].onended=()=>{pause();label(124/24);seek.value=123};
+play.onclick=async()=>{if(!ready)return;if(playing){pause();return}final.pause();if(videos[0].ended||videos[0].currentTime>5.12)position(0);try{videos.forEach(v=>{v.playbackRate=Number($('#speed').value)});await Promise.all(videos.map(v=>v.play()));playing=true;play.textContent='暂停对照'}catch{pause();status.textContent='请再次点击同步播放。'}};
+reset.onclick=()=>{pause();position(0)};seek.oninput=()=>{pause();position(Number(seek.value)/24)};final.onplay=pause;
+$('#play-final').onclick=()=>{pause();final.play().catch(()=>{status.textContent='请使用视频播放控件重试。'})};
+$('#speed').onchange=()=>videos.forEach(v=>{v.playbackRate=Number($('#speed').value)});$('#zoom').onclick=()=>{const active=$('#zoom').getAttribute('aria-pressed')!=='true';$('#zoom').setAttribute('aria-pressed',String(active));document.querySelectorAll('.frame').forEach(f=>f.classList.toggle('zoom',active))};
+function tick(){if(playing){const t=videos[0].currentTime;if(!videos[1].seeking&&Math.abs(videos[1].currentTime-t)>.09)videos[1].currentTime=t;seek.value=Math.min(123,Math.round(t*24));label(t)}requestAnimationFrame(tick)}requestAnimationFrame(tick);
+load();setInterval(load,15000);
+</script></body></html>

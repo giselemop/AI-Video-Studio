@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>阅读室场景连续性 · 关键帧待审</title>
+<style>
+:root{color-scheme:dark;font-family:system-ui,"Microsoft YaHei",sans-serif;background:#0d1420;color:#edf3fa}*{box-sizing:border-box}body{margin:0}main{max-width:1440px;margin:auto;padding:30px 24px 60px}nav{display:flex;gap:20px;flex-wrap:wrap;align-items:center}a{color:#a3ded8;text-decoration:none}h1{font-size:32px;margin:30px 0 12px}h2{font-size:22px;margin-top:0}h3{font-size:16px}p{line-height:1.8;color:#bfcbdb}.banner{border:1px solid #927944;background:#332c1f;border-radius:12px;padding:18px 22px;margin:24px 0;color:#f6dfae}.banner p{color:inherit;margin-bottom:0}.grid{display:grid;grid-template-columns:1fr 1fr;gap:22px}.card,.scene{padding:22px;border:1px solid #2a3a50;border-radius:14px;background:#142032;min-width:0;margin-bottom:22px}.grid .card{margin:0}.scene-picture{position:relative;max-width:1100px;margin:auto}img{display:block;width:100%;aspect-ratio:16/9;object-fit:contain;background:#080e17;cursor:zoom-in}.region{position:absolute;border:2px solid #79dad2;pointer-events:none}.region:last-child{border-color:#e2b765}.region span{font-size:12px;background:#112132dc;padding:3px;color:#fff}.badge{display:inline-block;padding:5px 12px;border-radius:16px;font-size:13px;background:#30425b}.Passed{background:#194439;color:#bcf4dc}.Failed{background:#542c34;color:#ffd5d9}.reason{white-space:pre-wrap}.meta{overflow-wrap:anywhere;font-size:13px;color:#9db1c9}details{border-top:1px solid #33455d;margin-top:16px;padding-top:14px}summary{cursor:pointer}pre{white-space:pre-wrap;overflow-wrap:anywhere;max-height:400px;overflow:auto;font-size:12px}.pending{border:1px dashed #586780;padding:18px;color:#c7d3e6;border-radius:8px}.error{color:#ffb2be}button{background:#233d50;border:1px solid #557084;color:#e4eef8;padding:9px 14px;border-radius:7px;cursor:pointer}dialog{width:min(96vw,1700px);max-height:96vh;background:#0b1320;color:#fff;border:1px solid #4a6077;border-radius:12px}dialog::backdrop{background:#000c}dialog img{max-height:84vh;aspect-ratio:auto;margin-top:10px}footer{font-size:13px;color:#8c9fb7;line-height:1.8;margin-top:28px}video{width:100%}@media(max-width:860px){.grid{grid-template-columns:1fr}main{padding:20px 14px}h1{font-size:26px}}
+</style></head><body><main>
+<nav><a href="/#character-story">剧情选角与场景版本</a><a href="/#character-library">人物参考库</a><a href="/character-reference-repair.html">人物修复候选（待审）</a><a href="/character-story-preview.html">上一轮四片预览</a><button id="refresh">刷新实际状态</button></nav>
+<h1>同一阅读室 · 四张剧情关键帧</h1><p>固定林安、周言的造型版本与左右站位，先检查静态画面的剧情方向、手部和背景，再决定是否进入H3。</p>
+<div class="banner"><strong>保持待审 · 新视频尚未生成 · 发布 Blocked</strong><p>本轮四张图均有真实任务与文件，但三张试片检查 Failed；一张 PreviewInspection Passed 仍不等于人工内容通过。用户已要求保持待审，暂停后续补图与视频。</p><p id="sourceStatus">正在核对人物版本当前审核状态……</p></div>
+<section class="scene"><h2>冻结的场景构图基准</h2><p id="sceneMeta" class="meta"></p><div id="scenePicture" class="scene-picture"></div><p>原图已经包含同一组人物。方框外使用原场景像素；方框内由Klein生成并羽化合成。像素核验只说明受保护背景的保持情况，不能证明人物身份、方向或动作正确。</p><p>更换演员、造型版本、站位或机位时须明确制作新基准；不会自动采用人物库最新版本。隔离旧头部姿态的修复路线已登记，尚无真实生成结果。</p></section>
+<div id="grid" class="grid"></div><section class="card" style="margin-top:22px"><h2>后续视频与合成</h2><div id="videoState" class="pending">Blocked：当前关键帧及人物来源审核未满足要求，未提交本轮H3视频或合成任务。上一轮视频入口保留，不能当作本轮结果。</div></section>
+<footer>本轮为项目51 / 集36。人物参考库保存设定、图片及不可变版本，不代表已训练专属模型或三维人物。H3采用已检查关键帧的FL2VA首帧路线；Ref2VA未启用。技术检查、试片内容检查、人工审核与发布资格分别记录。</footer>
+</main><dialog id="zoom"><button id="closeZoom">关闭原图</button><img alt="场景与剧情关键帧原图放大"></dialog>
+<script>
+const data=__PAYLOAD__;
+const media=p=>'/api/media?assetPath='+encodeURIComponent(p);
+const el=(tag,text,cls)=>{const n=document.createElement(tag);if(text!==undefined)n.textContent=text;if(cls)n.className=cls;return n};
+const get=async path=>{const r=await fetch(path);if(!r.ok)throw Error('读取失败 '+r.status+' '+path);return r.json()};
+function image(path,alt){const n=el('img');n.src=media(path);n.alt=alt;n.onclick=()=>{document.querySelector('#zoom img').src=n.src;document.querySelector('#zoom').showModal()};return n}
+function details(title,value){const d=el('details');d.append(el('summary',title),el('pre',JSON.stringify(value,null,2)));return d}
+async function load(){
+  const grid=document.querySelector('#grid');grid.replaceChildren();
+  try{const reviews=await get('/api/character-story/library-reviews');document.querySelector('#sourceStatus').textContent=data.actors.map(a=>{const r=reviews.find(r=>r.versionId===a.versionId);return '人物 #'+a.characterId+' / 版本 #'+a.versionId+'：'+(r?.contentStatus||'状态未知')+(r?'（拒绝 '+r.rejected+'，失效 '+r.unavailable+'，批准 '+r.approved+'/'+r.total+'）':'')}).join('；')+'。审核状态可更新，冻结的文件与版本不会改写。'}catch(e){document.querySelector('#sourceStatus').textContent=e.message}
+  const box=document.querySelector('#scenePicture');box.replaceChildren(image(data.source.path,'原始阅读室场景构图基准'));for(const r of data.regions){const n=el('div',undefined,'region');Object.assign(n.style,{left:r.x/1536*100+'%',top:r.y/864*100+'%',width:r.width/1536*100+'%',height:r.height/864*100+'%'});n.append(el('span',r.side==='left'?'画面左人物区':'画面右人物区'));box.append(n)}
+  document.querySelector('#sceneMeta').textContent='场景版本 #'+data.sceneVersionId+' / 修复候选版本 #'+data.repairSceneVersionId+' · 来源任务 #'+data.source.taskId+' · 1536×864 · SHA256 '+data.source.sha256;
+  for(const s of data.slots){
+    const card=el('section',undefined,'card');card.append(el('h2',s.label));grid.append(card);
+    try{
+      const task=await get('/api/tasks/'+s.Keyframe.id),shot=await get('/api/character-story/shots/'+s.shotId),record=shot.tasks.find(t=>t.id===s.Keyframe.id),review=record?.review||s.Keyframe.inspection,plan=shot.plans.find(p=>p.id===s.Keyframe.body.planId),png=task.results.find(r=>r.available&&r.assetPath?.endsWith('.png')),metric=data.outputs.find(o=>o.taskId===s.Keyframe.id);
+      card.append(el('span',review?.payload.decision||'NeedReview','badge '+(review?.payload.decision||'')),el('p','实际任务 #'+s.Keyframe.id+' · '+task.task.status+' · 原计划 #'+s.Keyframe.body.planId+' · 当前计划 #'+s.planId,'meta'));
+      if(png)card.append(image(png.assetPath,s.label+' 实际关键帧'));else card.append(el('p','任务没有可用PNG输出','error'));
+      card.append(el('h3','原计划动作与起始状态'),el('p',plan?.payload.action||s.planBody.action),el('p',(review?.payload.scope||'待检查')+'：'+(review?.payload.note||'尚未检查'),'reason'));
+      if(metric)card.append(el('p','受保护背景 '+metric.protectedPixelCount+' 像素（'+(100*metric.protectedPixelCount/(1536*864)).toFixed(1)+'%），单通道最大差值 '+metric.maxProtectedChannelDelta+'/255。技术 Passed；内容及人工审核另行记录。','meta'));
+      card.append(el('p','人工内容 NeedReview · 发布 Blocked','meta'),details('来源、原计划与修复计划历史',{originalPlan:plan,currentPlanId:s.planId,planHistory:s.PlanHistory||[],keyframeTask:record,technicalEvidence:metric}));
+    }catch(e){card.append(el('p',e.message,'error'))}
+  }
+}
+document.querySelector('#closeZoom').onclick=()=>document.querySelector('#zoom').close();document.querySelector('#refresh').onclick=load;load();
+</script></body></html>

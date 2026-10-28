@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>午后小日常 · 本地男女双人样片</title>
+  <style>
+    :root{font:16px/1.6 system-ui,sans-serif;color:#e8edf3;background:#10151d;color-scheme:dark}
+    body{max-width:1480px;margin:32px auto;padding:0 24px}h1{font-size:28px;margin-bottom:8px}p{color:#b4c0cc;margin:8px 0 20px}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}.card{background:#1a2330;border:1px solid #334054;border-radius:12px;padding:16px}
+    h2{font-size:18px;margin:0 0 12px}video{width:100%;aspect-ratio:16/9;background:#000;border-radius:8px}.note{font-size:14px;color:#bbc6d3}
+    button{margin:4px;padding:9px 13px;border:1px solid #506079;border-radius:7px;background:#23354d;color:#fff;cursor:pointer}button:hover{background:#304b6b}
+    #status{font-variant-numeric:tabular-nums}a{color:#9fd0ff}.error{color:#ffb3a6}@media(max-width:950px){.grid{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <h1>午后小日常 · 本地男女双人样片</h1>
+  <p>按原片的客厅打趣、沙发嬉闹、追到门口的剧情改编；两名全新虚构成年角色。生成、配音与合成均在本机执行。</p>
+  <p id="progress" role="status">正在读取本地生成进度。</p>
+  <main class="grid">
+    <section class="card"><h2>本地新生成 · 一男一女</h2>
+      <video id="result" aria-label="完整男女双人样片" controls preload="metadata" playsinline></video>
+      <p class="note">H3源 1376×768 / 24FPS → 展示版1280×720，31秒。Qwen Vivian / Dylan中文对白和字幕。</p>
+      <div><button id="playAll" disabled>从头完整播放</button><button id="pause" disabled>暂停</button></div>
+      <div id="chapters"></div><p id="status" role="status">等待载入成片。</p>
+      <p class="note">技术验收与内容审核分开。人物身份、手指、身体接触、剧情完成度和对白口型仍需观看判断；本片没有接入经过实测的MultiTalk口型路线。</p>
+      <a id="download" hidden>打开成片文件</a>
+    </section>
+    <section class="card"><h2>用户提供的参考原片</h2>
+      <video id="reference" aria-label="参考原片" controls preload="metadata" playsinline></video>
+      <p class="note">晓晓出海《午后小日常》，原片1280×720 / 30FPS / 30.7秒。两名成年女性，作者声明AI生成。</p>
+      <a href="https://www.douyin.com/video/7699361421842789233" target="_blank" rel="noopener noreferrer">打开抖音原片</a>
+    </section>
+  </main>
+  <h2 id="sourcesTitle" style="margin-top:28px">已生成的本地素材 · 完整配音尚待合成</h2>
+  <p id="sourcesNote" class="note">以下是本轮实际生成的分段视频，默认静音，可先检查动作与人物连续性。完整故事完成后会载入上方成片播放器。</p>
+  <section id="sources" class="grid"></section>
+  <script>
+    const result=document.querySelector('#result'),reference=document.querySelector('#reference'),status=document.querySelector('#status');
+    for(const player of [result,reference])player.addEventListener('play',()=>{for(const other of document.querySelectorAll('video'))if(other!==player)other.pause();});
+    const media=path=>'/api/media?'+new URLSearchParams({assetPath:path});
+    reference.src=media('DouyinReference20261023/reference-7699361421842789233.mp4');
+    const valid=path=>/^Artifacts\/project-32\/video\/task-\d+\/v\d+\/[A-Za-z0-9_.-]+\.mp4$/.test(path||'');
+    const assign=path=>{if(!valid(path))return false;if(result.getAttribute('src')!==media(path))result.src=media(path);const link=document.querySelector('#download');link.href=media(path);link.hidden=false;for(const b of document.querySelectorAll('#playAll,#pause,#chapters button'))b.disabled=false;return true;};
+    const path=new URL(location.href).searchParams.get('video')||'';
+    if(!assign(path))status.textContent='新成片完成后会自动载入。';
+    let polling=true;
+    const loadProgress=async()=>{try{
+      const response=await fetch(media('DouyinReference20261023/run.json'),{cache:'no-store'});if(!response.ok)throw new Error();
+      const state=await response.json();if(state.projectId!==32)throw new Error();
+      const completed=Array.from({length:6},(_,i)=>Boolean(state['shot'+(i+1)+'VideoPath'])).filter(Boolean).length;
+      const voices=Array.from({length:11},(_,i)=>Boolean(state['dialogue'+(i+1)+'Path'])).filter(Boolean).length;
+      for(let i=1;i<=6;i++){
+        const path=state['shot'+i+'VideoPath'];if(!valid(path)||document.querySelector('#source'+i))continue;
+        const card=document.createElement('section');card.className='card';
+        const heading=document.createElement('h2');heading.textContent=i+' · '+(state.shotPlan?.[i-1]?.title||'本地素材');
+        const video=document.createElement('video');video.id='source'+i;video.setAttribute('aria-label','第'+i+'段本地素材');video.controls=true;video.muted=true;video.preload='none';video.playsInline=true;video.src=media(path);
+        video.poster=media('DouyinReference20261023/shot-'+String(i).padStart(2,'0')+'/frame-000.png');
+        video.addEventListener('ended',()=>video.load());
+        video.addEventListener('play',()=>{for(const other of document.querySelectorAll('video'))if(other!==video)other.pause();});
+        card.append(heading,video);document.querySelector('#sources').append(card);
+      }
+      const finished=['ReadyForUserPreview','AwaitingPlaybackInspection'].includes(state.stage)&&assign(state.finalVideoPath);
+      let sampling='';
+      if(!finished&&/^GeneratingShot[1-6]$/.test(state.stage))try{
+        const response=await fetch(media('DouyinReference20261023/comfy-progress.json'),{cache:'no-store'});
+        const event=await response.json();if(event.stage===state.stage&&event.type==='progress'&&event.data?.max>0)
+          sampling=' · 当前第'+state.stage.slice(-1)+'段采样 '+event.data.value+' / '+event.data.max+' 步';
+      }catch(e){}
+      document.querySelector('#progress').textContent=finished?'新成片已生成 · 技术检查与内容审核分开，请观看实际效果。':
+        state.stage==='Blocked'||state.stage==='Failed'?'当前步骤受阻，已有素材和任务记录已保留。':'视频素材 '+completed+' / 6 段 · 中文对白 '+voices+' / 11 句'+sampling+' · 正在本地执行。';
+      if(finished){polling=false;document.querySelector('#sourcesTitle').textContent='本轮生成素材 · 独立源片';document.querySelector('#sourcesNote').textContent='以下是六段本地生成源片，默认静音，可逐段检查动作与人物连续性；上方提供完整Qwen配音和字幕成片。';}
+    }catch(e){document.querySelector('#progress').textContent='暂时无法读取生成进度，请确认本地服务在线。';}if(polling)setTimeout(loadProgress,15000);};
+    loadProgress();
+    document.querySelector('#playAll').onclick=async()=>{reference.pause();result.currentTime=0;try{await result.play();}catch(e){status.textContent='请使用播放器播放按钮。';}};
+    document.querySelector('#pause').onclick=()=>result.pause();
+    ['回家打趣','零食撒落','沙发嬉闹','抱枕反击','起身追逐','门口收尾'].forEach((title,i)=>{
+      const button=document.createElement('button');button.textContent=(i+1)+' '+title;
+      button.disabled=!result.hasAttribute('src');
+      button.onclick=()=>{reference.pause();result.currentTime=i*124/24;result.play().catch(()=>{});};document.querySelector('#chapters').append(button);
+    });
+    const update=()=>status.textContent=(result.ended?'播放完成 · ':result.paused?'已暂停 · ':'播放中 · ')+result.currentTime.toFixed(2)+' / '+(Number.isFinite(result.duration)?result.duration.toFixed(2):'--')+' 秒 · '+(result.muted?'已静音':'音量 '+Math.round(result.volume*100)+'%');
+    for(const event of ['loadedmetadata','timeupdate','play','pause','ended','seeked','volumechange'])result.addEventListener(event,update);
+    result.addEventListener('error',()=>{status.textContent='成片加载失败，请核对本地服务和文件。';status.className='error';});
+  </script>
+</body>
+</html>

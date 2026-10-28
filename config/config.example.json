@@ -18,6 +18,9 @@
     "Workflows": "C:\\install\\AI\\Workflows",
     "Data": "C:\\install\\AI\\Data"
   },
+  "LocalAccess": {
+    "RequireLogin": true
+  },
   "Queue": {
     "Concurrency": 1,
     "MinFreeVramMiB": 1024,

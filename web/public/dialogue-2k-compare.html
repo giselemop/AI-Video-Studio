@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>午后对白 · 原版与 2K 对比</title>
+<style>
+:root{color-scheme:dark;font-family:system-ui,"Microsoft YaHei",sans-serif;background:#10141b;color:#eef2f8}body{margin:0 auto;max-width:1500px;padding:28px}h1{font-size:27px;margin:0 0 10px}p{line-height:1.7;color:#adb8c8}button,select,a.button{border:1px solid #43526a;border-radius:8px;background:#202c3d;color:#eef2f8;padding:10px 14px;font:inherit;cursor:pointer;text-decoration:none}button:hover,a.button:hover{background:#31445f}button.primary{background:#246fcb}button:disabled{opacity:.45;cursor:wait}.toolbar{display:flex;flex-wrap:wrap;gap:9px;align-items:center;margin:16px 0}.players{display:grid;grid-template-columns:1fr 1fr;gap:18px}article{min-width:0;background:#18212e;border:1px solid #354259;border-radius:12px;overflow:hidden}article h2{font-size:18px;margin:15px 18px 7px}article p{font-size:13px;margin:0 18px 13px}.frame{aspect-ratio:16/9;overflow:hidden;background:#05080c}video{display:block;width:100%;height:100%;object-fit:contain;transform:scale(var(--zoom,1));transform-origin:var(--origin,50% 45%)}input[type=range]{flex:1;min-width:180px;accent-color:#75b3ff}#status{color:#d4e4fa;min-height:24px;font-variant-numeric:tabular-nums}.tag{font-size:13px;border-radius:20px;padding:5px 10px;background:#213a36;color:#9be2c3}.lines{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}.lines button{text-align:left;font-size:14px}.lines small{color:#9cb0cd;display:block;margin-bottom:6px}.details{margin-top:25px}img{max-width:100%;display:block;border-radius:10px;margin:15px auto}.notice{font-size:14px;max-width:1100px}a{color:#9bc9ff}#ready[hidden]{display:none}@media(max-width:800px){body{padding:16px}.players{grid-template-columns:1fr}.lines{grid-template-columns:1fr 1fr}h1{font-size:22px}}
+</style>
+<h1>午后对白 · 原版与 2K 对比</h1>
+<p id="intro">正在读取本地样片…</p>
+<div id="ready" hidden>
+<div class="toolbar"><button id="play" class="primary">同步播放</button><button id="pause">暂停</button><button id="restart">从头播放</button><button id="back">前一帧</button><button id="next">后一帧</button>
+<label>速度 <select id="speed"><option value="1">正常</option><option value="0.5">半速</option></select></label>
+<label>声音 <select id="sound"><option value="original">原版音轨</option><option value="qhd">2K 版音轨</option><option value="mute">静音</option></select></label><span class="tag">同人物 · 同台词 · 同剪辑</span></div>
+<div class="players">
+<article><h2>原版 · 1280×720</h2><p>上一轮完成的 10 秒三镜头样片</p><div class="frame"><video id="original" preload="auto" playsinline></video></div></article>
+<article><h2>2K · 2560×1440</h2><p>SeedVR2 逐镜头修复与超分，24 FPS</p><div class="frame"><video id="qhd" preload="auto" playsinline muted></video></div></article>
+</div>
+<div class="toolbar"><input id="seek" aria-label="共同播放时间" type="range" min="0" max="239" step="1" value="0"><output id="clock">0.000 / 10.000 秒</output></div>
+<div class="toolbar"><button class="shot" data-frame="19">女方近景 · 0.792 秒</button><button class="shot" data-frame="77">男方反打 · 3.208 秒</button><button class="shot" data-frame="127">双人收尾 · 5.292 秒</button><button class="shot" data-frame="168">男方回应 · 7.000 秒</button>
+<label>画面 <select id="zoom"><option value="1">完整构图</option><option value="2">中部细节 ×2</option><option value="left">左侧细节 ×2</option><option value="right">右侧细节 ×2</option></select></label></div>
+<div id="status" role="status"></div><div class="lines" id="lines"></div>
+<p class="notice">两路按同一时间播放，默认只播放一条音轨。2K 版沿用原始音频包，保留 240 帧与原有切点；画面来自原片的逐镜头修复与超分。肤质、牙齿和细微口眼变化仍请观看判断。</p>
+<div class="toolbar"><a id="openOriginal" class="button" target="_blank" rel="noopener">单独看原版</a><a id="openQhd" class="button" target="_blank" rel="noopener">单独看 2K 版</a><a href="/dialogue-three-shot-preview.html">上一轮预览页</a></div>
+<section class="details"><h2>同一时刻的脸部细节</h2><p>两列使用相同视野裁切，左为原版、右为 2K。原版裁图按相同显示尺寸放大，便于公平查看。</p><img id="faces" alt="原版与2K同一时刻脸部细节对比" loading="lazy"></section>
+</div>
+<script>
+'use strict';
+const $=s=>document.querySelector(s),a=$('#original'),b=$('#qhd'),videos=[a,b];
+let data,playing=false,ready=false,lastSync=0;
+function media(path){if(typeof path!=='string'||!path.startsWith('Artifacts/')||path.includes('..')||path.includes('\\'))throw Error('无效的媒体路径');return '/api/media?assetPath='+encodeURIComponent(path)}
+function asset(path){if(typeof path!=='string'||!path.startsWith('Dialogue2KSeedVR220261024/')||path.includes('..')||path.includes('\\'))throw Error('无效的对比图片');return '/api/media?assetPath='+encodeURIComponent(path)}
+function sound(){a.muted=$('#sound').value!=='original';b.muted=$('#sound').value!=='qhd';a.volume=1;b.volume=1}
+function status(note=''){const active=data?.lines.find(line=>a.currentTime>=line.startSeconds&&a.currentTime<line.endSeconds);$('#status').textContent=(note||(!ready?'等待视频加载':playing?'同步播放中':'已暂停'))+' · '+(active?(active.role==='female'?'女方：':'男方：')+active.text:'人物反应')+' · 声音：'+$('#sound').selectedOptions[0].textContent+' · 音量 100%'}
+function pause(){playing=false;videos.forEach(v=>v.pause());status()}
+function seek(frame){pause();const time=Math.max(0,Math.min(239,frame))/24;videos.forEach(v=>v.currentTime=time);$('#seek').value=Math.round(time*24);$('#clock').textContent=time.toFixed(3)+' / 10.000 秒';status('定位第 '+Math.round(time*24)+' 帧')}
+async function play(){if(!ready)return;try{if(a.ended||a.currentTime>=9.99)videos.forEach(v=>v.currentTime=0);b.currentTime=a.currentTime;videos.forEach(v=>v.playbackRate=Number($('#speed').value));sound();await Promise.all(videos.map(v=>v.play()));playing=true;status()}catch(error){pause();status('播放失败，请再次点击播放：'+error.message)}}
+$('#play').onclick=play;$('#pause').onclick=pause;$('#restart').onclick=()=>{seek(0);play()};
+$('#seek').oninput=e=>seek(Number(e.target.value));$('#back').onclick=()=>seek(Math.round(a.currentTime*24)-1);$('#next').onclick=()=>seek(Math.round(a.currentTime*24)+1);
+$('#speed').onchange=()=>videos.forEach(v=>v.playbackRate=Number($('#speed').value));$('#sound').onchange=()=>{sound();status()};
+document.querySelectorAll('.shot').forEach(button=>button.onclick=()=>seek(Number(button.dataset.frame)));
+$('#zoom').onchange=()=>{const mode=$('#zoom').value;document.documentElement.style.setProperty('--zoom',mode==='1'?'1':'2');document.documentElement.style.setProperty('--origin',mode==='left'?'28% 42%':mode==='right'?'72% 42%':'50% 42%')};
+videos.forEach(v=>{v.onloadeddata=()=>{ready=videos.every(item=>item.readyState>=2);status()};v.onerror=()=>{ready=false;pause();status('视频读取失败，请刷新或打开单独样片')}});
+a.ontimeupdate=()=>{$('#seek').value=Math.min(239,Math.round(a.currentTime*24));$('#clock').textContent=a.currentTime.toFixed(3)+' / 10.000 秒';status();if(playing&&performance.now()-lastSync>400){if(Math.abs(a.currentTime-b.currentTime)>.10)b.currentTime=a.currentTime;lastSync=performance.now()}};
+function endedStatus(){status(a.ended&&b.ended?'两路完整 10 秒播放结束':'正在完成尾帧')}
+a.onended=()=>{playing=false;endedStatus()};b.onended=endedStatus;
+fetch('/dialogue-2k-compare.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('样片尚未完成');return r.json()}).then(value=>{data=value;if(data.technicalStatus!=='Passed')throw Error('样片仍在验收');a.src=media(data.originalPath);b.src=media(data.finalPath);$('#openOriginal').href=a.src;$('#openQhd').href=b.src;$('#faces').src=asset(data.facesPath);$('#intro').textContent='纯本地完成 · 10 秒 · 三个镜头 · 四句原台词。两路保持相同播放时刻，支持逐帧和局部查看。';data.lines.forEach(line=>{const button=document.createElement('button'),small=document.createElement('small');small.textContent=(line.role==='female'?'女方':'男方')+' · '+line.startSeconds.toFixed(3)+' 秒';button.append(small,document.createTextNode(line.text));button.onclick=()=>seek(Math.floor(line.startSeconds*24));$('#lines').append(button)});$('#ready').hidden=false;sound();status()}).catch(error=>{$('#intro').textContent='当前无法展示对比：'+error.message});
+</script>
+</html>

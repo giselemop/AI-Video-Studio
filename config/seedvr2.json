@@ -1,0 +1,19 @@
+{
+  "engineDirectory": "C:/install/AI/SeedVR2/engine",
+  "engineRevision": "4490bd1f482e026674543386bb2a4d176da245b9",
+  "python": "C:/install/AI/SeedVR2/venv/Scripts/python.exe",
+  "modelDirectory": "C:/install/AI/Models/upscale_models/SeedVR2",
+  "repository": "numz/SeedVR2_comfyUI",
+  "revision": "09ced71023636e9bc8cdf9cdecfb2625d1e691e8",
+  "timeoutSeconds": 5400,
+  "batchSize": 9,
+  "temporalOverlap": 3,
+  "qhdChunkSize": 33,
+  "blocksToSwap": 32,
+  "tileSize": 512,
+  "tileOverlap": 64,
+  "files": [
+    {"file":"seedvr2_ema_3b_fp8_e4m3fn.safetensors","size":3391544696,"sha256":"3bf1e43ebedd570e7e7a0b1b60d6a02e105978f505c8128a241cde99a8240cff"},
+    {"file":"ema_vae_fp16.safetensors","size":501324814,"sha256":"20678548f420d98d26f11442d3528f8b8c94e57ee046ef93dbb7633da8612ca1"}
+  ]
+}

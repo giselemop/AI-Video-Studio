@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Qwen 中文配音 · 新生成的10秒短片</title>
+  <style>
+    *{box-sizing:border-box}body{margin:0;background:#0c1420;color:#eaf1fb;font:16px/1.65 system-ui,"Microsoft YaHei",sans-serif}main{max-width:1120px;margin:32px auto;padding:0 24px}h1{font-size:28px;margin:0 0 8px}p{color:#b6c5d8;margin:12px 0}video{width:100%;aspect-ratio:16/9;background:#000;border:1px solid #334761;border-radius:12px}button,a{font:inherit}button{padding:9px 22px;border-radius:8px;border:1px solid #5e95d2;background:#214769;color:#fff;cursor:pointer}button:disabled{opacity:.4;cursor:wait}nav{display:flex;gap:20px;align-items:center;margin-top:18px}a{color:#9bc9ff}#status{min-height:28px}.note{border-top:1px solid #273a51;margin-top:24px;padding-top:18px;font-size:14px}audio{width:100%;max-width:460px;display:block;margin-top:10px}.error{color:#ffb2b2}
+  </style>
+</head>
+<body><main>
+  <h1>Qwen 中文配音 × 新生成的10秒短片</h1>
+  <p>午后的校园，长椅上的红色笔记本。一段新的画面，配上 Vivian 中文旁白。</p>
+  <video id="preview" controls playsinline preload="metadata" aria-label="Qwen中文配音10秒视频"></video>
+  <nav><button id="play" disabled>播放声画</button><a id="download" hidden target="_blank" rel="noopener">单独打开视频</a></nav>
+  <p id="status" role="status">正在读取视频…</p>
+  <p>旁白：午后的阳光穿过树叶，落在安静的校园里。林夏拾起长椅上的红色笔记本，轻声喊道：同学，你的本子忘拿了。</p>
+  <div class="note">
+    <p>本地 Qwen3-TTS · Vivian。原配音长12.88秒，本片以1.32倍速度保持音高接入完整台词，原始音频保留。画面由两段新生成素材相接，配音为离屏旁白；人物、动作、衔接和听感仍待你审核。</p>
+    <details><summary>对比原始配音</summary><audio id="original" controls preload="none" aria-label="原始Qwen配音"></audio></details>
+  </div>
+</main><script>
+  const video=document.querySelector('#preview'), status=document.querySelector('#status'), play=document.querySelector('#play'), download=document.querySelector('#download'), original=document.querySelector('#original');
+  try {
+    const path=new URLSearchParams(location.search).get('video')||'';
+    if(!/^Artifacts\/[^?#]+\.mp4$/i.test(path)||path.split('/').includes('..')||path.includes('\\')||path.includes(':')||path.includes('%'))throw Error('视频路径无效，请从本次预览链接打开。');
+    video.src='/api/media?assetPath='+encodeURIComponent(path);download.href=video.src;download.hidden=false;
+    original.src='/api/media?assetPath='+encodeURIComponent('Artifacts/project-28/audio/task-1196/v0001/v0001_qwen3_chinese_preview_0fbc4f5a5d26.wav');
+    video.addEventListener('loadedmetadata',()=>{status.textContent=`${video.videoWidth}×${video.videoHeight} · ${video.duration.toFixed(2)}秒 · 中文配音`;play.disabled=false});
+    video.addEventListener('error',()=>{status.className='error';status.textContent='视频暂时无法播放，请检查本地服务或媒体文件。'});
+    video.addEventListener('play',()=>original.pause());original.addEventListener('play',()=>video.pause());
+    play.addEventListener('click',async()=>{try{original.pause();if(video.ended)video.currentTime=0;await video.play()}catch{status.textContent='请点击视频播放器中的播放按钮。'}});
+  } catch(error) {status.className='error';status.textContent=error.message;video.removeAttribute('src')}
+</script></body></html>

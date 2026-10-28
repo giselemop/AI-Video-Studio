@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>校园视频 · 清晰度对照</title>
+  <style>
+    *{box-sizing:border-box}body{margin:0;background:#10141c;color:#e9eef7;font:16px/1.6 system-ui,"Microsoft YaHei",sans-serif}
+    main{max-width:1120px;margin:36px auto;padding:0 20px}h1{font-size:26px;margin:0 0 6px}.muted{color:#a7b4c8;margin:0 0 24px}
+    .stage{position:relative;aspect-ratio:16/9;background:#000;border:1px solid #334157;border-radius:12px;overflow:hidden;--split:50%}
+    video{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}.enhanced{clip-path:inset(0 0 0 var(--split))}
+    .divider{position:absolute;left:var(--split);top:0;bottom:0;width:2px;background:#fff;pointer-events:none;box-shadow:0 0 4px #000}
+    .tag{position:absolute;top:12px;padding:4px 10px;border-radius:6px;background:#10141cbb;pointer-events:none}.left{left:12px}.right{right:12px}
+    label{display:block;color:#bac6d8;margin:18px 0 4px}input[type=range]{width:100%;accent-color:#7dd3fc;cursor:pointer}
+    .controls{display:flex;align-items:center;gap:12px;margin:16px 0;flex-wrap:wrap}button,a{color:#dcecff}button{background:#254b6e;border:1px solid #5681a5;border-radius:7px;padding:8px 18px;cursor:pointer;font:inherit}button:disabled{opacity:.5;cursor:wait}
+    .links{display:flex;gap:20px;margin-top:20px}#message{min-height:26px;color:#a7b4c8}#message.error{color:#fca5a5}.stage:fullscreen{border:0;border-radius:0;height:100vh;width:100vw}
+    @media(max-width:600px){main{margin-top:20px}h1{font-size:22px}.tag{font-size:12px}}
+  </style>
+</head>
+<body>
+<main>
+  <h1>校园视频 · 清晰度对照</h1>
+  <p class="muted">同一段10秒画面 · 1280 × 720 · 30 FPS。拖动分界线比较细节。</p>
+  <div class="stage" id="stage">
+    <video id="before" muted playsinline preload="auto"></video>
+    <video id="after" class="enhanced" muted playsinline preload="auto"></video>
+    <div class="divider"></div><span class="tag left">原版</span><span class="tag right">AI 超分</span>
+  </div>
+  <label for="wipe">画面对照</label><input id="wipe" type="range" min="0" max="100" value="50" aria-label="原版与增强版分界线">
+  <div class="controls"><button id="play" disabled>播放对照</button><button id="restart" disabled>从头播放</button><button id="fullscreen">全屏</button><span id="time">0.00 / 10.00 秒</span></div>
+  <label for="seek">播放位置</label><input id="seek" type="range" min="0" max="10" value="0" step="0.033333333" disabled>
+  <div id="message" role="status">正在加载两段视频…</div>
+  <div class="links"><a id="original" target="_blank" rel="noopener">单独看原版</a><a id="enhanced" target="_blank" rel="noopener">单独看增强版</a></div>
+</main>
+<script>
+  const before=document.querySelector('#before'),after=document.querySelector('#after');
+  const stage=document.querySelector('#stage'),play=document.querySelector('#play'),seek=document.querySelector('#seek');
+  const message=document.querySelector('#message'),restart=document.querySelector('#restart');
+  let ready=false,playing=false;
+  const params=new URLSearchParams(location.search);
+  const media=key=>{
+    const path=params.get(key)||'';
+    if(!/^Artifacts\/[^?#]+\.mp4$/i.test(path)||path.split('/').includes('..')||path.includes('\\'))throw Error('缺少有效的视频路径。请从本次对照链接打开。');
+    return '/api/media?assetPath='+encodeURIComponent(path);
+  };
+  const pause=()=>{before.pause();after.pause();playing=false;play.textContent='播放对照';};
+  const showError=text=>{pause();message.className='error';message.textContent=text;};
+  const start=async()=>{
+    if(!ready)return;
+    if(before.ended||before.currentTime>=before.duration-.03){before.currentTime=0;after.currentTime=0;}
+    after.currentTime=before.currentTime;
+    try{await Promise.all([before.play(),after.play()]);playing=true;play.textContent='暂停';}
+    catch{showError('播放未能开始，请点击播放重试。');}
+  };
+  const loaded=()=>{
+    if(before.readyState<2||after.readyState<2)return;
+    if(Math.abs(before.duration-after.duration)>.04){showError('两段视频时长不一致，无法同步对照。');return;}
+    ready=true;play.disabled=false;restart.disabled=false;seek.disabled=false;seek.max=before.duration;
+    message.className='';message.textContent='已就绪。左侧原版，右侧 Real-ESRGAN 两倍超分；原始素材保留。';
+  };
+  try{before.src=media('before');after.src=media('after');document.querySelector('#original').href=before.src;document.querySelector('#enhanced').href=after.src;}
+  catch(error){showError(error.message);}
+  for(const video of [before,after]){
+    video.addEventListener('loadeddata',loaded);
+    video.addEventListener('error',()=>showError('视频加载失败，请确认本机服务和媒体文件可用。'));
+    video.addEventListener('waiting',()=>{if(playing){pause();message.textContent='正在缓冲，加载完成后可继续播放。';}});
+  }
+  play.addEventListener('click',()=>playing?pause():start());
+  restart.addEventListener('click',()=>{pause();before.currentTime=0;after.currentTime=0;start();});
+  before.addEventListener('ended',pause);
+  seek.addEventListener('input',()=>{pause();before.currentTime=Number(seek.value);after.currentTime=Number(seek.value);});
+  document.querySelector('#wipe').addEventListener('input',event=>stage.style.setProperty('--split',event.target.value+'%'));
+  document.querySelector('#fullscreen').addEventListener('click',()=>stage.requestFullscreen?.().catch(()=>{}));
+  function update(){
+    if(ready){seek.value=before.currentTime;document.querySelector('#time').textContent=before.currentTime.toFixed(2)+' / '+before.duration.toFixed(2)+' 秒';
+      if(playing&&Math.abs(before.currentTime-after.currentTime)>.04)after.currentTime=before.currentTime;}
+    requestAnimationFrame(update);
+  }
+  update();
+</script>
+</body>
+</html>

@@ -1,0 +1,93 @@
+{
+  "technicalStatus": "Passed",
+  "contentStatus": "NeedReview",
+  "intro": "纯本地完成 · 十秒三镜头 · 同一组人物参考、四句原台词与完整原声。支持同步播放、逐帧和两秒短测对照。",
+  "pilot": {
+    "seconds": 2,
+    "frames": 48,
+    "paths": [
+      "Artifacts/project-36/video/task-1281/v0002/v0002_skin_original_720p_2s_10b5bdd02315.mp4",
+      "Artifacts/project-36/video/task-1281/v0003/v0003_skin_current_2k_2s_2b68d6fda686.mp4",
+      "Artifacts/project-37/video/task-1308/v0001/v0001_face_acting_pilot_same_voice_2k_2s_51e9043cebd8.mp4"
+    ],
+    "newTitle": "新版表情 · 2K",
+    "comparisonPrefix": "FaceActing20261024/pilot-qhd-comparison/compare-",
+    "moments": [
+      {
+        "frame": 0,
+        "label": "0.000 秒"
+      },
+      {
+        "frame": 12,
+        "label": "0.500 秒"
+      },
+      {
+        "frame": 24,
+        "label": "1.000 秒"
+      },
+      {
+        "frame": 36,
+        "label": "1.500 秒"
+      },
+      {
+        "frame": 47,
+        "label": "1.958 秒"
+      }
+    ]
+  },
+  "full": {
+    "seconds": 10,
+    "frames": 240,
+    "paths": [
+      "Artifacts/project-34/video/task-1263/v0001/v0001_dialogue_three_shot_local_10s_1b677efb8f9e.mp4",
+      "Artifacts/project-35/video/task-1268/v0001/v0001_dialogue_three_shot_seedvr2_2k_10s_cadf366eb62c.mp4",
+      "Artifacts/project-37/video/task-1306/v0001/v0001_face_acting_three_shot_same_dialogue_2k_10s_f6b4a2109e12.mp4"
+    ],
+    "newTitle": "表情重建 · 2K",
+    "comparisonPrefix": "FaceActing20261024/final-comparison/compare-",
+    "moments": [
+      {
+        "frame": 19,
+        "label": "女方近景"
+      },
+      {
+        "frame": 77,
+        "label": "男方回应"
+      },
+      {
+        "frame": 127,
+        "label": "女方让步"
+      },
+      {
+        "frame": 168,
+        "label": "男方收尾"
+      },
+      {
+        "frame": 239,
+        "label": "末帧"
+      }
+    ]
+  },
+  "references": [
+    {
+      "label": "原始露齿笑参考",
+      "path": "FaceActing20261024/references/female/input.png",
+      "selected": false
+    },
+    {
+      "label": "A · 闭口表情候选",
+      "path": "Artifacts/project-37/image/task-1288/v0001/v0001_task_1288_task_1288_attempt_1_bbcd0dca_00001__ca1fe71f4356.png",
+      "selected": false
+    },
+    {
+      "label": "B · 轻微闭口（本轮选用）",
+      "path": "Artifacts/project-37/image/task-1289/v0001/v0001_task_1289_task_1289_attempt_1_a98ce6d1_00001__d0a5d7c24f47.png",
+      "selected": true
+    },
+    {
+      "label": "C · 侧脸表情候选",
+      "path": "Artifacts/project-37/image/task-1290/v0001/v0001_task_1290_task_1290_attempt_1_05ce2f25_00001__53fd074f50ec.png",
+      "selected": false
+    }
+  ]
+}

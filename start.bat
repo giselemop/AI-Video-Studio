@@ -18,7 +18,7 @@ if not exist "%SERVER_EXE%" (
 )
 powershell -NoProfile -ExecutionPolicy Bypass -Command "$c=Get-NetTCPConnection -State Listen -LocalPort 8188 -ErrorAction SilentlyContinue; if(-not $c){exit 1}" >nul 2>&1
 if errorlevel 1 (
-  if exist "%COMFY_PY%" start "ComfyUI" /b "%COMFY_PY%" "%COMFY_ROOT%\main.py" --listen 127.0.0.1 --port 8188 --preview-method auto 1>"%COMFY_LOG%" 2>"%COMFY_ERR%"
+  if exist "%COMFY_PY%" start "ComfyUI" /b "%COMFY_PY%" "%COMFY_ROOT%\main.py" --listen 127.0.0.1 --port 8188 --use-pytorch-cross-attention --lowvram --disable-dynamic-vram --reserve-vram 1.5 --disable-pinned-memory --disable-mmap --extra-model-paths-config "%COMFY_ROOT%\extra_model_paths.yaml" 1>"%COMFY_LOG%" 2>"%COMFY_ERR%"
 )
 powershell -NoProfile -ExecutionPolicy Bypass -Command "$c=Get-NetTCPConnection -State Listen -LocalPort 3306 -ErrorAction SilentlyContinue; if($c){exit 0}else{exit 1}" >nul 2>&1
 if errorlevel 1 echo WARNING: MySQL is not listening on 3306. Database actions will remain unavailable.

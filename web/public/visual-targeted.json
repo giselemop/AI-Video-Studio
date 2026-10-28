@@ -1,0 +1,143 @@
+{
+  "intro": "三项定向修复均已生成并完成文件与保护区域核验。支持前后同步、半速、逐帧与局部对比；画面自然度仍需人工复核。",
+  "groups": [
+    {
+      "key": "blink",
+      "title": "眨眼闭合",
+      "seconds": 2.0,
+      "frames": 48,
+      "fps": 24,
+      "note": "同一新关键帧与旧自有生成驱动。新增学习式眼部残差，仅在驱动眨眼时合成眼部；嘴部和头部沿用原运动。两版统一24FPS展示，静音。不是新真人表演，眨眼节奏与自然度仍需观看判断。",
+      "before": {
+        "title": "上一轮 · 眨眼闭合不完整",
+        "path": "Artifacts/project-38/video/task-1320/v0001/v0001_visual_acting_new_2s_24fps_5ff1e27bd822.mp4",
+        "spec": "1280×720 · 24FPS · 48帧 · 2秒"
+      },
+      "after": {
+        "title": "本轮 · 局部眼部修复",
+        "path": "Artifacts/project-39/video/task-1324/v0001/v0001_blink_repaired_24fps_4bf30f3cd5f7.mp4",
+        "spec": "1280×720 · 24FPS · 48帧 · 2秒"
+      },
+      "moments": [
+        {
+          "label": "0.000 秒",
+          "frame": 0,
+          "compare": "VisualTargeted20261024/comparisons/blink-000.png"
+        },
+        {
+          "label": "0.292 秒",
+          "frame": 7,
+          "compare": "VisualTargeted20261024/comparisons/blink-007.png"
+        },
+        {
+          "label": "0.375 秒",
+          "frame": 9,
+          "compare": "VisualTargeted20261024/comparisons/blink-009.png"
+        },
+        {
+          "label": "0.500 秒",
+          "frame": 12,
+          "compare": "VisualTargeted20261024/comparisons/blink-012.png"
+        },
+        {
+          "label": "1.000 秒",
+          "frame": 24,
+          "compare": "VisualTargeted20261024/comparisons/blink-024.png"
+        }
+      ]
+    },
+    {
+      "key": "h3",
+      "title": "H3中段表情",
+      "seconds": 5.166666666666667,
+      "frames": 124,
+      "fps": 24,
+      "note": "同模型、种子、首尾帧、20步与原生规格；只改分时段闭口提示。请看中段是否露齿、是否提前大笑，以及收尾与构图。首尾约束不能保证所有帧严格遵循语义。",
+      "before": {
+        "title": "上一轮 · 首尾帧实验",
+        "path": "Artifacts/project-38/video/task-1316/v0001/v0001_task_1316_task_1316_attempt_1_ca8defa9_00001__f2b1adba3c6b.mp4",
+        "spec": "H3原生864×480 · 24FPS · 124帧 · 5.167秒"
+      },
+      "after": {
+        "title": "本轮 · 分时段闭口约束",
+        "path": "Artifacts/project-39/video/task-1322/v0001/v0001_task_1322_task_1322_attempt_1_aae3dfe0_00001__9197de37a683.mp4",
+        "spec": "H3原生864×480 · 24FPS · 124帧 · 5.167秒"
+      },
+      "moments": [
+        {
+          "label": "0.000 秒",
+          "frame": 0,
+          "compare": "VisualTargeted20261024/comparisons/h3-000.png"
+        },
+        {
+          "label": "1.250 秒",
+          "frame": 30,
+          "compare": "VisualTargeted20261024/comparisons/h3-030.png"
+        },
+        {
+          "label": "2.542 秒",
+          "frame": 61,
+          "compare": "VisualTargeted20261024/comparisons/h3-061.png"
+        },
+        {
+          "label": "3.833 秒",
+          "frame": 92,
+          "compare": "VisualTargeted20261024/comparisons/h3-092.png"
+        },
+        {
+          "label": "5.125 秒",
+          "frame": 123,
+          "compare": "VisualTargeted20261024/comparisons/h3-123.png"
+        }
+      ]
+    },
+    {
+      "key": "detail",
+      "title": "皮肤细节保留",
+      "seconds": 2.0,
+      "frames": 48,
+      "fps": 24,
+      "note": "左侧为上一轮QHD的同编码对照；右侧从同帧精修前素材回补已有亮度频段。只作用于受保护的皮肤掩膜，眼口及掩膜外编码前保持；收益较轻，不等于新增真实毛孔。",
+      "before": {
+        "title": "上一轮QHD · 同编码对照",
+        "path": "Artifacts/project-39/video/task-1325/v0002/v0002_source_detail_baseline_same_encode_2s_83747cfc6ef4.mp4",
+        "spec": "2560×1440 · 24FPS · 48帧 · 2秒"
+      },
+      "after": {
+        "title": "本轮 · 源细节回补",
+        "path": "Artifacts/project-39/video/task-1325/v0001/v0001_source_detail_recovered_2s_de82e234ef6c.mp4",
+        "spec": "2560×1440 · 24FPS · 48帧 · 2秒"
+      },
+      "moments": [
+        {
+          "label": "0.000 秒",
+          "frame": 0,
+          "compare": "VisualTargeted20261024/comparisons/detail-000.png"
+        },
+        {
+          "label": "0.500 秒",
+          "frame": 12,
+          "compare": "VisualTargeted20261024/comparisons/detail-012.png"
+        },
+        {
+          "label": "1.000 秒",
+          "frame": 24,
+          "compare": "VisualTargeted20261024/comparisons/detail-024.png"
+        },
+        {
+          "label": "1.500 秒",
+          "frame": 36,
+          "compare": "VisualTargeted20261024/comparisons/detail-036.png"
+        },
+        {
+          "label": "1.958 秒",
+          "frame": 47,
+          "compare": "VisualTargeted20261024/comparisons/detail-047.png"
+        }
+      ]
+    }
+  ],
+  "technicalStatus": "Passed",
+  "contentStatus": "NeedReview",
+  "publicationStatus": "Blocked"
+}

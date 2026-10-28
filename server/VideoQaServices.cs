@@ -17,13 +17,17 @@ public sealed class VideoQaService
     private readonly StudioSettings _settings;
     private readonly StudioRepository _repository;
     private readonly FfmpegService _ffmpeg;
+    private readonly FaceQualityService _faceQuality;
+    private readonly AssetPathPolicy _paths;
     private readonly ILogger<VideoQaService> _logger;
 
-    public VideoQaService(StudioSettings settings, StudioRepository repository, FfmpegService ffmpeg, ILogger<VideoQaService> logger)
+    public VideoQaService(StudioSettings settings, StudioRepository repository, FfmpegService ffmpeg, FaceQualityService faceQuality, AssetPathPolicy paths, ILogger<VideoQaService> logger)
     {
         _settings = settings;
         _repository = repository;
         _ffmpeg = ffmpeg;
+        _faceQuality = faceQuality;
+        _paths = paths;
         _logger = logger;
     }
 
@@ -60,7 +64,7 @@ public sealed class VideoQaService
         var result = new Dictionary<string, object?>(StringComparer.OrdinalIgnoreCase)
         {
             ["checkedAt"] = DateTimeOffset.Now,
-            ["path"] = input.Path,
+            ["assetPath"] = _paths.TryResolveExisting(input.Path, out _, out var assetPath) ? assetPath : null,
             ["standard"] = new { input.ExpectedWidth, input.ExpectedHeight, input.ExpectedFps, input.ExpectedDuration, input.RequireAudio, input.RequireSubtitle }
         };
         var emptyMetrics = new QaFrameMetrics(0, 0, 0, 0, 0, [], null);
@@ -159,15 +163,24 @@ public sealed class VideoQaService
         var issues = new List<QaIssueDraft>(technical.Issues);
         var manual = false;
         var characterCount = JsonArrayCount(shot.Text("characterIdsJson"));
+        var faceReference = characterCount == 0 ? null : (await _repository.ShotReferencePathsAsync(shot.Long("id"), ct)).FirstOrDefault();
+        var face = characterCount == 0 || string.IsNullOrWhiteSpace(path) ? null : await _faceQuality.AnalyzeVideoAsync(path, faceReference, ct);
+        var faceHardFailure = face?.Rejected == true;
+        if (face is not null)
+        {
+            manual = true;
+            foreach (var issue in face.Issues)
+                issues.Add(new QaIssueDraft(faceHardFailure ? "FACE_STABILITY_REJECTED" : "FACE_STABILITY_REVIEW", faceHardFailure ? "Critical" : "Warning", issue));
+        }
         var hasScene = shot.LongOrNull("sceneId") is not null || !string.IsNullOrWhiteSpace(shot.Text("sceneName"));
         var hasAction = !string.IsNullOrWhiteSpace(shot.Text("action")) || !string.IsNullOrWhiteSpace(shot.Text("expectedAction"));
         var requiredProps = shot.Text("requiredPropsJson");
 
-        var character = characterCount == 0 ? 100m : 78m;
+        var character = characterCount == 0 ? 100m : face?.Score ?? 55m;
         if (characterCount > 0)
         {
             manual = true;
-            issues.Add(new QaIssueDraft("MANUAL_CONTENT_REVIEW", "Warning", "当前环境未加载大型人脸/身份检测模型；请人工确认脸、发型、服装、年龄和身体比例一致"));
+            issues.Add(new QaIssueDraft("MANUAL_CONTENT_REVIEW", "Warning", "当前未加载大型人脸身份模型；请人工确认脸、发型、服装、年龄和身体比例一致。CPU 脸部检查只作筛选代理"));
         }
 
         var motion = technical.Metrics.FrameCount < 2 ? 65m : Math.Clamp(82m - (decimal)Math.Max(0, technical.Metrics.AverageMotion - .30) * 55m, 65m, 92m);
@@ -179,6 +192,7 @@ public sealed class VideoQaService
         else motion = 70m;
 
         var temporal = Math.Clamp(96m - (decimal)technical.Metrics.SuddenChangePercent * .45m - (decimal)technical.Metrics.BlackFramePercent * 4m, 50m, 100m);
+        if (face is not null) temporal = Math.Min(temporal, face.Score);
         if (technical.Metrics.SuddenChangePercent > 10) { manual = true; issues.Add(new QaIssueDraft("TEMPORAL_REVIEW", "Warning", "存在明显帧间变化，需要人工确认闪烁、脸部漂移和连续帧一致性")); }
 
         var semantic = hasAction ? 78m : 70m;
@@ -203,12 +217,12 @@ public sealed class VideoQaService
             ["Semantic"] = semantic, ["Visual"] = visual, ["Composition"] = composition, ["Scene"] = scene, ["AudioSubtitles"] = audioSubtitles
         };
         var score = Math.Round(technical.Score * .15m + character * .15m + motion * .15m + temporal * .15m + semantic * .15m + visual * .10m + composition * .05m + scene * .05m + audioSubtitles * .05m, 2);
-        var hard = technical.HardFailure || score < 70 || issues.Any(x => x.Severity is "Critical" or "Error");
+        var hard = technical.HardFailure || faceHardFailure || score < 70 || issues.Any(x => x.Severity is "Critical" or "Error");
         var status = hard ? "Rejected" : manual ? "NeedReview" : score >= preset.ShotPassScore ? "Passed" : score >= preset.ShotReviewScore ? "NeedReview" : "Rejected";
         var result = new Dictionary<string, object?>(StringComparer.OrdinalIgnoreCase)
         {
             ["score"] = score, ["status"] = status, ["preset"] = preset.Name, ["weights"] = new { Technical = .15, Character = .15, Motion = .15, Temporal = .15, Semantic = .15, Visual = .10, Composition = .05, Scene = .05, AudioSubtitles = .05 },
-            ["components"] = components, ["technical"] = technical.Result, ["manualReviewRequired"] = manual,
+            ["components"] = components, ["technical"] = technical.Result, ["faceQuality"] = face?.Metrics, ["faceIssues"] = face?.Issues, ["manualReviewRequired"] = manual,
             ["detectorPolicy"] = "未加载大型内容模型的项目统一标记为人工复核，不自动放行", ["expectedAction"] = shot.Text("expectedAction") ?? shot.Text("action"), ["requiredProps"] = requiredProps
         };
         return new ShotQaEvaluation(status, score, components, result, issues, manual, hard);
@@ -293,47 +307,71 @@ public sealed class VideoQaService
         return evaluationResult;
     }
 
-    public async Task<QaExportResult> ExportMasterAsync(long episodeId, QaExportInput input, CancellationToken ct = default)
-    {
-        var episode = (await _repository.EpisodeAsync(episodeId, ct)).FirstOrDefault() ?? throw new InvalidOperationException("Episode 不存在");
-        if (!episode.Bool("qaLocked") || !string.Equals(episode.Text("status"), "Approved", StringComparison.OrdinalIgnoreCase)) throw new InvalidOperationException("Episode 尚未 Approved，不能导出 Master");
-        if (!await _repository.AllEpisodeShotsPassedAsync(episodeId, ct)) throw new InvalidOperationException("仍有未 Passed 的镜头，不能导出 Master");
-        if (await _repository.EpisodeHasOpenBlockingIssueAsync(episodeId, ct)) throw new InvalidOperationException("存在未关闭的 Critical/Error QA 问题，不能导出 Master");
+    public Task<QaExportResult> ExportMasterAsync(long episodeId, QaExportInput input, CancellationToken ct = default)
+        => throw new InvalidOperationException("发布导出必须绑定明确的发布候选包；不能从当前 Episode 路径直接导出");
 
-        var source = episode.Text("outputPath");
-        if (!TryAllowedFile(source, out var sourcePath)) throw new FileNotFoundException("Episode 最终视频不存在", source);
+    public async Task<QaExportResult> PrepareMasterAsync(long episodeId, QaExportInput input, ReleaseSourceManifest manifest, long candidateId, int candidateVersion, string candidateSnapshotSha256, string outputDirectory, CancellationToken ct = default)
+    {
+        var episode = (await _repository.EpisodeAsync(episodeId, ct)).FirstOrDefault() ?? throw new InvalidOperationException("Episode does not exist");
+        if (!episode.Bool("qaLocked") || !string.Equals(episode.Text("qaStatus"), "Approved", StringComparison.OrdinalIgnoreCase))
+            throw new InvalidOperationException("Episode must be Approved and QA-locked before Master export");
+        if (!await _repository.AllEpisodeShotsPassedAsync(episodeId, ct)) throw new InvalidOperationException("Every shot must be Passed before Master export");
+        if (await _repository.EpisodeHasOpenBlockingIssueAsync(episodeId, ct)) throw new InvalidOperationException("Open Critical/Error QA issues block Master export");
+        if (manifest.EpisodeId != episodeId || !ReleaseEligibilityService.IsSha256ForExport(candidateSnapshotSha256)) throw new InvalidOperationException("RELEASE_CANDIDATE_SNAPSHOT_INVALID: 候选包快照标识无效");
+        var sourcePath = await ResolveSnapshotFileAsync(manifest.EpisodeOutput, "Episode 正式输出", ct);
         var project = episode.LongOrNull("projectId") is { } projectId ? (await _repository.ProjectAsync(projectId, ct)).FirstOrDefault() : null;
         var projectName = SafeName(project?.Text("name") ?? "Project");
         var number = Math.Max(1, episode.Int("episodeNumber", 1));
-        var release = Path.Combine(_settings.DataPath, "Output", "Release", projectName, $"Episode{number:000}");
+        var release = Path.GetFullPath(outputDirectory);
         Directory.CreateDirectory(release);
-        var master = Path.Combine(release, $"{projectName}_Episode_{number:000}_MASTER.mp4");
-        File.Copy(sourcePath, master, true);
 
+        var master = Path.Combine(release, $"{projectName}_Episode_{number:000}_MASTER.mp4");
+        File.Copy(sourcePath, master, false);
         string? subtitle = null;
-        if (input.IncludeSubtitles && TryAllowedFile(episode.Text("subtitlePath"), out var subtitleSource))
+        if (input.IncludeSubtitles)
         {
+            var subtitleSource = await ResolveSnapshotFileAsync(manifest.Subtitle, "字幕", ct);
             subtitle = Path.Combine(release, $"{projectName}_Episode_{number:000}.srt");
-            File.Copy(subtitleSource, subtitle, true);
+            File.Copy(subtitleSource, subtitle, false);
         }
         string? cover = null;
         if (input.IncludeCover)
         {
+            var existingCover = await ResolveSnapshotFileAsync(manifest.Cover, "封面", ct);
             cover = Path.Combine(release, $"{projectName}_Episode_{number:000}_COVER.jpg");
-            if (TryAllowedFile(episode.Text("coverPath"), out var existingCover)) File.Copy(existingCover, cover, true);
-            else await _ffmpeg.ExtractFrameAsync(sourcePath, 0, cover, ct);
+            File.Copy(existingCover, cover, false);
         }
 
         var runs = await _repository.QaRunsAsync(episodeId, null, ct);
         var issues = await _repository.QaIssuesAsync(episodeId, null, ct);
-        var report = new { generatedAt = DateTimeOffset.Now, episodeId, episodeNumber = number, preset = episode.Text("qaPreset") ?? "Standard", masterPath = master, subtitlePath = subtitle, coverPath = cover, runs, issues };
+        var report = new { generatedAt = DateTimeOffset.Now, episodeId, episodeNumber = number, preset = episode.Text("qaPreset") ?? "Standard", candidateId, candidateVersion, candidateSnapshotSha256, sourceManifest = manifest, masterPath = master, subtitlePath = subtitle, coverPath = cover, runs, issues };
         var jsonPath = Path.Combine(release, "QA_REPORT.json");
         var markdownPath = Path.Combine(release, "QA_REPORT.md");
-        await File.WriteAllTextAsync(jsonPath, JsonSerializer.Serialize(report, new JsonSerializerOptions { WriteIndented = true }), new UTF8Encoding(false), ct);
-        var md = new StringBuilder().AppendLine($"# QA 报告 - {projectName} Episode {number:000}").AppendLine().AppendLine($"- 生成时间：{DateTimeOffset.Now:yyyy-MM-dd HH:mm:ss zzz}").AppendLine($"- Master：`{master}`").AppendLine($"- 结论：Approved").AppendLine($"- QA 问题数：{issues.Count}").AppendLine().AppendLine("## 发布检查").AppendLine().AppendLine("- [x] Episode Approved 且已锁定").AppendLine("- [x] 所有镜头 Passed").AppendLine("- [x] 无未关闭 Critical/Error").AppendLine("- [x] 视频、字幕、封面和报告已导出").ToString();
-        await File.WriteAllTextAsync(markdownPath, md, new UTF8Encoding(false), ct);
-        await _repository.UpdateEpisodeReleaseAsync(episodeId, master, cover, markdownPath, jsonPath, ct);
+        await WriteNewTextAsync(jsonPath, JsonSerializer.Serialize(report, new JsonSerializerOptions { WriteIndented = true }), ct);
+        var markdown = new StringBuilder().AppendLine($"# QA Report - {projectName} Episode {number:000}").AppendLine()
+            .AppendLine($"- Generated: {DateTimeOffset.Now:yyyy-MM-dd HH:mm:ss zzz}").AppendLine($"- Master: `{master}`")
+            .AppendLine("- Decision: Approved").AppendLine($"- QA issues: {issues.Count}").ToString();
+        await WriteNewTextAsync(markdownPath, markdown, ct);
         return new QaExportResult(master, subtitle, cover, markdownPath, jsonPath);
+    }
+
+    private async Task<string> ResolveSnapshotFileAsync(ReleaseFileSnapshot? snapshot, string displayName, CancellationToken ct)
+    {
+        if (snapshot is null || string.IsNullOrWhiteSpace(snapshot.RelativePath) || !TryAllowedFile(snapshot.RelativePath, out var fullPath))
+            throw new FileNotFoundException($"发布候选包锁定的{displayName}不存在或不在受控目录");
+        var hash = await _ffmpeg.Sha256Async(fullPath, ct);
+        if (!string.Equals(hash, snapshot.Sha256, StringComparison.OrdinalIgnoreCase))
+            throw new InvalidOperationException($"RELEASE_CANDIDATE_STALE: {displayName}文件哈希已变化");
+        return fullPath;
+    }
+
+    private static async Task WriteNewTextAsync(string path, string content, CancellationToken ct)
+    {
+        await using var stream = new FileStream(path, FileMode.CreateNew, FileAccess.Write, FileShare.None, 81920, FileOptions.Asynchronous | FileOptions.SequentialScan);
+        await using var writer = new StreamWriter(stream, new UTF8Encoding(false));
+        await writer.WriteAsync(content.AsMemory(), ct);
+        await writer.FlushAsync(ct);
+        await stream.FlushAsync(ct);
     }
 
     private QaTechnicalEvaluation BuildTechnical(List<QaIssueDraft> issues, Dictionary<string, object?> result, QaFrameMetrics metrics, bool hardFailure)
@@ -427,15 +465,7 @@ public sealed class VideoQaService
 
     private bool TryAllowedFile(string? path, out string full)
     {
-        full = "";
-        if (string.IsNullOrWhiteSpace(path)) return false;
-        try
-        {
-            full = Path.GetFullPath(path);
-            var root = Path.GetFullPath(Path.Combine(_settings.RootPath, ".."));
-            return File.Exists(full) && (full.Equals(root, StringComparison.OrdinalIgnoreCase) || full.StartsWith(root.TrimEnd(Path.DirectorySeparatorChar) + Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase));
-        }
-        catch { return false; }
+        return _paths.TryResolveExisting(path, out full, out _);
     }
 
     private static int JsonArrayCount(string? raw)

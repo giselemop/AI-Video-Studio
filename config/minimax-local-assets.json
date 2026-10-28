@@ -1,0 +1,48 @@
+{
+  "schemaVersion": 1,
+  "route": "minimax-h3-local-gguf-q4-experimental",
+  "license": "MiniMax H3 Community License; local experiments only until content and release review",
+  "licenseUrl": "https://huggingface.co/MiniMaxAI/MiniMax-H3/blob/main/LICENSE",
+  "loader": {
+    "repository": "https://github.com/kyuz0/ComfyUI-GGUF-H3",
+    "revision": "6d33de29cdc8bfa3f417dc0d96cbbc3b5412b8ed"
+  },
+  "assets": [
+    {
+      "role": "diffusion",
+      "repository": "molbal/MiniMax-H3-GGUF",
+      "revision": "b45874371c61c49bf04096602f5527aac71b360b",
+      "file": "minimax_h3_fl2va_pruned_fp8_Q4_0.gguf",
+      "target": "diffusion_models/minimax_h3_fl2va_pruned_fp8_Q4_0.gguf",
+      "size": 11377542880,
+      "sha256": "50891b806d6d700f4f20931791ca42a083dd9148609838268ccdc782bf899c1c"
+    },
+    {
+      "role": "text_encoder",
+      "repository": "unsloth/MiniMax-H3-GGUF",
+      "revision": "babc040eff0084465460ead58fdb8ec44296f8dd",
+      "file": "qwen3vl_32b_minimax_h3-Q2_K_M.gguf",
+      "target": "text_encoders/qwen3vl_32b_minimax_h3-Q2_K_M.gguf",
+      "size": 13102161024,
+      "sha256": "a8ccadccd57ef34c838ffb8a7da8368bb554721b2760274a1d3b0df63960b997"
+    },
+    {
+      "role": "video_vae",
+      "repository": "Comfy-Org/MiniMax-H3",
+      "revision": "e5eb578a89295337b8ff433a035929ce0279e0b6",
+      "file": "vae/minimax_h3_video_vae_fp16.safetensors",
+      "target": "vae/minimax_h3_video_vae_fp16.safetensors",
+      "size": 5207808496,
+      "sha256": "7c1f131492e7eddacaac9069a61b81bdd39de5cc96561e677c5eab1cdce5e522"
+    },
+    {
+      "role": "audio_vae",
+      "repository": "Comfy-Org/MiniMax-H3",
+      "revision": "e5eb578a89295337b8ff433a035929ce0279e0b6",
+      "file": "vae/minimax_h3_audio_vae_fp32.safetensors",
+      "target": "vae/minimax_h3_audio_vae_fp32.safetensors",
+      "size": 605254808,
+      "sha256": "8e505d95dd1561d47abd43d4238fd40d9bb1ae9e147ed0a4cba778d76ae4db48"
+    }
+  ]
+}

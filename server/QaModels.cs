@@ -17,6 +17,13 @@ public sealed class QaTechnicalCheckInput
     public decimal BlackFrameMaxPercent { get; set; } = 2;
 }
 
+public sealed class FaceMediaCheckInput
+{
+    public string Path { get; set; } = "";
+    public string? ReferenceImagePath { get; set; }
+    public bool PortraitPreferred { get; set; }
+}
+
 public sealed class QaCheckInput
 {
     public string Preset { get; set; } = "Standard";
@@ -28,10 +35,16 @@ public sealed class QaReviewInput
     public string Decision { get; set; } = "NeedReview";
     public string? Reviewer { get; set; }
     public string? Note { get; set; }
+    /// <summary>
+    /// Passing a shot that the automatic gate rejected is an explicit human
+    /// override and must include a review note.
+    /// </summary>
+    public bool OverrideHardFailure { get; set; }
 }
 
 public sealed class QaExportInput
 {
+    public long? CandidateId { get; set; }
     public bool IncludeSubtitles { get; set; } = true;
     public bool IncludeCover { get; set; } = true;
 }

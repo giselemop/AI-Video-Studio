@@ -1,0 +1,32 @@
+{
+  "finalPath": "Artifacts/project-33/video/task-1246/v0001/v0001_two_person_dialogue_local_9.5s_8931528782f6.mp4",
+  "posterPath": "DialoguePilot20261023/final-poster.jpg",
+  "previousPath": "Artifacts/project-32/video/task-1236/v0001/v0001_afternoon_two_person_local_31s_c40ccac273c8.mp4",
+  "lines": [
+    {
+      "role": "female",
+      "text": "哟，约会回来了？",
+      "startSeconds": 0.4,
+      "emotionLabel": "含笑打趣"
+    },
+    {
+      "role": "male",
+      "text": "哼，要你管。",
+      "startSeconds": 2.82,
+      "emotionLabel": "佯装不服"
+    },
+    {
+      "role": "female",
+      "text": "好啦，不逗你了。",
+      "startSeconds": 4.68,
+      "emotionLabel": "温柔让步"
+    },
+    {
+      "role": "male",
+      "text": "这还差不多。",
+      "startSeconds": 7.66,
+      "emotionLabel": "轻松满意"
+    }
+  ],
+  "note": "四句对白均保持原速，字幕标明说话人；两人轮流说话，保留倾听与反应。"
+}

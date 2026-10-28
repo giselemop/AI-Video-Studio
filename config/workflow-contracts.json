@@ -1,0 +1,4247 @@
+{
+  "schemaVersion": 2,
+  "contracts": [
+    {
+      "id": "realvisxl-book-reference-1536-v1",
+      "version": "realvisxl-book-reference-1536-v1",
+      "fileName": "realvisxl_book_reference_api.json",
+      "workflowType": "Image",
+      "productionEligible": false,
+      "experimental": true,
+      "licenseStatus": "LOCAL_ONLY_PENDING_REVIEW",
+      "taskTypes": [
+        "Image",
+        "Keyframe"
+      ],
+      "modelFiles": [
+        "RealVisXL_V5.0_fp16.safetensors"
+      ],
+      "modelSha256": {
+        "RealVisXL_V5.0_fp16.safetensors": "6a35a7855770ae9820a3c931d4964c3817b6d9e3c6f9c4dabb5b3a94e5643b80"
+      },
+      "nodes": [
+        {
+          "role": "checkpoint",
+          "nodeId": "1",
+          "classType": "CheckpointLoaderSimple",
+          "inputName": "ckpt_name"
+        },
+        {
+          "role": "positivePrompt",
+          "nodeId": "2",
+          "classType": "CLIPTextEncode",
+          "inputName": "text"
+        },
+        {
+          "role": "negativePrompt",
+          "nodeId": "3",
+          "classType": "CLIPTextEncode",
+          "inputName": "text"
+        },
+        {
+          "role": "sampler",
+          "nodeId": "9",
+          "classType": "KSampler",
+          "inputName": "seed"
+        },
+        {
+          "role": "output",
+          "nodeId": "12",
+          "classType": "SaveImage",
+          "inputName": "filename_prefix"
+        }
+      ],
+      "media": {
+        "defaultWidth": 1536,
+        "defaultHeight": 864,
+        "allowedDimensions": [
+          {
+            "width": 1536,
+            "height": 864
+          }
+        ],
+        "nativeFps": 1,
+        "allowedFps": [],
+        "exactFrameCount": false,
+        "preserveAudio": false
+      },
+      "notes": "sha256=ae4529242b51353cb937bd37aac4db91cca13862ef85191f3a465b568433d349 | Masked local book harmonization; exact unmasked subject preservation; content inspection required.",
+      "slots": [
+        {
+          "role": "firstFrame",
+          "nodeId": "4",
+          "classType": "LoadImage",
+          "inputName": "image",
+          "required": true
+        },
+        {
+          "role": "editMask",
+          "nodeId": "5",
+          "classType": "LoadImage",
+          "inputName": "image",
+          "required": true
+        }
+      ]
+    },
+    {
+      "id": "realvisxl-openpose-reference-1536-v1",
+      "version": "realvisxl-openpose-reference-1536-v1",
+      "fileName": "realvisxl_openpose_reference_api.json",
+      "workflowType": "Image",
+      "productionEligible": false,
+      "experimental": true,
+      "licenseStatus": "LOCAL_ONLY_PENDING_REVIEW",
+      "taskTypes": [
+        "Image",
+        "Keyframe"
+      ],
+      "modelFiles": [
+        "RealVisXL_V5.0_fp16.safetensors",
+        "xinsir_openpose_sdxl_1.0.safetensors"
+      ],
+      "modelSha256": {
+        "RealVisXL_V5.0_fp16.safetensors": "6a35a7855770ae9820a3c931d4964c3817b6d9e3c6f9c4dabb5b3a94e5643b80",
+        "xinsir_openpose_sdxl_1.0.safetensors": "b8524e557a7df60d081f5d4a0eb109967d107df217943bf88c2d99b9ebcc06c5"
+      },
+      "nodes": [
+        {
+          "role": "checkpoint",
+          "nodeId": "1",
+          "classType": "CheckpointLoaderSimple",
+          "inputName": "ckpt_name"
+        },
+        {
+          "role": "positivePrompt",
+          "nodeId": "2",
+          "classType": "CLIPTextEncode",
+          "inputName": "text"
+        },
+        {
+          "role": "negativePrompt",
+          "nodeId": "3",
+          "classType": "CLIPTextEncode",
+          "inputName": "text"
+        },
+        {
+          "role": "latent",
+          "nodeId": "4",
+          "classType": "EmptyLatentImage",
+          "inputName": "width"
+        },
+        {
+          "role": "output",
+          "nodeId": "7",
+          "classType": "SaveImage",
+          "inputName": "filename_prefix"
+        },
+        {
+          "role": "controlNetLoader",
+          "nodeId": "8",
+          "classType": "ControlNetLoader",
+          "inputName": "control_net_name"
+        },
+        {
+          "role": "controlNet",
+          "nodeId": "10",
+          "classType": "ControlNetApplyAdvanced",
+          "inputName": "strength"
+        }
+      ],
+      "media": {
+        "defaultWidth": 1536,
+        "defaultHeight": 864,
+        "allowedDimensions": [
+          {
+            "width": 1536,
+            "height": 864
+          }
+        ],
+        "nativeFps": 1,
+        "allowedFps": [],
+        "exactFrameCount": false,
+        "preserveAudio": false
+      },
+      "notes": "sha256=97bf578427a6505d22f7cefa7ca7f5ab166af21da14e8f0be3bb42fef14bcee7 | Explicit local SDXL OpenPose reference; fixed body pose, content inspection required.",
+      "slots": [
+        {
+          "role": "pose",
+          "nodeId": "9",
+          "classType": "LoadImage",
+          "inputName": "image",
+          "required": true
+        }
+      ]
+    },
+    {
+      "id": "realvisxl-reference-1536-v1",
+      "version": "realvisxl-reference-1536-v1",
+      "fileName": "realvisxl_reference_api.json",
+      "workflowType": "Image",
+      "productionEligible": false,
+      "experimental": true,
+      "licenseStatus": "LOCAL_ONLY_PENDING_REVIEW",
+      "taskTypes": [
+        "Image",
+        "Keyframe"
+      ],
+      "modelFiles": [
+        "RealVisXL_V5.0_fp16.safetensors"
+      ],
+      "modelSha256": {
+        "RealVisXL_V5.0_fp16.safetensors": "6a35a7855770ae9820a3c931d4964c3817b6d9e3c6f9c4dabb5b3a94e5643b80"
+      },
+      "nodes": [
+        {
+          "role": "checkpoint",
+          "nodeId": "1",
+          "classType": "CheckpointLoaderSimple",
+          "inputName": "ckpt_name"
+        },
+        {
+          "role": "positivePrompt",
+          "nodeId": "2",
+          "classType": "CLIPTextEncode",
+          "inputName": "text"
+        },
+        {
+          "role": "negativePrompt",
+          "nodeId": "3",
+          "classType": "CLIPTextEncode",
+          "inputName": "text"
+        },
+        {
+          "role": "latent",
+          "nodeId": "4",
+          "classType": "EmptyLatentImage",
+          "inputName": "width"
+        },
+        {
+          "role": "output",
+          "nodeId": "7",
+          "classType": "SaveImage",
+          "inputName": "filename_prefix"
+        }
+      ],
+      "media": {
+        "defaultWidth": 1536,
+        "defaultHeight": 864,
+        "allowedDimensions": [
+          {
+            "width": 1536,
+            "height": 864
+          }
+        ],
+        "nativeFps": 1,
+        "allowedFps": [],
+        "exactFrameCount": false,
+        "preserveAudio": false
+      },
+      "notes": "sha256=f4cedf1ffc7393fc1859e78a21c3db5069f74aef0d1ac421d77c5f638230422a | Local photorealistic SDXL reference; 1536x864, tiled VAE, no automatic content approval."
+    },
+    {
+      "id": "h3-keyframe-refine-1088-v1",
+      "version": "h3-keyframe-refine-1088-v1",
+      "fileName": "h3_keyframe_refine_1088_api.json",
+      "workflowType": "Image",
+      "productionEligible": false,
+      "experimental": true,
+      "licenseStatus": "LOCAL_ONLY_PENDING_REVIEW",
+      "taskTypes": [
+        "Image",
+        "Keyframe"
+      ],
+      "modelFiles": [
+        "v1-5-pruned-emaonly-fp16.safetensors"
+      ],
+      "modelSha256": {
+        "v1-5-pruned-emaonly-fp16.safetensors": "e9476a13728cd75d8279f6ec8bad753a66a1957ca375a1464dc63b37db6e3916"
+      },
+      "nodes": [
+        {
+          "role": "checkpoint",
+          "nodeId": "1",
+          "classType": "CheckpointLoaderSimple",
+          "inputName": "ckpt_name"
+        },
+        {
+          "role": "positivePrompt",
+          "nodeId": "2",
+          "classType": "CLIPTextEncode",
+          "inputName": "text"
+        },
+        {
+          "role": "negativePrompt",
+          "nodeId": "3",
+          "classType": "CLIPTextEncode",
+          "inputName": "text"
+        },
+        {
+          "role": "resize",
+          "nodeId": "5",
+          "classType": "ImageScale",
+          "inputName": "width"
+        },
+        {
+          "role": "encode",
+          "nodeId": "6",
+          "classType": "VAEEncodeTiled",
+          "inputName": "pixels"
+        },
+        {
+          "role": "latent",
+          "nodeId": "7",
+          "classType": "KSampler",
+          "inputName": "seed"
+        },
+        {
+          "role": "decode",
+          "nodeId": "8",
+          "classType": "VAEDecodeTiled",
+          "inputName": "samples"
+        },
+        {
+          "role": "output",
+          "nodeId": "9",
+          "classType": "SaveImage",
+          "inputName": "filename_prefix"
+        }
+      ],
+      "slots": [
+        {
+          "role": "firstFrame",
+          "nodeId": "4",
+          "classType": "LoadImage",
+          "inputName": "image",
+          "required": true
+        }
+      ],
+      "media": {
+        "defaultWidth": 1920,
+        "defaultHeight": 1088,
+        "allowedDimensions": [
+          {
+            "width": 1920,
+            "height": 1088
+          }
+        ],
+        "nativeFps": 1,
+        "exactFrameCount": false
+      },
+      "notes": "sha256=9d4510fd2b3e6b0174a4d3200625614c542b921366f3dbc2bafa44aceeb771aa | Explicit local SD1.5 low-denoise high-resolution reference refinement; tiled VAE, not photographic recovery or automatic content approval."
+    },
+    {
+      "id": "h3-quality-keyframe-x2-v1",
+      "version": "h3-quality-keyframe-x2-v1",
+      "fileName": "h3_keyframe_upscale_api.json",
+      "workflowType": "Image",
+      "productionEligible": false,
+      "experimental": true,
+      "licenseStatus": "LOCAL_ONLY_PENDING_REVIEW",
+      "taskTypes": [
+        "Image"
+      ],
+      "modelFiles": [
+        "RealESRGAN_x2plus.pth"
+      ],
+      "modelSha256": {
+        "RealESRGAN_x2plus.pth": "49fafd45f8fd7aa8d31ab2a22d14d91b536c34494a5cfe31eb5d89c2fa266abb"
+      },
+      "nodes": [
+        {
+          "role": "upscaleModel",
+          "nodeId": "2",
+          "classType": "UpscaleModelLoader",
+          "inputName": "model_name"
+        },
+        {
+          "role": "resize",
+          "nodeId": "4",
+          "classType": "ImageScale",
+          "inputName": "width"
+        },
+        {
+          "role": "output",
+          "nodeId": "5",
+          "classType": "SaveImage",
+          "inputName": "filename_prefix"
+        }
+      ],
+      "slots": [
+        {
+          "role": "firstFrame",
+          "nodeId": "1",
+          "classType": "LoadImage",
+          "inputName": "image",
+          "required": true
+        }
+      ],
+      "media": {
+        "defaultWidth": 1376,
+        "defaultHeight": 768,
+        "allowedDimensions": [
+          {
+            "width": 1376,
+            "height": 768
+          }
+        ],
+        "nativeFps": 1,
+        "exactFrameCount": false
+      },
+      "notes": "sha256=4e9ee28f4e5bc4c7b6c1f261570e529ea874f7b46bcc497d3d09911147d447e4 | Explicit first-frame preparation for H3 comparison: RRDB x2 then center-crop Lanczos to 1376x768; source detail is synthetic, not native high-resolution capture."
+    },
+    {
+      "id": "ltx-native60-experiment-v1",
+      "version": "ltx-native60-experiment-v1",
+      "fileName": "ltx_native60_experiment_api.json",
+      "workflowType": "ImageToVideo",
+      "productionEligible": false,
+      "experimental": true,
+      "licenseStatus": "LOCAL_ONLY_PENDING_REVIEW",
+      "taskTypes": [
+        "ImageToVideo",
+        "Video"
+      ],
+      "modelFiles": [
+        "ltxv-2b-0.9.8-distilled-fp8.safetensors",
+        "t5xxl_fp8_e4m3fn_scaled.safetensors"
+      ],
+      "modelSha256": {
+        "ltxv-2b-0.9.8-distilled-fp8.safetensors": "d6d8fa8ed3a98346787c2503ac80fb5d7cebcf80e356b79a2ba361fbadf97e15",
+        "t5xxl_fp8_e4m3fn_scaled.safetensors": "a498f0485dc9536735258018417c3fd7758dc3bccc0a645feaa472b34955557a"
+      },
+      "nodes": [
+        {
+          "role": "checkpoint",
+          "nodeId": "44",
+          "classType": "CheckpointLoaderSimple",
+          "inputName": "ckpt_name"
+        },
+        {
+          "role": "textEncoder",
+          "nodeId": "38",
+          "classType": "CLIPLoader",
+          "inputName": "clip_name"
+        },
+        {
+          "role": "positivePrompt",
+          "nodeId": "6",
+          "classType": "CLIPTextEncode",
+          "inputName": "text"
+        },
+        {
+          "role": "negativePrompt",
+          "nodeId": "7",
+          "classType": "CLIPTextEncode",
+          "inputName": "text"
+        },
+        {
+          "role": "latent",
+          "nodeId": "77",
+          "classType": "LTXVImgToVideo",
+          "inputName": "length"
+        },
+        {
+          "role": "conditioning",
+          "nodeId": "69",
+          "classType": "LTXVConditioning",
+          "inputName": "frame_rate"
+        },
+        {
+          "role": "videoAssembly",
+          "nodeId": "90",
+          "classType": "CreateVideo",
+          "inputName": "fps"
+        },
+        {
+          "role": "output",
+          "nodeId": "41",
+          "classType": "SaveVideo",
+          "inputName": "filename_prefix"
+        }
+      ],
+      "slots": [
+        {
+          "role": "firstFrame",
+          "nodeId": "78",
+          "classType": "LoadImage",
+          "inputName": "image",
+          "required": true
+        }
+      ],
+      "media": {
+        "defaultWidth": 512,
+        "defaultHeight": 320,
+        "allowedDimensions": [
+          {
+            "width": 512,
+            "height": 320
+          }
+        ],
+        "outputFrames": [
+          305
+        ],
+        "nativeFps": 60,
+        "allowedFps": [
+          60
+        ],
+        "exactFrameCount": true,
+        "executionFrameOffset": 0,
+        "preserveAudio": false
+      },
+      "notes": "sha256=fcc0d08049351a2162c70ab6e6d13f2a720e26902235341633aa79bcb964491d | Explicit LTX 2B generation-conditioned 60fps experiment, 305 decoder frames saved directly to MP4. No frame interpolation; not a claim of 60fps training or quality validation. Existing 24fps routes remain separate."
+    },
+    {
+      "id": "realesrgan-x2-video-v1",
+      "version": "realesrgan-x2-video-v1",
+      "fileName": "realesrgan_x2_video_api.json",
+      "workflowType": "Video",
+      "productionEligible": false,
+      "experimental": true,
+      "licenseStatus": "LOCAL_ONLY_PENDING_REVIEW",
+      "taskTypes": [
+        "Video"
+      ],
+      "modelFiles": [
+        "RealESRGAN_x2plus.pth"
+      ],
+      "modelSha256": {
+        "RealESRGAN_x2plus.pth": "49fafd45f8fd7aa8d31ab2a22d14d91b536c34494a5cfe31eb5d89c2fa266abb"
+      },
+      "nodes": [
+        {
+          "role": "videoComponents",
+          "nodeId": "2",
+          "classType": "GetVideoComponents",
+          "inputName": "video"
+        },
+        {
+          "role": "upscaleModel",
+          "nodeId": "3",
+          "classType": "UpscaleModelLoader",
+          "inputName": "model_name"
+        },
+        {
+          "role": "upscale",
+          "nodeId": "4",
+          "classType": "ImageUpscaleWithModel",
+          "inputName": "upscale_model"
+        },
+        {
+          "role": "videoAssembly",
+          "nodeId": "5",
+          "classType": "CreateVideo",
+          "inputName": "fps"
+        },
+        {
+          "role": "output",
+          "nodeId": "6",
+          "classType": "SaveVideo",
+          "inputName": "filename_prefix"
+        }
+      ],
+      "slots": [
+        {
+          "role": "sourceVideo",
+          "nodeId": "1",
+          "classType": "LoadVideo",
+          "inputName": "file",
+          "required": true
+        }
+      ],
+      "media": {
+        "defaultWidth": 1024,
+        "defaultHeight": 640,
+        "allowedDimensions": [
+          {
+            "width": 1024,
+            "height": 640
+          }
+        ],
+        "outputFrames": [
+          121
+        ],
+        "nativeFps": 24,
+        "allowedFps": [
+          24
+        ],
+        "exactFrameCount": true,
+        "executionFrameOffset": 0,
+        "preserveAudio": true
+      },
+      "notes": "sha256=8e5f2d6ca56743a16f052dfd71b11acee578531cc6c40479868593aa5ebdef6b | Real-ESRGAN v0.2.1 x2plus; input 512x320/24fps/121 frames; sourceVideo slot preserves input timing and audio. Experimental campus comparison; no automatic production approval."
+    },
+    {
+      "id": "06-scene-keyframe-minimax-benchmark-v1",
+      "version": "06_scene_keyframe_quality_api.json",
+      "fileName": "06_scene_keyframe_quality_api.json",
+      "workflowType": "Image",
+      "productionEligible": false,
+      "experimental": true,
+      "licenseStatus": "LOCAL_ONLY_PENDING_REVIEW",
+      "taskTypes": [
+        "Image",
+        "Keyframe"
+      ],
+      "modelFiles": [
+        "v1-5-pruned-emaonly-fp16.safetensors"
+      ],
+      "modelSha256": {
+        "v1-5-pruned-emaonly-fp16.safetensors": "e9476a13728cd75d8279f6ec8bad753a66a1957ca375a1464dc63b37db6e3916"
+      },
+      "nodes": [
+        {
+          "role": "checkpoint",
+          "nodeId": "1",
+          "classType": "CheckpointLoaderSimple",
+          "inputName": "ckpt_name"
+        },
+        {
+          "role": "positivePrompt",
+          "nodeId": "2",
+          "classType": "CLIPTextEncode",
+          "inputName": "text"
+        },
+        {
+          "role": "negativePrompt",
+          "nodeId": "3",
+          "classType": "CLIPTextEncode",
+          "inputName": "text"
+        },
+        {
+          "role": "latent",
+          "nodeId": "4",
+          "classType": "EmptyLatentImage",
+          "inputName": "width"
+        },
+        {
+          "role": "output",
+          "nodeId": "7",
+          "classType": "SaveImage",
+          "inputName": "filename_prefix"
+        }
+      ],
+      "media": {
+        "defaultWidth": 864,
+        "defaultHeight": 480,
+        "allowedDimensions": [
+          {
+            "width": 864,
+            "height": 480
+          }
+        ],
+        "nativeFps": 1,
+        "allowedFps": [],
+        "exactFrameCount": false,
+        "preserveAudio": false
+      },
+      "notes": "sha256=7dd63c3553736fe10ca5d36c8015efcddd96018e3d230b24c8997586aa6c68cc | fresh SD1.5 landscape fixture for local H3 comparison; experimental only"
+    },
+    {
+      "id": "01-portrait-quality-v1",
+      "version": "01_portrait_quality_api.json",
+      "fileName": "01_portrait_quality_api.json",
+      "workflowType": "Image",
+      "productionEligible": true,
+      "experimental": false,
+      "licenseStatus": "LOCAL_ONLY_PENDING_REVIEW",
+      "taskTypes": [
+        "Image",
+        "Keyframe"
+      ],
+      "modelFiles": [
+        "v1-5-pruned-emaonly-fp16.safetensors"
+      ],
+      "modelSha256": {
+        "v1-5-pruned-emaonly-fp16.safetensors": "e9476a13728cd75d8279f6ec8bad753a66a1957ca375a1464dc63b37db6e3916"
+      },
+      "nodes": [
+        {
+          "role": "checkpoint",
+          "nodeId": "1",
+          "classType": "CheckpointLoaderSimple",
+          "inputName": "ckpt_name"
+        },
+        {
+          "role": "positivePrompt",
+          "nodeId": "2",
+          "classType": "CLIPTextEncode",
+          "inputName": "text"
+        },
+        {
+          "role": "negativePrompt",
+          "nodeId": "3",
+          "classType": "CLIPTextEncode",
+          "inputName": "text"
+        },
+        {
+          "role": "latent",
+          "nodeId": "4",
+          "classType": "EmptyLatentImage",
+          "inputName": "width"
+        },
+        {
+          "role": "output",
+          "nodeId": "7",
+          "classType": "SaveImage",
+          "inputName": "filename_prefix"
+        }
+      ],
+      "media": {
+        "defaultWidth": 640,
+        "defaultHeight": 832,
+        "allowedDimensions": [
+          {
+            "width": 640,
+            "height": 832
+          }
+        ],
+        "nativeFps": 1,
+        "allowedFps": [],
+        "exactFrameCount": false,
+        "preserveAudio": false
+      },
+      "notes": "sha256=8aa3766930b564c0b5a5a63fc3590b27f982cd2d970c0443877f455652cc0440"
+    },
+    {
+      "id": "02-ltx-i2v-quality-v1",
+      "version": "02_ltx_i2v_quality_api.comfy031-v2",
+      "fileName": "02_ltx_i2v_quality_api.json",
+      "workflowType": "ImageToVideo",
+      "productionEligible": false,
+      "experimental": true,
+      "licenseStatus": "LOCAL_ONLY_PENDING_REVIEW",
+      "taskTypes": [
+        "ImageToVideo",
+        "Video"
+      ],
+      "modelFiles": [
+        "ltxv-2b-0.9.8-distilled-fp8.safetensors",
+        "t5xxl_fp8_e4m3fn_scaled.safetensors"
+      ],
+      "modelSha256": {
+        "ltxv-2b-0.9.8-distilled-fp8.safetensors": "d6d8fa8ed3a98346787c2503ac80fb5d7cebcf80e356b79a2ba361fbadf97e15",
+        "t5xxl_fp8_e4m3fn_scaled.safetensors": "a498f0485dc9536735258018417c3fd7758dc3bccc0a645feaa472b34955557a"
+      },
+      "nodes": [
+        {
+          "role": "checkpoint",
+          "nodeId": "44",
+          "classType": "CheckpointLoaderSimple",
+          "inputName": "ckpt_name"
+        },
+        {
+          "role": "textEncoder",
+          "nodeId": "38",
+          "classType": "CLIPLoader",
+          "inputName": "clip_name"
+        },
+        {
+          "role": "positivePrompt",
+          "nodeId": "6",
+          "classType": "CLIPTextEncode",
+          "inputName": "text"
+        },
+        {
+          "role": "negativePrompt",
+          "nodeId": "7",
+          "classType": "CLIPTextEncode",
+          "inputName": "text"
+        },
+        {
+          "role": "latent",
+          "nodeId": "77",
+          "classType": "LTXVImgToVideo",
+          "inputName": "length"
+        },
+        {
+          "role": "conditioning",
+          "nodeId": "69",
+          "classType": "LTXVConditioning",
+          "inputName": "frame_rate"
+        },
+        {
+          "role": "output",
+          "nodeId": "41",
+          "classType": "SaveAnimatedWEBP",
+          "inputName": "fps"
+        }
+      ],
+      "slots": [
+        {
+          "role": "firstFrame",
+          "nodeId": "78",
+          "classType": "LoadImage",
+          "inputName": "image",
+          "required": true
+        }
+      ],
+      "media": {
+        "defaultWidth": 512,
+        "defaultHeight": 320,
+        "allowedDimensions": [
+          {
+            "width": 512,
+            "height": 320
+          }
+        ],
+        "outputFrames": [
+          121
+        ],
+        "nativeFps": 24,
+        "allowedFps": [
+          24
+        ],
+        "exactFrameCount": true,
+        "executionFrameOffset": 0,
+        "preserveAudio": false
+      },
+      "notes": "sha256=787c476f31898f2443327818536f7375d191c57c70c70f43566e0e6a3acf876f | v2: ComfyUI 0.31 unguided LTX decodes the requested length directly; task 1157 proved length 113 yields 113 frames. Keep guided contracts separate."
+    },
+    {
+      "id": "03-ltx-character-lock-v1",
+      "version": "03_ltx_character_lock_api.json",
+      "fileName": "03_ltx_character_lock_api.json",
+      "workflowType": "ImageToVideo",
+      "productionEligible": false,
+      "experimental": true,
+      "licenseStatus": "LOCAL_ONLY_PENDING_REVIEW",
+      "taskTypes": [
+        "ImageToVideo",
+        "Video"
+      ],
+      "modelFiles": [
+        "ltxv-2b-0.9.8-distilled-fp8.safetensors",
+        "t5xxl_fp8_e4m3fn_scaled.safetensors"
+      ],
+      "modelSha256": {
+        "ltxv-2b-0.9.8-distilled-fp8.safetensors": "d6d8fa8ed3a98346787c2503ac80fb5d7cebcf80e356b79a2ba361fbadf97e15",
+        "t5xxl_fp8_e4m3fn_scaled.safetensors": "a498f0485dc9536735258018417c3fd7758dc3bccc0a645feaa472b34955557a"
+      },
+      "nodes": [
+        {
+          "role": "checkpoint",
+          "nodeId": "44",
+          "classType": "CheckpointLoaderSimple",
+          "inputName": "ckpt_name"
+        },
+        {
+          "role": "textEncoder",
+          "nodeId": "38",
+          "classType": "CLIPLoader",
+          "inputName": "clip_name"
+        },
+        {
+          "role": "positivePrompt",
+          "nodeId": "6",
+          "classType": "CLIPTextEncode",
+          "inputName": "text"
+        },
+        {
+          "role": "negativePrompt",
+          "nodeId": "7",
+          "classType": "CLIPTextEncode",
+          "inputName": "text"
+        },
+        {
+          "role": "latent",
+          "nodeId": "77",
+          "classType": "LTXVImgToVideo",
+          "inputName": "length"
+        },
+        {
+          "role": "conditioning",
+          "nodeId": "69",
+          "classType": "LTXVConditioning",
+          "inputName": "frame_rate"
+        },
+        {
+          "role": "guide",
+          "nodeId": "80",
+          "classType": "LTXVAddGuide",
+          "inputName": "frame_idx"
+        },
+        {
+          "role": "output",
+          "nodeId": "41",
+          "classType": "SaveAnimatedWEBP",
+          "inputName": "fps"
+        }
+      ],
+      "slots": [
+        {
+          "role": "firstFrame",
+          "nodeId": "78",
+          "classType": "LoadImage",
+          "inputName": "image",
+          "required": true
+        },
+        {
+          "role": "guideFrame",
+          "nodeId": "79",
+          "classType": "LoadImage",
+          "inputName": "image",
+          "required": true
+        }
+      ],
+      "media": {
+        "defaultWidth": 320,
+        "defaultHeight": 416,
+        "allowedDimensions": [
+          {
+            "width": 320,
+            "height": 416
+          }
+        ],
+        "outputFrames": [
+          73
+        ],
+        "nativeFps": 24,
+        "allowedFps": [
+          24
+        ],
+        "exactFrameCount": true,
+        "executionFrameOffset": 8,
+        "guideFrameOffset": 9,
+        "requiresGuide": true,
+        "preserveAudio": false
+      },
+      "notes": "sha256=560f248fa1029ecc76272c498c3bbf9a7b074815c2bec9b268af8dd788f2624a"
+    },
+    {
+      "id": "05-wan22-ti2v-5b-v1",
+      "version": "05_wan22_ti2v_5b_api.json",
+      "fileName": "05_wan22_ti2v_5b_api.json",
+      "workflowType": "ImageToVideo",
+      "productionEligible": true,
+      "experimental": false,
+      "licenseStatus": "LOCAL_ONLY_PENDING_REVIEW",
+      "taskTypes": [
+        "ImageToVideo",
+        "Video"
+      ],
+      "modelFiles": [
+        "wan2.2_ti2v_5B_fp16.safetensors",
+        "umt5_xxl_fp8_e4m3fn_scaled.safetensors",
+        "wan2.2_vae.safetensors"
+      ],
+      "modelSha256": {
+        "wan2.2_ti2v_5B_fp16.safetensors": "456f901338bd9eadbded3828b819109a9b68e8a525ca5cf8d0049a69fcfeca1e",
+        "umt5_xxl_fp8_e4m3fn_scaled.safetensors": "60cce120e4e6647514529d4605ada3429ee8b456ba6143c4e37fe3475c42d4b0",
+        "wan2.2_vae.safetensors": "e40321bd36b9709991dae2530eb4ac303dd168276980d3e9bc4b6e2b75fed156"
+      },
+      "nodes": [
+        {
+          "role": "unet",
+          "nodeId": "37",
+          "classType": "UNETLoader",
+          "inputName": "unet_name"
+        },
+        {
+          "role": "textEncoder",
+          "nodeId": "38",
+          "classType": "CLIPLoader",
+          "inputName": "clip_name"
+        },
+        {
+          "role": "vae",
+          "nodeId": "39",
+          "classType": "VAELoader",
+          "inputName": "vae_name"
+        },
+        {
+          "role": "positivePrompt",
+          "nodeId": "6",
+          "classType": "CLIPTextEncode",
+          "inputName": "text"
+        },
+        {
+          "role": "negativePrompt",
+          "nodeId": "7",
+          "classType": "CLIPTextEncode",
+          "inputName": "text"
+        },
+        {
+          "role": "latent",
+          "nodeId": "55",
+          "classType": "Wan22ImageToVideoLatent",
+          "inputName": "length"
+        },
+        {
+          "role": "output",
+          "nodeId": "41",
+          "classType": "SaveAnimatedWEBP",
+          "inputName": "fps"
+        }
+      ],
+      "slots": [
+        {
+          "role": "firstFrame",
+          "nodeId": "56",
+          "classType": "LoadImage",
+          "inputName": "image",
+          "required": true
+        }
+      ],
+      "media": {
+        "defaultWidth": 512,
+        "defaultHeight": 320,
+        "allowedDimensions": [
+          {
+            "width": 512,
+            "height": 320
+          }
+        ],
+        "outputFrames": [
+          49
+        ],
+        "nativeFps": 24,
+        "allowedFps": [
+          24
+        ],
+        "exactFrameCount": true,
+        "preserveAudio": false
+      },
+      "notes": "sha256=86693afa877fb8b5181eda25fd32d551925959243e9e2dd62d846a756bb50a7c"
+    },
+    {
+      "id": "06-scene-keyframe-reference-v1",
+      "version": "06_scene_keyframe_reference_api.json",
+      "fileName": "06_scene_keyframe_reference_api.json",
+      "workflowType": "Image",
+      "productionEligible": true,
+      "experimental": false,
+      "licenseStatus": "LOCAL_ONLY_PENDING_REVIEW",
+      "taskTypes": [
+        "Image",
+        "Keyframe"
+      ],
+      "modelFiles": [
+        "v1-5-pruned-emaonly-fp16.safetensors"
+      ],
+      "modelSha256": {
+        "v1-5-pruned-emaonly-fp16.safetensors": "e9476a13728cd75d8279f6ec8bad753a66a1957ca375a1464dc63b37db6e3916"
+      },
+      "nodes": [
+        {
+          "role": "checkpoint",
+          "nodeId": "1",
+          "classType": "CheckpointLoaderSimple",
+          "inputName": "ckpt_name"
+        },
+        {
+          "role": "positivePrompt",
+          "nodeId": "2",
+          "classType": "CLIPTextEncode",
+          "inputName": "text"
+        },
+        {
+          "role": "negativePrompt",
+          "nodeId": "3",
+          "classType": "CLIPTextEncode",
+          "inputName": "text"
+        },
+        {
+          "role": "latent",
+          "nodeId": "7",
+          "classType": "KSampler",
+          "inputName": "seed"
+        },
+        {
+          "role": "output",
+          "nodeId": "9",
+          "classType": "SaveImage",
+          "inputName": "filename_prefix"
+        }
+      ],
+      "slots": [
+        {
+          "role": "sceneReference",
+          "nodeId": "4",
+          "classType": "LoadImage",
+          "inputName": "image",
+          "required": true
+        }
+      ],
+      "media": {
+        "defaultWidth": 768,
+        "defaultHeight": 512,
+        "allowedDimensions": [
+          {
+            "width": 768,
+            "height": 512
+          }
+        ],
+        "nativeFps": 1,
+        "allowedFps": [],
+        "exactFrameCount": false,
+        "preserveAudio": false
+      },
+      "notes": "sha256=4858a38bdb7208447dbf9936dc39d63aa8c18912cc7524da6b923495bcf2f856"
+    },
+    {
+      "id": "09-character-master-reference-v2",
+      "version": "09_character_master_reference_v2_api.json",
+      "fileName": "09_character_master_reference_v2_api.json",
+      "workflowType": "Image",
+      "productionEligible": true,
+      "experimental": false,
+      "licenseStatus": "LOCAL_ONLY_PENDING_REVIEW",
+      "taskTypes": [
+        "Image",
+        "Keyframe"
+      ],
+      "modelFiles": [
+        "v1-5-pruned-emaonly-fp16.safetensors"
+      ],
+      "modelSha256": {
+        "v1-5-pruned-emaonly-fp16.safetensors": "e9476a13728cd75d8279f6ec8bad753a66a1957ca375a1464dc63b37db6e3916"
+      },
+      "nodes": [
+        {
+          "role": "checkpoint",
+          "nodeId": "1",
+          "classType": "CheckpointLoaderSimple",
+          "inputName": "ckpt_name"
+        },
+        {
+          "role": "positivePrompt",
+          "nodeId": "2",
+          "classType": "CLIPTextEncode",
+          "inputName": "text"
+        },
+        {
+          "role": "negativePrompt",
+          "nodeId": "3",
+          "classType": "CLIPTextEncode",
+          "inputName": "text"
+        },
+        {
+          "role": "latent",
+          "nodeId": "7",
+          "classType": "KSampler",
+          "inputName": "seed"
+        },
+        {
+          "role": "output",
+          "nodeId": "9",
+          "classType": "SaveImage",
+          "inputName": "filename_prefix"
+        }
+      ],
+      "slots": [
+        {
+          "role": "identityReference",
+          "nodeId": "4",
+          "classType": "LoadImage",
+          "inputName": "image",
+          "required": true
+        }
+      ],
+      "media": {
+        "defaultWidth": 640,
+        "defaultHeight": 832,
+        "allowedDimensions": [
+          {
+            "width": 640,
+            "height": 832
+          }
+        ],
+        "nativeFps": 1,
+        "allowedFps": [],
+        "exactFrameCount": false,
+        "preserveAudio": false
+      },
+      "notes": "sha256=cdf6927579b502282ac9507d9871b527418675730202ec42e0277379f5d90143"
+    },
+    {
+      "id": "10-ltx-face-stable-v2",
+      "version": "10_ltx_face_stable_v2_api.json",
+      "fileName": "10_ltx_face_stable_v2_api.json",
+      "workflowType": "ImageToVideo",
+      "productionEligible": false,
+      "experimental": true,
+      "licenseStatus": "LOCAL_ONLY_PENDING_REVIEW",
+      "taskTypes": [
+        "ImageToVideo",
+        "Video"
+      ],
+      "modelFiles": [
+        "ltxv-2b-0.9.8-distilled-fp8.safetensors",
+        "t5xxl_fp8_e4m3fn_scaled.safetensors"
+      ],
+      "modelSha256": {
+        "ltxv-2b-0.9.8-distilled-fp8.safetensors": "d6d8fa8ed3a98346787c2503ac80fb5d7cebcf80e356b79a2ba361fbadf97e15",
+        "t5xxl_fp8_e4m3fn_scaled.safetensors": "a498f0485dc9536735258018417c3fd7758dc3bccc0a645feaa472b34955557a"
+      },
+      "nodes": [
+        {
+          "role": "checkpoint",
+          "nodeId": "44",
+          "classType": "CheckpointLoaderSimple",
+          "inputName": "ckpt_name"
+        },
+        {
+          "role": "textEncoder",
+          "nodeId": "38",
+          "classType": "CLIPLoader",
+          "inputName": "clip_name"
+        },
+        {
+          "role": "positivePrompt",
+          "nodeId": "6",
+          "classType": "CLIPTextEncode",
+          "inputName": "text"
+        },
+        {
+          "role": "negativePrompt",
+          "nodeId": "7",
+          "classType": "CLIPTextEncode",
+          "inputName": "text"
+        },
+        {
+          "role": "latent",
+          "nodeId": "77",
+          "classType": "LTXVImgToVideo",
+          "inputName": "length"
+        },
+        {
+          "role": "conditioning",
+          "nodeId": "69",
+          "classType": "LTXVConditioning",
+          "inputName": "frame_rate"
+        },
+        {
+          "role": "guide",
+          "nodeId": "80",
+          "classType": "LTXVAddGuide",
+          "inputName": "frame_idx"
+        },
+        {
+          "role": "output",
+          "nodeId": "41",
+          "classType": "SaveAnimatedWEBP",
+          "inputName": "fps"
+        }
+      ],
+      "slots": [
+        {
+          "role": "firstFrame",
+          "nodeId": "78",
+          "classType": "LoadImage",
+          "inputName": "image",
+          "required": true
+        },
+        {
+          "role": "guideFrame",
+          "nodeId": "79",
+          "classType": "LoadImage",
+          "inputName": "image",
+          "required": true
+        }
+      ],
+      "media": {
+        "defaultWidth": 320,
+        "defaultHeight": 416,
+        "allowedDimensions": [
+          {
+            "width": 320,
+            "height": 416
+          }
+        ],
+        "outputFrames": [
+          73
+        ],
+        "nativeFps": 24,
+        "allowedFps": [
+          24
+        ],
+        "exactFrameCount": true,
+        "executionFrameOffset": 8,
+        "guideFrameOffset": 9,
+        "requiresGuide": true,
+        "preserveAudio": false
+      },
+      "notes": "sha256=bae47b792ea97e4e9951b4db4d7a4ae0a04949ca4a9980c947dbe91454eba26b"
+    },
+    {
+      "id": "12-ltx-face-stable-v3",
+      "version": "12_ltx_face_stable_v3_api.json",
+      "fileName": "12_ltx_face_stable_v3_api.json",
+      "workflowType": "ImageToVideo",
+      "productionEligible": true,
+      "experimental": false,
+      "licenseStatus": "LOCAL_ONLY_PENDING_REVIEW",
+      "taskTypes": [
+        "ImageToVideo",
+        "Video"
+      ],
+      "modelFiles": [
+        "ltxv-2b-0.9.8-distilled-fp8.safetensors",
+        "t5xxl_fp8_e4m3fn_scaled.safetensors"
+      ],
+      "modelSha256": {
+        "ltxv-2b-0.9.8-distilled-fp8.safetensors": "d6d8fa8ed3a98346787c2503ac80fb5d7cebcf80e356b79a2ba361fbadf97e15",
+        "t5xxl_fp8_e4m3fn_scaled.safetensors": "a498f0485dc9536735258018417c3fd7758dc3bccc0a645feaa472b34955557a"
+      },
+      "nodes": [
+        {
+          "role": "checkpoint",
+          "nodeId": "44",
+          "classType": "CheckpointLoaderSimple",
+          "inputName": "ckpt_name"
+        },
+        {
+          "role": "textEncoder",
+          "nodeId": "38",
+          "classType": "CLIPLoader",
+          "inputName": "clip_name"
+        },
+        {
+          "role": "positivePrompt",
+          "nodeId": "6",
+          "classType": "CLIPTextEncode",
+          "inputName": "text"
+        },
+        {
+          "role": "negativePrompt",
+          "nodeId": "7",
+          "classType": "CLIPTextEncode",
+          "inputName": "text"
+        },
+        {
+          "role": "latent",
+          "nodeId": "77",
+          "classType": "LTXVImgToVideo",
+          "inputName": "length"
+        },
+        {
+          "role": "conditioning",
+          "nodeId": "69",
+          "classType": "LTXVConditioning",
+          "inputName": "frame_rate"
+        },
+        {
+          "role": "guide",
+          "nodeId": "80",
+          "classType": "LTXVAddGuide",
+          "inputName": "frame_idx"
+        },
+        {
+          "role": "output",
+          "nodeId": "41",
+          "classType": "SaveAnimatedWEBP",
+          "inputName": "fps"
+        }
+      ],
+      "slots": [
+        {
+          "role": "firstFrame",
+          "nodeId": "78",
+          "classType": "LoadImage",
+          "inputName": "image",
+          "required": true
+        },
+        {
+          "role": "guideFrame",
+          "nodeId": "79",
+          "classType": "LoadImage",
+          "inputName": "image",
+          "required": true
+        }
+      ],
+      "media": {
+        "defaultWidth": 320,
+        "defaultHeight": 416,
+        "allowedDimensions": [
+          {
+            "width": 320,
+            "height": 416
+          }
+        ],
+        "outputFrames": [
+          73
+        ],
+        "nativeFps": 24,
+        "allowedFps": [
+          24
+        ],
+        "exactFrameCount": true,
+        "executionFrameOffset": 8,
+        "guideFrameOffset": 9,
+        "requiresGuide": true,
+        "preserveAudio": false
+      },
+      "notes": "sha256=446c052b93da7c365d8ce790f66581965dddd34507a3684544336d20c4b9e1a3"
+    },
+    {
+      "id": "13-sd15-ipadapter-face-v1",
+      "version": "13_sd15_ipadapter_face_v1_api.json",
+      "fileName": "13_sd15_ipadapter_face_v1_api.json",
+      "workflowType": "Image",
+      "productionEligible": true,
+      "experimental": false,
+      "licenseStatus": "LOCAL_ONLY_PENDING_REVIEW",
+      "taskTypes": [
+        "Image",
+        "Keyframe"
+      ],
+      "modelFiles": [
+        "v1-5-pruned-emaonly-fp16.safetensors",
+        "ip-adapter-plus-face_sd15.safetensors"
+      ],
+      "modelSha256": {
+        "v1-5-pruned-emaonly-fp16.safetensors": "e9476a13728cd75d8279f6ec8bad753a66a1957ca375a1464dc63b37db6e3916",
+        "ip-adapter-plus-face_sd15.safetensors": "1c9edc21af6f737dc1d6e0e734190e976cfacf802d6b024b77aa3be922f7569b"
+      },
+      "nodes": [
+        {
+          "role": "checkpoint",
+          "nodeId": "1",
+          "classType": "CheckpointLoaderSimple",
+          "inputName": "ckpt_name"
+        },
+        {
+          "role": "positivePrompt",
+          "nodeId": "2",
+          "classType": "CLIPTextEncode",
+          "inputName": "text"
+        },
+        {
+          "role": "negativePrompt",
+          "nodeId": "3",
+          "classType": "CLIPTextEncode",
+          "inputName": "text"
+        },
+        {
+          "role": "identityAdapterLoader",
+          "nodeId": "10",
+          "classType": "IPAdapterUnifiedLoader",
+          "inputName": "preset"
+        },
+        {
+          "role": "identityAdapter",
+          "nodeId": "11",
+          "classType": "IPAdapter",
+          "inputName": "image"
+        },
+        {
+          "role": "latent",
+          "nodeId": "7",
+          "classType": "KSampler",
+          "inputName": "seed"
+        },
+        {
+          "role": "output",
+          "nodeId": "9",
+          "classType": "SaveImage",
+          "inputName": "filename_prefix"
+        }
+      ],
+      "slots": [
+        {
+          "role": "identityReference",
+          "nodeId": "4",
+          "classType": "LoadImage",
+          "inputName": "image",
+          "required": true
+        }
+      ],
+      "media": {
+        "defaultWidth": 512,
+        "defaultHeight": 512,
+        "allowedDimensions": [],
+        "nativeFps": 1,
+        "allowedFps": [],
+        "exactFrameCount": false,
+        "preserveAudio": false
+      },
+      "notes": "sha256=eb7348326f6aca657f4b8cfcda789de4a9ceb4a7be8860358ba70d8fdf6c0505"
+    },
+    {
+      "id": "14-sd15-controlnet-openpose-v1",
+      "version": "14_sd15_controlnet_openpose_v1_api.json",
+      "fileName": "14_sd15_controlnet_openpose_v1_api.json",
+      "workflowType": "Image",
+      "productionEligible": true,
+      "experimental": false,
+      "licenseStatus": "LOCAL_ONLY_PENDING_REVIEW",
+      "taskTypes": [
+        "Image",
+        "Keyframe"
+      ],
+      "modelFiles": [
+        "v1-5-pruned-emaonly-fp16.safetensors",
+        "control_v11p_sd15_openpose.pth"
+      ],
+      "modelSha256": {
+        "v1-5-pruned-emaonly-fp16.safetensors": "e9476a13728cd75d8279f6ec8bad753a66a1957ca375a1464dc63b37db6e3916",
+        "control_v11p_sd15_openpose.pth": "db97becd92cd19aff71352a60e93c2508decba3dee64f01f686727b9b406a9dd"
+      },
+      "nodes": [
+        {
+          "role": "checkpoint",
+          "nodeId": "1",
+          "classType": "CheckpointLoaderSimple",
+          "inputName": "ckpt_name"
+        },
+        {
+          "role": "positivePrompt",
+          "nodeId": "2",
+          "classType": "CLIPTextEncode",
+          "inputName": "text"
+        },
+        {
+          "role": "negativePrompt",
+          "nodeId": "3",
+          "classType": "CLIPTextEncode",
+          "inputName": "text"
+        },
+        {
+          "role": "controlNet",
+          "nodeId": "14",
+          "classType": "ControlNetApplyAdvanced",
+          "inputName": "strength"
+        },
+        {
+          "role": "latent",
+          "nodeId": "7",
+          "classType": "KSampler",
+          "inputName": "seed"
+        },
+        {
+          "role": "output",
+          "nodeId": "9",
+          "classType": "SaveImage",
+          "inputName": "filename_prefix"
+        }
+      ],
+      "slots": [
+        {
+          "role": "firstFrame",
+          "nodeId": "4",
+          "classType": "LoadImage",
+          "inputName": "image",
+          "required": true
+        },
+        {
+          "role": "pose",
+          "nodeId": "12",
+          "classType": "LoadImage",
+          "inputName": "image",
+          "required": true
+        }
+      ],
+      "media": {
+        "defaultWidth": 512,
+        "defaultHeight": 512,
+        "allowedDimensions": [],
+        "nativeFps": 1,
+        "allowedFps": [],
+        "exactFrameCount": false,
+        "preserveAudio": false
+      },
+      "notes": "sha256=87cbcc503b9cd5da02677e1184f5388b6d14cb9118060b41372fea6d42515d09"
+    },
+    {
+      "id": "infinitetalk-dialogue-125-v2",
+      "version": "infinitetalk-dialogue-125-v2",
+      "fileName": "infinitetalk_dialogue_125_exact_api.json",
+      "workflowType": "ImageToVideo",
+      "productionEligible": false,
+      "experimental": true,
+      "licenseStatus": "LOCAL_ONLY_PENDING_REVIEW",
+      "taskTypes": [
+        "ImageToVideo"
+      ],
+      "modelFiles": [
+        "wan2.1-i2v-14b-480p-Q4_K_M.gguf",
+        "Wan2_1-InfiniteTalk_Multi_Q8.gguf",
+        "Wan2_1_VAE_bf16.safetensors",
+        "lightx2v_I2V_14B_480p_cfg_step_distill_rank64_bf16.safetensors",
+        "wav2vec2-chinese-base_fp16.safetensors",
+        "umt5_xxl_fp8_e4m3fn_scaled.safetensors"
+      ],
+      "modelSha256": {
+        "wan2.1-i2v-14b-480p-Q4_K_M.gguf": "d91f7139acadb42ea05cdf97b311e5099f714f11fbe4d90916500e2f53cbba82",
+        "Wan2_1-InfiniteTalk_Multi_Q8.gguf": "2b9b1dc2fb0f0a351e688ad8dc7545bf90b2a2f20cd91953ac077510ef6b7bc0",
+        "Wan2_1_VAE_bf16.safetensors": "1ab9a32cc2c740f6e39d80d367ce5dcc28db8c71b79b28670546b8973e9d75f9",
+        "lightx2v_I2V_14B_480p_cfg_step_distill_rank64_bf16.safetensors": "85c4a61c30e0497aa44b91d93a893b624708461a56fe5485183b28fa07e2dfb3",
+        "wav2vec2-chinese-base_fp16.safetensors": "000813e441020f18cff844c969d2d5d4adc2a5ce46b2db1f23950b05d88805b4",
+        "umt5_xxl_fp8_e4m3fn_scaled.safetensors": "60cce120e4e6647514529d4605ada3429ee8b456ba6143c4e37fe3475c42d4b0"
+      },
+      "nodes": [
+        {
+          "role": "output",
+          "nodeId": "18",
+          "classType": "SaveVideo",
+          "inputName": "filename_prefix"
+        },
+        {
+          "role": "sampler",
+          "nodeId": "15",
+          "classType": "WanVideoSampler",
+          "inputName": "seed"
+        },
+        {
+          "role": "exactFrameTrim",
+          "nodeId": "19",
+          "classType": "ImageFromBatch",
+          "inputName": "length"
+        }
+      ],
+      "slots": [
+        {
+          "role": "firstFrame",
+          "nodeId": "1",
+          "classType": "LoadImage",
+          "inputName": "image",
+          "required": true
+        },
+        {
+          "role": "femaleAudio",
+          "nodeId": "2",
+          "classType": "LoadAudio",
+          "inputName": "audio",
+          "required": true
+        },
+        {
+          "role": "maleAudio",
+          "nodeId": "3",
+          "classType": "LoadAudio",
+          "inputName": "audio",
+          "required": true
+        }
+      ],
+      "media": {
+        "defaultWidth": 832,
+        "defaultHeight": 480,
+        "allowedDimensions": [
+          {
+            "width": 832,
+            "height": 480
+          }
+        ],
+        "outputFrames": [
+          125
+        ],
+        "nativeFps": 25,
+        "allowedFps": [
+          25
+        ],
+        "exactFrameCount": true,
+        "preserveAudio": true
+      },
+      "notes": "sha256=7e0eb855fd309c9dacf4f0c95f99afcc36709a17ebc7516534540d7deed5acc2 | exact frame trim after windowed decoding; local InfiniteTalk Multi Q8 + Wan2.1 I2V Q4_K_M; separate female-left/male-right audio and masks; requires visual review"
+    },
+    {
+      "id": "infinitetalk-dialogue-241-v2",
+      "version": "infinitetalk-dialogue-241-v2",
+      "fileName": "infinitetalk_dialogue_241_exact_api.json",
+      "workflowType": "ImageToVideo",
+      "productionEligible": false,
+      "experimental": true,
+      "licenseStatus": "LOCAL_ONLY_PENDING_REVIEW",
+      "taskTypes": [
+        "ImageToVideo"
+      ],
+      "modelFiles": [
+        "wan2.1-i2v-14b-480p-Q4_K_M.gguf",
+        "Wan2_1-InfiniteTalk_Multi_Q8.gguf",
+        "Wan2_1_VAE_bf16.safetensors",
+        "lightx2v_I2V_14B_480p_cfg_step_distill_rank64_bf16.safetensors",
+        "wav2vec2-chinese-base_fp16.safetensors",
+        "umt5_xxl_fp8_e4m3fn_scaled.safetensors"
+      ],
+      "modelSha256": {
+        "wan2.1-i2v-14b-480p-Q4_K_M.gguf": "d91f7139acadb42ea05cdf97b311e5099f714f11fbe4d90916500e2f53cbba82",
+        "Wan2_1-InfiniteTalk_Multi_Q8.gguf": "2b9b1dc2fb0f0a351e688ad8dc7545bf90b2a2f20cd91953ac077510ef6b7bc0",
+        "Wan2_1_VAE_bf16.safetensors": "1ab9a32cc2c740f6e39d80d367ce5dcc28db8c71b79b28670546b8973e9d75f9",
+        "lightx2v_I2V_14B_480p_cfg_step_distill_rank64_bf16.safetensors": "85c4a61c30e0497aa44b91d93a893b624708461a56fe5485183b28fa07e2dfb3",
+        "wav2vec2-chinese-base_fp16.safetensors": "000813e441020f18cff844c969d2d5d4adc2a5ce46b2db1f23950b05d88805b4",
+        "umt5_xxl_fp8_e4m3fn_scaled.safetensors": "60cce120e4e6647514529d4605ada3429ee8b456ba6143c4e37fe3475c42d4b0"
+      },
+      "nodes": [
+        {
+          "role": "output",
+          "nodeId": "18",
+          "classType": "SaveVideo",
+          "inputName": "filename_prefix"
+        },
+        {
+          "role": "sampler",
+          "nodeId": "15",
+          "classType": "WanVideoSampler",
+          "inputName": "seed"
+        },
+        {
+          "role": "exactFrameTrim",
+          "nodeId": "19",
+          "classType": "ImageFromBatch",
+          "inputName": "length"
+        }
+      ],
+      "slots": [
+        {
+          "role": "firstFrame",
+          "nodeId": "1",
+          "classType": "LoadImage",
+          "inputName": "image",
+          "required": true
+        },
+        {
+          "role": "femaleAudio",
+          "nodeId": "2",
+          "classType": "LoadAudio",
+          "inputName": "audio",
+          "required": true
+        },
+        {
+          "role": "maleAudio",
+          "nodeId": "3",
+          "classType": "LoadAudio",
+          "inputName": "audio",
+          "required": true
+        }
+      ],
+      "media": {
+        "defaultWidth": 832,
+        "defaultHeight": 480,
+        "allowedDimensions": [
+          {
+            "width": 832,
+            "height": 480
+          }
+        ],
+        "outputFrames": [
+          241
+        ],
+        "nativeFps": 25,
+        "allowedFps": [
+          25
+        ],
+        "exactFrameCount": true,
+        "preserveAudio": true
+      },
+      "notes": "sha256=680639676d1ef05ffc080e43f4711ca06d5e97a24932a34291f3be6e229d84f2 | exact frame trim after windowed decoding; local InfiniteTalk Multi Q8 + Wan2.1 I2V Q4_K_M; separate female-left/male-right audio and masks; requires visual review"
+    },
+    {
+      "id": "dialogue-three-shot-1-v1",
+      "version": "dialogue-three-shot-1-v1",
+      "fileName": "dialogue_three_shot_1_v1_api.json",
+      "workflowType": "ImageToVideo",
+      "productionEligible": false,
+      "experimental": true,
+      "licenseStatus": "LOCAL_ONLY_PENDING_REVIEW",
+      "taskTypes": [
+        "ImageToVideo"
+      ],
+      "modelFiles": [
+        "wan2.1-i2v-14b-480p-Q4_K_M.gguf",
+        "Wan2_1-InfiniteTalk_Multi_Q8.gguf",
+        "Wan2_1_VAE_bf16.safetensors",
+        "lightx2v_I2V_14B_480p_cfg_step_distill_rank64_bf16.safetensors",
+        "wav2vec2-chinese-base_fp16.safetensors",
+        "umt5_xxl_fp8_e4m3fn_scaled.safetensors"
+      ],
+      "modelSha256": {
+        "wan2.1-i2v-14b-480p-Q4_K_M.gguf": "d91f7139acadb42ea05cdf97b311e5099f714f11fbe4d90916500e2f53cbba82",
+        "Wan2_1-InfiniteTalk_Multi_Q8.gguf": "2b9b1dc2fb0f0a351e688ad8dc7545bf90b2a2f20cd91953ac077510ef6b7bc0",
+        "Wan2_1_VAE_bf16.safetensors": "1ab9a32cc2c740f6e39d80d367ce5dcc28db8c71b79b28670546b8973e9d75f9",
+        "lightx2v_I2V_14B_480p_cfg_step_distill_rank64_bf16.safetensors": "85c4a61c30e0497aa44b91d93a893b624708461a56fe5485183b28fa07e2dfb3",
+        "wav2vec2-chinese-base_fp16.safetensors": "000813e441020f18cff844c969d2d5d4adc2a5ce46b2db1f23950b05d88805b4",
+        "umt5_xxl_fp8_e4m3fn_scaled.safetensors": "60cce120e4e6647514529d4605ada3429ee8b456ba6143c4e37fe3475c42d4b0"
+      },
+      "nodes": [
+        {
+          "role": "output",
+          "nodeId": "18",
+          "classType": "SaveVideo",
+          "inputName": "filename_prefix"
+        },
+        {
+          "role": "sampler",
+          "nodeId": "15",
+          "classType": "WanVideoSampler",
+          "inputName": "seed"
+        },
+        {
+          "role": "positivePrompt",
+          "nodeId": "5",
+          "classType": "VideoStudioNativeWanTextCached",
+          "inputName": "positive"
+        },
+        {
+          "role": "negativePrompt",
+          "nodeId": "5",
+          "classType": "VideoStudioNativeWanTextCached",
+          "inputName": "negative"
+        },
+        {
+          "role": "exactFrameTrim",
+          "nodeId": "19",
+          "classType": "ImageFromBatch",
+          "inputName": "length"
+        }
+      ],
+      "slots": [
+        {
+          "role": "firstFrame",
+          "nodeId": "1",
+          "classType": "LoadImage",
+          "inputName": "image",
+          "required": true
+        },
+        {
+          "role": "speakerAudio",
+          "nodeId": "2",
+          "classType": "LoadAudio",
+          "inputName": "audio",
+          "required": true
+        }
+      ],
+      "media": {
+        "defaultWidth": 832,
+        "defaultHeight": 480,
+        "allowedDimensions": [
+          {
+            "width": 832,
+            "height": 480
+          }
+        ],
+        "outputFrames": [
+          57
+        ],
+        "nativeFps": 25,
+        "allowedFps": [
+          25
+        ],
+        "exactFrameCount": true,
+        "preserveAudio": true
+      },
+      "notes": "sha256=eddf83d5a27ed40e3558852ae0fe2f022221d4ed46332739c4d3cfb1481fe791 | local three-shot 1; exact decoded frame trim; caller pads audio to 57/25 seconds; visual and voice review required"
+    },
+    {
+      "id": "dialogue-three-shot-2-v1",
+      "version": "dialogue-three-shot-2-v1",
+      "fileName": "dialogue_three_shot_2_v1_api.json",
+      "workflowType": "ImageToVideo",
+      "productionEligible": false,
+      "experimental": true,
+      "licenseStatus": "LOCAL_ONLY_PENDING_REVIEW",
+      "taskTypes": [
+        "ImageToVideo"
+      ],
+      "modelFiles": [
+        "wan2.1-i2v-14b-480p-Q4_K_M.gguf",
+        "Wan2_1-InfiniteTalk_Multi_Q8.gguf",
+        "Wan2_1_VAE_bf16.safetensors",
+        "lightx2v_I2V_14B_480p_cfg_step_distill_rank64_bf16.safetensors",
+        "wav2vec2-chinese-base_fp16.safetensors",
+        "umt5_xxl_fp8_e4m3fn_scaled.safetensors"
+      ],
+      "modelSha256": {
+        "wan2.1-i2v-14b-480p-Q4_K_M.gguf": "d91f7139acadb42ea05cdf97b311e5099f714f11fbe4d90916500e2f53cbba82",
+        "Wan2_1-InfiniteTalk_Multi_Q8.gguf": "2b9b1dc2fb0f0a351e688ad8dc7545bf90b2a2f20cd91953ac077510ef6b7bc0",
+        "Wan2_1_VAE_bf16.safetensors": "1ab9a32cc2c740f6e39d80d367ce5dcc28db8c71b79b28670546b8973e9d75f9",
+        "lightx2v_I2V_14B_480p_cfg_step_distill_rank64_bf16.safetensors": "85c4a61c30e0497aa44b91d93a893b624708461a56fe5485183b28fa07e2dfb3",
+        "wav2vec2-chinese-base_fp16.safetensors": "000813e441020f18cff844c969d2d5d4adc2a5ce46b2db1f23950b05d88805b4",
+        "umt5_xxl_fp8_e4m3fn_scaled.safetensors": "60cce120e4e6647514529d4605ada3429ee8b456ba6143c4e37fe3475c42d4b0"
+      },
+      "nodes": [
+        {
+          "role": "output",
+          "nodeId": "18",
+          "classType": "SaveVideo",
+          "inputName": "filename_prefix"
+        },
+        {
+          "role": "sampler",
+          "nodeId": "15",
+          "classType": "WanVideoSampler",
+          "inputName": "seed"
+        },
+        {
+          "role": "positivePrompt",
+          "nodeId": "5",
+          "classType": "VideoStudioNativeWanTextCached",
+          "inputName": "positive"
+        },
+        {
+          "role": "negativePrompt",
+          "nodeId": "5",
+          "classType": "VideoStudioNativeWanTextCached",
+          "inputName": "negative"
+        },
+        {
+          "role": "exactFrameTrim",
+          "nodeId": "19",
+          "classType": "ImageFromBatch",
+          "inputName": "length"
+        }
+      ],
+      "slots": [
+        {
+          "role": "firstFrame",
+          "nodeId": "1",
+          "classType": "LoadImage",
+          "inputName": "image",
+          "required": true
+        },
+        {
+          "role": "speakerAudio",
+          "nodeId": "2",
+          "classType": "LoadAudio",
+          "inputName": "audio",
+          "required": true
+        }
+      ],
+      "media": {
+        "defaultWidth": 832,
+        "defaultHeight": 480,
+        "allowedDimensions": [
+          {
+            "width": 832,
+            "height": 480
+          }
+        ],
+        "outputFrames": [
+          46
+        ],
+        "nativeFps": 25,
+        "allowedFps": [
+          25
+        ],
+        "exactFrameCount": true,
+        "preserveAudio": true
+      },
+      "notes": "sha256=cbafaefb6d46818a884ac118cf5f34c1b323f77fc2ba41775735578a079120c6 | local three-shot 2; exact decoded frame trim; caller pads audio to 46/25 seconds; visual and voice review required"
+    },
+    {
+      "id": "dialogue-three-shot-3-v1",
+      "version": "dialogue-three-shot-3-v1",
+      "fileName": "dialogue_three_shot_3_v1_api.json",
+      "workflowType": "ImageToVideo",
+      "productionEligible": false,
+      "experimental": true,
+      "licenseStatus": "LOCAL_ONLY_PENDING_REVIEW",
+      "taskTypes": [
+        "ImageToVideo"
+      ],
+      "modelFiles": [
+        "wan2.1-i2v-14b-480p-Q4_K_M.gguf",
+        "Wan2_1-InfiniteTalk_Multi_Q8.gguf",
+        "Wan2_1_VAE_bf16.safetensors",
+        "lightx2v_I2V_14B_480p_cfg_step_distill_rank64_bf16.safetensors",
+        "wav2vec2-chinese-base_fp16.safetensors",
+        "umt5_xxl_fp8_e4m3fn_scaled.safetensors"
+      ],
+      "modelSha256": {
+        "wan2.1-i2v-14b-480p-Q4_K_M.gguf": "d91f7139acadb42ea05cdf97b311e5099f714f11fbe4d90916500e2f53cbba82",
+        "Wan2_1-InfiniteTalk_Multi_Q8.gguf": "2b9b1dc2fb0f0a351e688ad8dc7545bf90b2a2f20cd91953ac077510ef6b7bc0",
+        "Wan2_1_VAE_bf16.safetensors": "1ab9a32cc2c740f6e39d80d367ce5dcc28db8c71b79b28670546b8973e9d75f9",
+        "lightx2v_I2V_14B_480p_cfg_step_distill_rank64_bf16.safetensors": "85c4a61c30e0497aa44b91d93a893b624708461a56fe5485183b28fa07e2dfb3",
+        "wav2vec2-chinese-base_fp16.safetensors": "000813e441020f18cff844c969d2d5d4adc2a5ce46b2db1f23950b05d88805b4",
+        "umt5_xxl_fp8_e4m3fn_scaled.safetensors": "60cce120e4e6647514529d4605ada3429ee8b456ba6143c4e37fe3475c42d4b0"
+      },
+      "nodes": [
+        {
+          "role": "output",
+          "nodeId": "18",
+          "classType": "SaveVideo",
+          "inputName": "filename_prefix"
+        },
+        {
+          "role": "sampler",
+          "nodeId": "15",
+          "classType": "WanVideoSampler",
+          "inputName": "seed"
+        },
+        {
+          "role": "positivePrompt",
+          "nodeId": "5",
+          "classType": "VideoStudioNativeWanTextCached",
+          "inputName": "positive"
+        },
+        {
+          "role": "negativePrompt",
+          "nodeId": "5",
+          "classType": "VideoStudioNativeWanTextCached",
+          "inputName": "negative"
+        },
+        {
+          "role": "exactFrameTrim",
+          "nodeId": "19",
+          "classType": "ImageFromBatch",
+          "inputName": "length"
+        }
+      ],
+      "slots": [
+        {
+          "role": "firstFrame",
+          "nodeId": "1",
+          "classType": "LoadImage",
+          "inputName": "image",
+          "required": true
+        },
+        {
+          "role": "femaleAudio",
+          "nodeId": "2",
+          "classType": "LoadAudio",
+          "inputName": "audio",
+          "required": true
+        },
+        {
+          "role": "maleAudio",
+          "nodeId": "3",
+          "classType": "LoadAudio",
+          "inputName": "audio",
+          "required": true
+        }
+      ],
+      "media": {
+        "defaultWidth": 832,
+        "defaultHeight": 480,
+        "allowedDimensions": [
+          {
+            "width": 832,
+            "height": 480
+          }
+        ],
+        "outputFrames": [
+          151
+        ],
+        "nativeFps": 25,
+        "allowedFps": [
+          25
+        ],
+        "exactFrameCount": true,
+        "preserveAudio": true
+      },
+      "notes": "sha256=352e00c395bbf3c6cd77fd09f8dfb7e536307e5ceb084ec5f3db7df537b5661a | local three-shot 3; exact decoded frame trim; caller pads audio to 151/25 seconds; visual and voice review required"
+    },
+    {
+      "id": "realvisxl-skin-patch-768-v1",
+      "version": "realvisxl-skin-patch-768-v1",
+      "fileName": "realvisxl_skin_patch_768_api.json",
+      "workflowType": "Image",
+      "productionEligible": false,
+      "experimental": true,
+      "licenseStatus": "LOCAL_ONLY_PENDING_REVIEW",
+      "taskTypes": [
+        "Image",
+        "Keyframe"
+      ],
+      "modelFiles": [
+        "RealVisXL_V5.0_fp16.safetensors"
+      ],
+      "modelSha256": {
+        "RealVisXL_V5.0_fp16.safetensors": "6a35a7855770ae9820a3c931d4964c3817b6d9e3c6f9c4dabb5b3a94e5643b80"
+      },
+      "nodes": [
+        {
+          "role": "checkpoint",
+          "nodeId": "1",
+          "classType": "CheckpointLoaderSimple",
+          "inputName": "ckpt_name"
+        },
+        {
+          "role": "positivePrompt",
+          "nodeId": "2",
+          "classType": "CLIPTextEncode",
+          "inputName": "text"
+        },
+        {
+          "role": "negativePrompt",
+          "nodeId": "3",
+          "classType": "CLIPTextEncode",
+          "inputName": "text"
+        },
+        {
+          "role": "sampler",
+          "nodeId": "9",
+          "classType": "KSampler",
+          "inputName": "seed"
+        },
+        {
+          "role": "output",
+          "nodeId": "12",
+          "classType": "SaveImage",
+          "inputName": "filename_prefix"
+        }
+      ],
+      "media": {
+        "defaultWidth": 768,
+        "defaultHeight": 768,
+        "allowedDimensions": [
+          {
+            "width": 768,
+            "height": 768
+          }
+        ],
+        "nativeFps": 1,
+        "allowedFps": [],
+        "exactFrameCount": false,
+        "preserveAudio": false
+      },
+      "notes": "sha256=c2c089c11748b1b55a7c259ad479ab43be15aa6941644ac150ee667268d16526 | Local skin-only low-denoise patch; original pixels protect eyes/lips/contour; not an identity replacement route.",
+      "slots": [
+        {
+          "role": "firstFrame",
+          "nodeId": "4",
+          "classType": "LoadImage",
+          "inputName": "image",
+          "required": true
+        },
+        {
+          "role": "editMask",
+          "nodeId": "5",
+          "classType": "LoadImage",
+          "inputName": "image",
+          "required": true
+        }
+      ]
+    },
+    {
+      "id": "realvisxl-expression-reference-768-v1",
+      "version": "realvisxl-expression-reference-768-v1",
+      "fileName": "realvisxl_expression_reference_768_api.json",
+      "workflowType": "Image",
+      "productionEligible": false,
+      "experimental": true,
+      "licenseStatus": "LOCAL_ONLY_PENDING_REVIEW",
+      "taskTypes": [
+        "Image",
+        "Keyframe"
+      ],
+      "modelFiles": [
+        "RealVisXL_V5.0_fp16.safetensors"
+      ],
+      "modelSha256": {
+        "RealVisXL_V5.0_fp16.safetensors": "6a35a7855770ae9820a3c931d4964c3817b6d9e3c6f9c4dabb5b3a94e5643b80"
+      },
+      "nodes": [
+        {
+          "role": "checkpoint",
+          "nodeId": "1",
+          "classType": "CheckpointLoaderSimple",
+          "inputName": "ckpt_name"
+        },
+        {
+          "role": "positivePrompt",
+          "nodeId": "2",
+          "classType": "CLIPTextEncode",
+          "inputName": "text"
+        },
+        {
+          "role": "negativePrompt",
+          "nodeId": "3",
+          "classType": "CLIPTextEncode",
+          "inputName": "text"
+        },
+        {
+          "role": "sampler",
+          "nodeId": "9",
+          "classType": "KSampler",
+          "inputName": "seed"
+        },
+        {
+          "role": "output",
+          "nodeId": "12",
+          "classType": "SaveImage",
+          "inputName": "filename_prefix"
+        }
+      ],
+      "media": {
+        "defaultWidth": 768,
+        "defaultHeight": 768,
+        "allowedDimensions": [
+          {
+            "width": 768,
+            "height": 768
+          }
+        ],
+        "nativeFps": 1,
+        "allowedFps": [],
+        "exactFrameCount": false,
+        "preserveAudio": false
+      },
+      "notes": "sha256=283f7eee0aa8f966374a3e9f2744e74b3fc5e89b1f8f6964d72a76fdcf904cdf | Same-angle original-conditioned mouth/cheek/jaw expression repair, original eyes/upper nose/hair preserved. Experimental local preview, human review required.",
+      "slots": [
+        {
+          "role": "firstFrame",
+          "nodeId": "4",
+          "classType": "LoadImage",
+          "inputName": "image",
+          "required": true
+        },
+        {
+          "role": "editMask",
+          "nodeId": "5",
+          "classType": "LoadImage",
+          "inputName": "image",
+          "required": true
+        }
+      ]
+    },
+    {
+      "id": "face-acting-shot-1-v1",
+      "version": "face-acting-shot-1-v1",
+      "fileName": "face_acting_shot_1_v1_api.json",
+      "workflowType": "ImageToVideo",
+      "productionEligible": false,
+      "experimental": true,
+      "licenseStatus": "LOCAL_ONLY_PENDING_REVIEW",
+      "taskTypes": [
+        "ImageToVideo"
+      ],
+      "modelFiles": [
+        "wan2.1-i2v-14b-480p-Q4_K_M.gguf",
+        "Wan2_1-InfiniteTalk_Multi_Q8.gguf",
+        "Wan2_1_VAE_bf16.safetensors",
+        "lightx2v_I2V_14B_480p_cfg_step_distill_rank64_bf16.safetensors",
+        "wav2vec2-chinese-base_fp16.safetensors",
+        "umt5_xxl_fp8_e4m3fn_scaled.safetensors"
+      ],
+      "modelSha256": {
+        "wan2.1-i2v-14b-480p-Q4_K_M.gguf": "d91f7139acadb42ea05cdf97b311e5099f714f11fbe4d90916500e2f53cbba82",
+        "Wan2_1-InfiniteTalk_Multi_Q8.gguf": "2b9b1dc2fb0f0a351e688ad8dc7545bf90b2a2f20cd91953ac077510ef6b7bc0",
+        "Wan2_1_VAE_bf16.safetensors": "1ab9a32cc2c740f6e39d80d367ce5dcc28db8c71b79b28670546b8973e9d75f9",
+        "lightx2v_I2V_14B_480p_cfg_step_distill_rank64_bf16.safetensors": "85c4a61c30e0497aa44b91d93a893b624708461a56fe5485183b28fa07e2dfb3",
+        "wav2vec2-chinese-base_fp16.safetensors": "000813e441020f18cff844c969d2d5d4adc2a5ce46b2db1f23950b05d88805b4",
+        "umt5_xxl_fp8_e4m3fn_scaled.safetensors": "60cce120e4e6647514529d4605ada3429ee8b456ba6143c4e37fe3475c42d4b0"
+      },
+      "nodes": [
+        {
+          "role": "output",
+          "nodeId": "18",
+          "classType": "SaveVideo",
+          "inputName": "filename_prefix"
+        },
+        {
+          "role": "sampler",
+          "nodeId": "15",
+          "classType": "WanVideoSampler",
+          "inputName": "seed"
+        },
+        {
+          "role": "positivePrompt",
+          "nodeId": "5",
+          "classType": "VideoStudioNativeWanTextCached",
+          "inputName": "positive"
+        },
+        {
+          "role": "negativePrompt",
+          "nodeId": "5",
+          "classType": "VideoStudioNativeWanTextCached",
+          "inputName": "negative"
+        },
+        {
+          "role": "exactFrameTrim",
+          "nodeId": "19",
+          "classType": "ImageFromBatch",
+          "inputName": "length"
+        }
+      ],
+      "slots": [
+        {
+          "role": "firstFrame",
+          "nodeId": "1",
+          "classType": "LoadImage",
+          "inputName": "image",
+          "required": true
+        },
+        {
+          "role": "speakerAudio",
+          "nodeId": "2",
+          "classType": "LoadAudio",
+          "inputName": "audio",
+          "required": true
+        }
+      ],
+      "media": {
+        "defaultWidth": 832,
+        "defaultHeight": 480,
+        "allowedDimensions": [
+          {
+            "width": 832,
+            "height": 480
+          }
+        ],
+        "outputFrames": [
+          57
+        ],
+        "nativeFps": 25,
+        "allowedFps": [
+          25
+        ],
+        "exactFrameCount": true,
+        "preserveAudio": true
+      },
+      "notes": "sha256=e38f69586c74b1377cc6df3171147f6fb83248fdb0a32d9bc94828ff900e7c27 | Same approved actors/audio; corrected reference expression, 8 steps, 57-frame window, audio_scale .95; exact output trim and content review required."
+    },
+    {
+      "id": "face-acting-shot-2-v1",
+      "version": "face-acting-shot-2-v1",
+      "fileName": "face_acting_shot_2_v1_api.json",
+      "workflowType": "ImageToVideo",
+      "productionEligible": false,
+      "experimental": true,
+      "licenseStatus": "LOCAL_ONLY_PENDING_REVIEW",
+      "taskTypes": [
+        "ImageToVideo"
+      ],
+      "modelFiles": [
+        "wan2.1-i2v-14b-480p-Q4_K_M.gguf",
+        "Wan2_1-InfiniteTalk_Multi_Q8.gguf",
+        "Wan2_1_VAE_bf16.safetensors",
+        "lightx2v_I2V_14B_480p_cfg_step_distill_rank64_bf16.safetensors",
+        "wav2vec2-chinese-base_fp16.safetensors",
+        "umt5_xxl_fp8_e4m3fn_scaled.safetensors"
+      ],
+      "modelSha256": {
+        "wan2.1-i2v-14b-480p-Q4_K_M.gguf": "d91f7139acadb42ea05cdf97b311e5099f714f11fbe4d90916500e2f53cbba82",
+        "Wan2_1-InfiniteTalk_Multi_Q8.gguf": "2b9b1dc2fb0f0a351e688ad8dc7545bf90b2a2f20cd91953ac077510ef6b7bc0",
+        "Wan2_1_VAE_bf16.safetensors": "1ab9a32cc2c740f6e39d80d367ce5dcc28db8c71b79b28670546b8973e9d75f9",
+        "lightx2v_I2V_14B_480p_cfg_step_distill_rank64_bf16.safetensors": "85c4a61c30e0497aa44b91d93a893b624708461a56fe5485183b28fa07e2dfb3",
+        "wav2vec2-chinese-base_fp16.safetensors": "000813e441020f18cff844c969d2d5d4adc2a5ce46b2db1f23950b05d88805b4",
+        "umt5_xxl_fp8_e4m3fn_scaled.safetensors": "60cce120e4e6647514529d4605ada3429ee8b456ba6143c4e37fe3475c42d4b0"
+      },
+      "nodes": [
+        {
+          "role": "output",
+          "nodeId": "18",
+          "classType": "SaveVideo",
+          "inputName": "filename_prefix"
+        },
+        {
+          "role": "sampler",
+          "nodeId": "15",
+          "classType": "WanVideoSampler",
+          "inputName": "seed"
+        },
+        {
+          "role": "positivePrompt",
+          "nodeId": "5",
+          "classType": "VideoStudioNativeWanTextCached",
+          "inputName": "positive"
+        },
+        {
+          "role": "negativePrompt",
+          "nodeId": "5",
+          "classType": "VideoStudioNativeWanTextCached",
+          "inputName": "negative"
+        },
+        {
+          "role": "exactFrameTrim",
+          "nodeId": "19",
+          "classType": "ImageFromBatch",
+          "inputName": "length"
+        }
+      ],
+      "slots": [
+        {
+          "role": "firstFrame",
+          "nodeId": "1",
+          "classType": "LoadImage",
+          "inputName": "image",
+          "required": true
+        },
+        {
+          "role": "speakerAudio",
+          "nodeId": "2",
+          "classType": "LoadAudio",
+          "inputName": "audio",
+          "required": true
+        }
+      ],
+      "media": {
+        "defaultWidth": 832,
+        "defaultHeight": 480,
+        "allowedDimensions": [
+          {
+            "width": 832,
+            "height": 480
+          }
+        ],
+        "outputFrames": [
+          46
+        ],
+        "nativeFps": 25,
+        "allowedFps": [
+          25
+        ],
+        "exactFrameCount": true,
+        "preserveAudio": true
+      },
+      "notes": "sha256=e48bc1655b48390807dca8ca564cbd6d1ef3ca53cb5dccbe2562704127d7c559 | Same approved actors/audio; corrected reference expression, 8 steps, 57-frame window, audio_scale .95; exact output trim and content review required."
+    },
+    {
+      "id": "face-acting-shot-3-v1",
+      "version": "face-acting-shot-3-v1",
+      "fileName": "face_acting_shot_3_v1_api.json",
+      "workflowType": "ImageToVideo",
+      "productionEligible": false,
+      "experimental": true,
+      "licenseStatus": "LOCAL_ONLY_PENDING_REVIEW",
+      "taskTypes": [
+        "ImageToVideo"
+      ],
+      "modelFiles": [
+        "wan2.1-i2v-14b-480p-Q4_K_M.gguf",
+        "Wan2_1-InfiniteTalk_Multi_Q8.gguf",
+        "Wan2_1_VAE_bf16.safetensors",
+        "lightx2v_I2V_14B_480p_cfg_step_distill_rank64_bf16.safetensors",
+        "wav2vec2-chinese-base_fp16.safetensors",
+        "umt5_xxl_fp8_e4m3fn_scaled.safetensors"
+      ],
+      "modelSha256": {
+        "wan2.1-i2v-14b-480p-Q4_K_M.gguf": "d91f7139acadb42ea05cdf97b311e5099f714f11fbe4d90916500e2f53cbba82",
+        "Wan2_1-InfiniteTalk_Multi_Q8.gguf": "2b9b1dc2fb0f0a351e688ad8dc7545bf90b2a2f20cd91953ac077510ef6b7bc0",
+        "Wan2_1_VAE_bf16.safetensors": "1ab9a32cc2c740f6e39d80d367ce5dcc28db8c71b79b28670546b8973e9d75f9",
+        "lightx2v_I2V_14B_480p_cfg_step_distill_rank64_bf16.safetensors": "85c4a61c30e0497aa44b91d93a893b624708461a56fe5485183b28fa07e2dfb3",
+        "wav2vec2-chinese-base_fp16.safetensors": "000813e441020f18cff844c969d2d5d4adc2a5ce46b2db1f23950b05d88805b4",
+        "umt5_xxl_fp8_e4m3fn_scaled.safetensors": "60cce120e4e6647514529d4605ada3429ee8b456ba6143c4e37fe3475c42d4b0"
+      },
+      "nodes": [
+        {
+          "role": "output",
+          "nodeId": "18",
+          "classType": "SaveVideo",
+          "inputName": "filename_prefix"
+        },
+        {
+          "role": "sampler",
+          "nodeId": "15",
+          "classType": "WanVideoSampler",
+          "inputName": "seed"
+        },
+        {
+          "role": "positivePrompt",
+          "nodeId": "5",
+          "classType": "VideoStudioNativeWanTextCached",
+          "inputName": "positive"
+        },
+        {
+          "role": "negativePrompt",
+          "nodeId": "5",
+          "classType": "VideoStudioNativeWanTextCached",
+          "inputName": "negative"
+        },
+        {
+          "role": "exactFrameTrim",
+          "nodeId": "19",
+          "classType": "ImageFromBatch",
+          "inputName": "length"
+        }
+      ],
+      "slots": [
+        {
+          "role": "firstFrame",
+          "nodeId": "1",
+          "classType": "LoadImage",
+          "inputName": "image",
+          "required": true
+        },
+        {
+          "role": "femaleAudio",
+          "nodeId": "2",
+          "classType": "LoadAudio",
+          "inputName": "audio",
+          "required": true
+        },
+        {
+          "role": "maleAudio",
+          "nodeId": "3",
+          "classType": "LoadAudio",
+          "inputName": "audio",
+          "required": true
+        }
+      ],
+      "media": {
+        "defaultWidth": 832,
+        "defaultHeight": 480,
+        "allowedDimensions": [
+          {
+            "width": 832,
+            "height": 480
+          }
+        ],
+        "outputFrames": [
+          151
+        ],
+        "nativeFps": 25,
+        "allowedFps": [
+          25
+        ],
+        "exactFrameCount": true,
+        "preserveAudio": true
+      },
+      "notes": "sha256=5f605776757de4e82622f835bfe85ba672c129c5cdca5c79da56eab00275e7e2 | Same approved actors/audio; corrected reference expression, 8 steps, 57-frame window, audio_scale .95; exact output trim and content review required."
+    },
+    {
+      "id": "minimax-h3-firstlast480-v1",
+      "version": "minimax-h3-firstlast480-v1",
+      "fileName": "minimax_h3_local_fl2v_480_api.json",
+      "workflowType": "ImageToVideo",
+      "productionEligible": false,
+      "experimental": true,
+      "licenseStatus": "LOCAL_ONLY_PENDING_REVIEW",
+      "taskTypes": [
+        "ImageToVideo"
+      ],
+      "modelFiles": [
+        "minimax_h3_fl2va_pruned_fp8_Q4_0.gguf",
+        "qwen3vl_32b_minimax_h3-Q2_K_M.gguf",
+        "vae/minimax_h3_video_vae_fp16.safetensors",
+        "vae/minimax_h3_audio_vae_fp32.safetensors"
+      ],
+      "modelSha256": {
+        "minimax_h3_fl2va_pruned_fp8_Q4_0.gguf": "50891b806d6d700f4f20931791ca42a083dd9148609838268ccdc782bf899c1c",
+        "qwen3vl_32b_minimax_h3-Q2_K_M.gguf": "a8ccadccd57ef34c838ffb8a7da8368bb554721b2760274a1d3b0df63960b997",
+        "vae/minimax_h3_video_vae_fp16.safetensors": "7c1f131492e7eddacaac9069a61b81bdd39de5cc96561e677c5eab1cdce5e522",
+        "vae/minimax_h3_audio_vae_fp32.safetensors": "8e505d95dd1561d47abd43d4238fd40d9bb1ae9e147ed0a4cba778d76ae4db48"
+      },
+      "nodes": [
+        {
+          "role": "model",
+          "nodeId": "1",
+          "classType": "UnetLoaderGGUF",
+          "inputName": "unet_name",
+          "required": true
+        },
+        {
+          "role": "positivePrompt",
+          "nodeId": "6",
+          "classType": "MiniMaxH3ImageToVideo",
+          "inputName": "prompt",
+          "required": true
+        },
+        {
+          "role": "seed",
+          "nodeId": "7",
+          "classType": "RandomNoise",
+          "inputName": "noise_seed",
+          "required": true
+        },
+        {
+          "role": "save",
+          "nodeId": "15",
+          "classType": "SaveVideo",
+          "inputName": "filename_prefix",
+          "required": true
+        }
+      ],
+      "slots": [
+        {
+          "role": "firstFrame",
+          "nodeId": "5",
+          "classType": "LoadImage",
+          "inputName": "image",
+          "required": true
+        },
+        {
+          "role": "lastFrame",
+          "nodeId": "16",
+          "classType": "LoadImage",
+          "inputName": "image",
+          "required": true
+        }
+      ],
+      "media": {
+        "defaultWidth": 864,
+        "defaultHeight": 480,
+        "allowedDimensions": [
+          {
+            "width": 864,
+            "height": 480
+          }
+        ],
+        "outputFrames": [
+          124
+        ],
+        "nativeFps": 24,
+        "allowedFps": [
+          24
+        ],
+        "exactFrameCount": true,
+        "executionFrameOffset": 0,
+        "guideFrameOffset": 0,
+        "requiresGuide": false,
+        "preserveAudio": true
+      },
+      "notes": "sha256=0abd7c34fb0a102e9459cbc324b7a6687487ddcf8ef6b97b1c07ab0be9b8262e | Pinned local H3 first/last-frame 480p experiment. Explicit node5 firstFrame and node16 lastFrame; exact 864x480 static inputs with SHA256, last target frame 123. Managed H3 admission and queue verify both inputs. No model replacement or production approval."
+    },
+    {
+      "id": "flux2-klein4b-keyframe-local-1024-v1",
+      "version": "flux2-klein4b-keyframe-local-1024-v1",
+      "fileName": "flux2_klein4b_keyframe_api.json",
+      "workflowType": "Image",
+      "productionEligible": false,
+      "experimental": true,
+      "licenseStatus": "APACHE_2_0_LOCAL_EXPERIMENT_PENDING_CONTENT_REVIEW",
+      "taskTypes": [
+        "Image",
+        "Keyframe"
+      ],
+      "modelFiles": [
+        "flux-2-klein-4b-fp8.safetensors",
+        "qwen_3_4b.safetensors",
+        "flux2-vae.safetensors"
+      ],
+      "modelSha256": {
+        "flux-2-klein-4b-fp8.safetensors": "97ed34fe0567e436200f2faee3939b88f2b5d99f8af2a4dc16532c4245c0ccb6",
+        "qwen_3_4b.safetensors": "6c671498573ac2f7a5501502ccce8d2b08ea6ca2f661c458e708f36b36edfc5a",
+        "flux2-vae.safetensors": "868fe7b343cc8f3a19dbcfcafbc3d5f888802be3f89bd81b65b3621a066ce8f3"
+      },
+      "nodes": [
+        {
+          "role": "diffusionModel",
+          "nodeId": "1",
+          "classType": "UNETLoader",
+          "inputName": "unet_name"
+        },
+        {
+          "role": "textEncoder",
+          "nodeId": "2",
+          "classType": "CLIPLoader",
+          "inputName": "clip_name"
+        },
+        {
+          "role": "vae",
+          "nodeId": "3",
+          "classType": "VAELoader",
+          "inputName": "vae_name"
+        },
+        {
+          "role": "positivePrompt",
+          "nodeId": "7",
+          "classType": "CLIPTextEncode",
+          "inputName": "text"
+        },
+        {
+          "role": "sampler",
+          "nodeId": "14",
+          "classType": "RandomNoise",
+          "inputName": "noise_seed"
+        },
+        {
+          "role": "schedule",
+          "nodeId": "13",
+          "classType": "Flux2Scheduler",
+          "inputName": "steps"
+        },
+        {
+          "role": "guidance",
+          "nodeId": "11",
+          "classType": "CFGGuider",
+          "inputName": "cfg"
+        },
+        {
+          "role": "output",
+          "nodeId": "18",
+          "classType": "SaveImage",
+          "inputName": "filename_prefix"
+        }
+      ],
+      "slots": [
+        {
+          "role": "firstFrame",
+          "nodeId": "4",
+          "classType": "LoadImage",
+          "inputName": "image",
+          "required": true
+        }
+      ],
+      "media": {
+        "defaultWidth": 1024,
+        "defaultHeight": 576,
+        "allowedDimensions": [
+          {
+            "width": 1024,
+            "height": 576
+          }
+        ],
+        "nativeFps": 1,
+        "allowedFps": [],
+        "exactFrameCount": false,
+        "preserveAudio": false
+      },
+      "notes": "sha256=949195db4763cf7b42dd8545f634ac1c7f61d0055f4062091411adecc3f0459c | Local-only FLUX.2 Klein 4B distilled FP8 reference edit, Qwen3-4B BF16 text encoder on CPU, 4-step Euler CFG1. Apache 2.0 model artifacts. Frozen six-candidate visual evaluation only; generation and identity/content approval remain distinct."
+    },
+    {
+      "id": "flux2-klein4b-keyframe-local-1024-v2",
+      "version": "flux2-klein4b-keyframe-local-1024-v2",
+      "fileName": "flux2_klein4b_keyframe_v2_api.json",
+      "workflowType": "Image",
+      "productionEligible": false,
+      "experimental": true,
+      "licenseStatus": "APACHE_2_0_LOCAL_EXPERIMENT_PENDING_CONTENT_REVIEW",
+      "taskTypes": [
+        "Image",
+        "Keyframe"
+      ],
+      "modelFiles": [
+        "flux-2-klein-4b-fp8.safetensors",
+        "qwen_3_4b.safetensors",
+        "flux2-vae.safetensors"
+      ],
+      "modelSha256": {
+        "flux-2-klein-4b-fp8.safetensors": "97ed34fe0567e436200f2faee3939b88f2b5d99f8af2a4dc16532c4245c0ccb6",
+        "qwen_3_4b.safetensors": "6c671498573ac2f7a5501502ccce8d2b08ea6ca2f661c458e708f36b36edfc5a",
+        "flux2-vae.safetensors": "868fe7b343cc8f3a19dbcfcafbc3d5f888802be3f89bd81b65b3621a066ce8f3"
+      },
+      "nodes": [
+        {
+          "role": "diffusionModel",
+          "nodeId": "1",
+          "classType": "UNETLoader",
+          "inputName": "unet_name"
+        },
+        {
+          "role": "textEncoder",
+          "nodeId": "2",
+          "classType": "CLIPLoader",
+          "inputName": "clip_name"
+        },
+        {
+          "role": "vae",
+          "nodeId": "3",
+          "classType": "VAELoader",
+          "inputName": "vae_name"
+        },
+        {
+          "role": "positivePrompt",
+          "nodeId": "7",
+          "classType": "CLIPTextEncode",
+          "inputName": "text"
+        },
+        {
+          "role": "sampler",
+          "nodeId": "14",
+          "classType": "RandomNoise",
+          "inputName": "noise_seed"
+        },
+        {
+          "role": "schedule",
+          "nodeId": "13",
+          "classType": "Flux2Scheduler",
+          "inputName": "steps"
+        },
+        {
+          "role": "guidance",
+          "nodeId": "11",
+          "classType": "CFGGuider",
+          "inputName": "cfg"
+        },
+        {
+          "role": "output",
+          "nodeId": "18",
+          "classType": "SaveImage",
+          "inputName": "filename_prefix"
+        }
+      ],
+      "slots": [
+        {
+          "role": "firstFrame",
+          "nodeId": "4",
+          "classType": "LoadImage",
+          "inputName": "image",
+          "required": true
+        }
+      ],
+      "media": {
+        "defaultWidth": 1024,
+        "defaultHeight": 576,
+        "allowedDimensions": [
+          {
+            "width": 1024,
+            "height": 576
+          }
+        ],
+        "nativeFps": 1,
+        "allowedFps": [],
+        "exactFrameCount": false,
+        "preserveAudio": false
+      },
+      "notes": "sha256=949195db4763cf7b42dd8545f634ac1c7f61d0055f4062091411adecc3f0459c | Local-only FLUX.2 Klein 4B distilled FP8 reference edit, Qwen3-4B BF16 text encoder on CPU, 4-step Euler CFG1. Apache 2.0 model artifacts. Frozen six-candidate visual evaluation only; generation and identity/content approval remain distinct."
+    },
+    {
+      "id": "dialogue-sync-close-v1",
+      "version": "dialogue-sync-close-v1",
+      "fileName": "dialogue_sync_close_v1_api.json",
+      "workflowType": "ImageToVideo",
+      "productionEligible": false,
+      "experimental": true,
+      "licenseStatus": "LOCAL_ONLY_PENDING_REVIEW",
+      "taskTypes": [
+        "ImageToVideo"
+      ],
+      "modelFiles": [
+        "wan2.1-i2v-14b-480p-Q4_K_M.gguf",
+        "Wan2_1-InfiniteTalk_Multi_Q8.gguf",
+        "Wan2_1_VAE_bf16.safetensors",
+        "lightx2v_I2V_14B_480p_cfg_step_distill_rank64_bf16.safetensors",
+        "wav2vec2-chinese-base_fp16.safetensors",
+        "umt5_xxl_fp8_e4m3fn_scaled.safetensors"
+      ],
+      "modelSha256": {
+        "wan2.1-i2v-14b-480p-Q4_K_M.gguf": "d91f7139acadb42ea05cdf97b311e5099f714f11fbe4d90916500e2f53cbba82",
+        "Wan2_1-InfiniteTalk_Multi_Q8.gguf": "2b9b1dc2fb0f0a351e688ad8dc7545bf90b2a2f20cd91953ac077510ef6b7bc0",
+        "Wan2_1_VAE_bf16.safetensors": "1ab9a32cc2c740f6e39d80d367ce5dcc28db8c71b79b28670546b8973e9d75f9",
+        "lightx2v_I2V_14B_480p_cfg_step_distill_rank64_bf16.safetensors": "85c4a61c30e0497aa44b91d93a893b624708461a56fe5485183b28fa07e2dfb3",
+        "wav2vec2-chinese-base_fp16.safetensors": "000813e441020f18cff844c969d2d5d4adc2a5ce46b2db1f23950b05d88805b4",
+        "umt5_xxl_fp8_e4m3fn_scaled.safetensors": "60cce120e4e6647514529d4605ada3429ee8b456ba6143c4e37fe3475c42d4b0"
+      },
+      "nodes": [
+        {
+          "role": "output",
+          "nodeId": "18",
+          "classType": "SaveVideo",
+          "inputName": "filename_prefix"
+        },
+        {
+          "role": "sampler",
+          "nodeId": "15",
+          "classType": "WanVideoSampler",
+          "inputName": "seed"
+        },
+        {
+          "role": "positivePrompt",
+          "nodeId": "5",
+          "classType": "VideoStudioNativeWanTextCached",
+          "inputName": "positive"
+        },
+        {
+          "role": "negativePrompt",
+          "nodeId": "5",
+          "classType": "VideoStudioNativeWanTextCached",
+          "inputName": "negative"
+        },
+        {
+          "role": "exactFrameTrim",
+          "nodeId": "19",
+          "classType": "ImageFromBatch",
+          "inputName": "length"
+        }
+      ],
+      "slots": [
+        {
+          "role": "firstFrame",
+          "nodeId": "1",
+          "classType": "LoadImage",
+          "inputName": "image",
+          "required": true
+        },
+        {
+          "role": "speakerAudio",
+          "nodeId": "2",
+          "classType": "LoadAudio",
+          "inputName": "audio",
+          "required": true
+        }
+      ],
+      "media": {
+        "defaultWidth": 832,
+        "defaultHeight": 480,
+        "allowedDimensions": [
+          {
+            "width": 832,
+            "height": 480
+          }
+        ],
+        "outputFrames": [
+          51
+        ],
+        "nativeFps": 25,
+        "allowedFps": [
+          25
+        ],
+        "exactFrameCount": true,
+        "preserveAudio": true
+      },
+      "notes": "sha256=41d572605321e1547fe0849cb668c9cd89238b94b9f566116b891c1c020b35ca | Existing weights; audio_cfg2, native aligned excerpt, pose-matched source and bounded natural response; review only"
+    },
+    {
+      "id": "dialogue-sync-wide-v1",
+      "version": "dialogue-sync-wide-v1",
+      "fileName": "dialogue_sync_wide_v1_api.json",
+      "workflowType": "ImageToVideo",
+      "productionEligible": false,
+      "experimental": true,
+      "licenseStatus": "LOCAL_ONLY_PENDING_REVIEW",
+      "taskTypes": [
+        "ImageToVideo"
+      ],
+      "modelFiles": [
+        "wan2.1-i2v-14b-480p-Q4_K_M.gguf",
+        "Wan2_1-InfiniteTalk_Multi_Q8.gguf",
+        "Wan2_1_VAE_bf16.safetensors",
+        "lightx2v_I2V_14B_480p_cfg_step_distill_rank64_bf16.safetensors",
+        "wav2vec2-chinese-base_fp16.safetensors",
+        "umt5_xxl_fp8_e4m3fn_scaled.safetensors"
+      ],
+      "modelSha256": {
+        "wan2.1-i2v-14b-480p-Q4_K_M.gguf": "d91f7139acadb42ea05cdf97b311e5099f714f11fbe4d90916500e2f53cbba82",
+        "Wan2_1-InfiniteTalk_Multi_Q8.gguf": "2b9b1dc2fb0f0a351e688ad8dc7545bf90b2a2f20cd91953ac077510ef6b7bc0",
+        "Wan2_1_VAE_bf16.safetensors": "1ab9a32cc2c740f6e39d80d367ce5dcc28db8c71b79b28670546b8973e9d75f9",
+        "lightx2v_I2V_14B_480p_cfg_step_distill_rank64_bf16.safetensors": "85c4a61c30e0497aa44b91d93a893b624708461a56fe5485183b28fa07e2dfb3",
+        "wav2vec2-chinese-base_fp16.safetensors": "000813e441020f18cff844c969d2d5d4adc2a5ce46b2db1f23950b05d88805b4",
+        "umt5_xxl_fp8_e4m3fn_scaled.safetensors": "60cce120e4e6647514529d4605ada3429ee8b456ba6143c4e37fe3475c42d4b0"
+      },
+      "nodes": [
+        {
+          "role": "output",
+          "nodeId": "18",
+          "classType": "SaveVideo",
+          "inputName": "filename_prefix"
+        },
+        {
+          "role": "sampler",
+          "nodeId": "15",
+          "classType": "WanVideoSampler",
+          "inputName": "seed"
+        },
+        {
+          "role": "positivePrompt",
+          "nodeId": "5",
+          "classType": "VideoStudioNativeWanTextCached",
+          "inputName": "positive"
+        },
+        {
+          "role": "negativePrompt",
+          "nodeId": "5",
+          "classType": "VideoStudioNativeWanTextCached",
+          "inputName": "negative"
+        },
+        {
+          "role": "exactFrameTrim",
+          "nodeId": "19",
+          "classType": "ImageFromBatch",
+          "inputName": "length"
+        }
+      ],
+      "slots": [
+        {
+          "role": "firstFrame",
+          "nodeId": "1",
+          "classType": "LoadImage",
+          "inputName": "image",
+          "required": true
+        },
+        {
+          "role": "femaleAudio",
+          "nodeId": "2",
+          "classType": "LoadAudio",
+          "inputName": "audio",
+          "required": true
+        },
+        {
+          "role": "maleAudio",
+          "nodeId": "3",
+          "classType": "LoadAudio",
+          "inputName": "audio",
+          "required": true
+        }
+      ],
+      "media": {
+        "defaultWidth": 832,
+        "defaultHeight": 480,
+        "allowedDimensions": [
+          {
+            "width": 832,
+            "height": 480
+          }
+        ],
+        "outputFrames": [
+          57
+        ],
+        "nativeFps": 25,
+        "allowedFps": [
+          25
+        ],
+        "exactFrameCount": true,
+        "preserveAudio": true
+      },
+      "notes": "sha256=e49689ce766b39b1c5773c56dda5703d9760a6492f0fd49fd1e3862cebdc57ad | Existing weights; audio_cfg2, native aligned excerpt, pose-matched source and bounded natural response; review only"
+    },
+    {
+      "id": "dialogue-sync-close-i2v-v2",
+      "version": "dialogue-sync-close-i2v-v2",
+      "fileName": "dialogue_sync_close_i2v_v2_api.json",
+      "workflowType": "ImageToVideo",
+      "productionEligible": false,
+      "experimental": true,
+      "licenseStatus": "LOCAL_ONLY_PENDING_REVIEW",
+      "taskTypes": [
+        "ImageToVideo"
+      ],
+      "modelFiles": [
+        "wan2.1-i2v-14b-480p-Q4_K_M.gguf",
+        "Wan2_1-InfiniteTalk_Multi_Q8.gguf",
+        "Wan2_1_VAE_bf16.safetensors",
+        "lightx2v_I2V_14B_480p_cfg_step_distill_rank64_bf16.safetensors",
+        "wav2vec2-chinese-base_fp16.safetensors",
+        "umt5_xxl_fp8_e4m3fn_scaled.safetensors"
+      ],
+      "modelSha256": {
+        "wan2.1-i2v-14b-480p-Q4_K_M.gguf": "d91f7139acadb42ea05cdf97b311e5099f714f11fbe4d90916500e2f53cbba82",
+        "Wan2_1-InfiniteTalk_Multi_Q8.gguf": "2b9b1dc2fb0f0a351e688ad8dc7545bf90b2a2f20cd91953ac077510ef6b7bc0",
+        "Wan2_1_VAE_bf16.safetensors": "1ab9a32cc2c740f6e39d80d367ce5dcc28db8c71b79b28670546b8973e9d75f9",
+        "lightx2v_I2V_14B_480p_cfg_step_distill_rank64_bf16.safetensors": "85c4a61c30e0497aa44b91d93a893b624708461a56fe5485183b28fa07e2dfb3",
+        "wav2vec2-chinese-base_fp16.safetensors": "000813e441020f18cff844c969d2d5d4adc2a5ce46b2db1f23950b05d88805b4",
+        "umt5_xxl_fp8_e4m3fn_scaled.safetensors": "60cce120e4e6647514529d4605ada3429ee8b456ba6143c4e37fe3475c42d4b0"
+      },
+      "nodes": [
+        {
+          "role": "output",
+          "nodeId": "18",
+          "classType": "SaveVideo",
+          "inputName": "filename_prefix"
+        },
+        {
+          "role": "sampler",
+          "nodeId": "15",
+          "classType": "WanVideoSampler",
+          "inputName": "seed"
+        },
+        {
+          "role": "positivePrompt",
+          "nodeId": "5",
+          "classType": "VideoStudioNativeWanTextCached",
+          "inputName": "positive"
+        },
+        {
+          "role": "negativePrompt",
+          "nodeId": "5",
+          "classType": "VideoStudioNativeWanTextCached",
+          "inputName": "negative"
+        },
+        {
+          "role": "exactFrameTrim",
+          "nodeId": "19",
+          "classType": "ImageFromBatch",
+          "inputName": "length"
+        }
+      ],
+      "slots": [
+        {
+          "role": "firstFrame",
+          "nodeId": "1",
+          "classType": "LoadImage",
+          "inputName": "image",
+          "required": true
+        },
+        {
+          "role": "speakerAudio",
+          "nodeId": "2",
+          "classType": "LoadAudio",
+          "inputName": "audio",
+          "required": true
+        }
+      ],
+      "media": {
+        "defaultWidth": 832,
+        "defaultHeight": 480,
+        "allowedDimensions": [
+          {
+            "width": 832,
+            "height": 480
+          }
+        ],
+        "outputFrames": [
+          51
+        ],
+        "nativeFps": 25,
+        "allowedFps": [
+          25
+        ],
+        "exactFrameCount": true,
+        "preserveAudio": true
+      },
+      "notes": "sha256=41d572605321e1547fe0849cb668c9cd89238b94b9f566116b891c1c020b35ca | Existing weights; audio_cfg2, native aligned excerpt, pose-matched source and bounded natural response; review only"
+    },
+    {
+      "id": "dialogue-sync-wide-i2v-v2",
+      "version": "dialogue-sync-wide-i2v-v2",
+      "fileName": "dialogue_sync_wide_i2v_v2_api.json",
+      "workflowType": "ImageToVideo",
+      "productionEligible": false,
+      "experimental": true,
+      "licenseStatus": "LOCAL_ONLY_PENDING_REVIEW",
+      "taskTypes": [
+        "ImageToVideo"
+      ],
+      "modelFiles": [
+        "wan2.1-i2v-14b-480p-Q4_K_M.gguf",
+        "Wan2_1-InfiniteTalk_Multi_Q8.gguf",
+        "Wan2_1_VAE_bf16.safetensors",
+        "lightx2v_I2V_14B_480p_cfg_step_distill_rank64_bf16.safetensors",
+        "wav2vec2-chinese-base_fp16.safetensors",
+        "umt5_xxl_fp8_e4m3fn_scaled.safetensors"
+      ],
+      "modelSha256": {
+        "wan2.1-i2v-14b-480p-Q4_K_M.gguf": "d91f7139acadb42ea05cdf97b311e5099f714f11fbe4d90916500e2f53cbba82",
+        "Wan2_1-InfiniteTalk_Multi_Q8.gguf": "2b9b1dc2fb0f0a351e688ad8dc7545bf90b2a2f20cd91953ac077510ef6b7bc0",
+        "Wan2_1_VAE_bf16.safetensors": "1ab9a32cc2c740f6e39d80d367ce5dcc28db8c71b79b28670546b8973e9d75f9",
+        "lightx2v_I2V_14B_480p_cfg_step_distill_rank64_bf16.safetensors": "85c4a61c30e0497aa44b91d93a893b624708461a56fe5485183b28fa07e2dfb3",
+        "wav2vec2-chinese-base_fp16.safetensors": "000813e441020f18cff844c969d2d5d4adc2a5ce46b2db1f23950b05d88805b4",
+        "umt5_xxl_fp8_e4m3fn_scaled.safetensors": "60cce120e4e6647514529d4605ada3429ee8b456ba6143c4e37fe3475c42d4b0"
+      },
+      "nodes": [
+        {
+          "role": "output",
+          "nodeId": "18",
+          "classType": "SaveVideo",
+          "inputName": "filename_prefix"
+        },
+        {
+          "role": "sampler",
+          "nodeId": "15",
+          "classType": "WanVideoSampler",
+          "inputName": "seed"
+        },
+        {
+          "role": "positivePrompt",
+          "nodeId": "5",
+          "classType": "VideoStudioNativeWanTextCached",
+          "inputName": "positive"
+        },
+        {
+          "role": "negativePrompt",
+          "nodeId": "5",
+          "classType": "VideoStudioNativeWanTextCached",
+          "inputName": "negative"
+        },
+        {
+          "role": "exactFrameTrim",
+          "nodeId": "19",
+          "classType": "ImageFromBatch",
+          "inputName": "length"
+        }
+      ],
+      "slots": [
+        {
+          "role": "firstFrame",
+          "nodeId": "1",
+          "classType": "LoadImage",
+          "inputName": "image",
+          "required": true
+        },
+        {
+          "role": "femaleAudio",
+          "nodeId": "2",
+          "classType": "LoadAudio",
+          "inputName": "audio",
+          "required": true
+        },
+        {
+          "role": "maleAudio",
+          "nodeId": "3",
+          "classType": "LoadAudio",
+          "inputName": "audio",
+          "required": true
+        }
+      ],
+      "media": {
+        "defaultWidth": 832,
+        "defaultHeight": 480,
+        "allowedDimensions": [
+          {
+            "width": 832,
+            "height": 480
+          }
+        ],
+        "outputFrames": [
+          57
+        ],
+        "nativeFps": 25,
+        "allowedFps": [
+          25
+        ],
+        "exactFrameCount": true,
+        "preserveAudio": true
+      },
+      "notes": "sha256=e49689ce766b39b1c5773c56dda5703d9760a6492f0fd49fd1e3862cebdc57ad | Existing weights; audio_cfg2, native aligned excerpt, pose-matched source and bounded natural response; review only"
+    },
+    {
+      "id": "dialogue-sync-full-shot-1-i2v-v1",
+      "version": "dialogue-sync-full-shot-1-i2v-v1",
+      "fileName": "dialogue_sync_full_shot_1_i2v_v1_api.json",
+      "workflowType": "ImageToVideo",
+      "productionEligible": false,
+      "experimental": true,
+      "licenseStatus": "LOCAL_ONLY_PENDING_REVIEW",
+      "taskTypes": [
+        "ImageToVideo"
+      ],
+      "modelFiles": [
+        "wan2.1-i2v-14b-480p-Q4_K_M.gguf",
+        "Wan2_1-InfiniteTalk_Multi_Q8.gguf",
+        "Wan2_1_VAE_bf16.safetensors",
+        "lightx2v_I2V_14B_480p_cfg_step_distill_rank64_bf16.safetensors",
+        "wav2vec2-chinese-base_fp16.safetensors",
+        "umt5_xxl_fp8_e4m3fn_scaled.safetensors"
+      ],
+      "modelSha256": {
+        "wan2.1-i2v-14b-480p-Q4_K_M.gguf": "d91f7139acadb42ea05cdf97b311e5099f714f11fbe4d90916500e2f53cbba82",
+        "Wan2_1-InfiniteTalk_Multi_Q8.gguf": "2b9b1dc2fb0f0a351e688ad8dc7545bf90b2a2f20cd91953ac077510ef6b7bc0",
+        "Wan2_1_VAE_bf16.safetensors": "1ab9a32cc2c740f6e39d80d367ce5dcc28db8c71b79b28670546b8973e9d75f9",
+        "lightx2v_I2V_14B_480p_cfg_step_distill_rank64_bf16.safetensors": "85c4a61c30e0497aa44b91d93a893b624708461a56fe5485183b28fa07e2dfb3",
+        "wav2vec2-chinese-base_fp16.safetensors": "000813e441020f18cff844c969d2d5d4adc2a5ce46b2db1f23950b05d88805b4",
+        "umt5_xxl_fp8_e4m3fn_scaled.safetensors": "60cce120e4e6647514529d4605ada3429ee8b456ba6143c4e37fe3475c42d4b0"
+      },
+      "nodes": [
+        {
+          "role": "output",
+          "nodeId": "18",
+          "classType": "SaveVideo",
+          "inputName": "filename_prefix"
+        },
+        {
+          "role": "sampler",
+          "nodeId": "15",
+          "classType": "WanVideoSampler",
+          "inputName": "seed"
+        },
+        {
+          "role": "positivePrompt",
+          "nodeId": "5",
+          "classType": "VideoStudioNativeWanTextCached",
+          "inputName": "positive"
+        },
+        {
+          "role": "negativePrompt",
+          "nodeId": "5",
+          "classType": "VideoStudioNativeWanTextCached",
+          "inputName": "negative"
+        },
+        {
+          "role": "exactFrameTrim",
+          "nodeId": "19",
+          "classType": "ImageFromBatch",
+          "inputName": "length"
+        }
+      ],
+      "slots": [
+        {
+          "role": "firstFrame",
+          "nodeId": "1",
+          "classType": "LoadImage",
+          "inputName": "image",
+          "required": true
+        },
+        {
+          "role": "speakerAudio",
+          "nodeId": "2",
+          "classType": "LoadAudio",
+          "inputName": "audio",
+          "required": true
+        }
+      ],
+      "media": {
+        "defaultWidth": 832,
+        "defaultHeight": 480,
+        "allowedDimensions": [
+          {
+            "width": 832,
+            "height": 480
+          }
+        ],
+        "outputFrames": [
+          57
+        ],
+        "nativeFps": 25,
+        "allowedFps": [
+          25
+        ],
+        "exactFrameCount": true,
+        "preserveAudio": true
+      },
+      "notes": "sha256=bb64f6135d7cd700a3feaccda0235e4d4e96ccbf4c57f37b6cc6517057615644 | Full accepted sync method; original per-shot dry voice; existing weights; audioCFG2; review only"
+    },
+    {
+      "id": "dialogue-sync-full-shot-2-i2v-v1",
+      "version": "dialogue-sync-full-shot-2-i2v-v1",
+      "fileName": "dialogue_sync_full_shot_2_i2v_v1_api.json",
+      "workflowType": "ImageToVideo",
+      "productionEligible": false,
+      "experimental": true,
+      "licenseStatus": "LOCAL_ONLY_PENDING_REVIEW",
+      "taskTypes": [
+        "ImageToVideo"
+      ],
+      "modelFiles": [
+        "wan2.1-i2v-14b-480p-Q4_K_M.gguf",
+        "Wan2_1-InfiniteTalk_Multi_Q8.gguf",
+        "Wan2_1_VAE_bf16.safetensors",
+        "lightx2v_I2V_14B_480p_cfg_step_distill_rank64_bf16.safetensors",
+        "wav2vec2-chinese-base_fp16.safetensors",
+        "umt5_xxl_fp8_e4m3fn_scaled.safetensors"
+      ],
+      "modelSha256": {
+        "wan2.1-i2v-14b-480p-Q4_K_M.gguf": "d91f7139acadb42ea05cdf97b311e5099f714f11fbe4d90916500e2f53cbba82",
+        "Wan2_1-InfiniteTalk_Multi_Q8.gguf": "2b9b1dc2fb0f0a351e688ad8dc7545bf90b2a2f20cd91953ac077510ef6b7bc0",
+        "Wan2_1_VAE_bf16.safetensors": "1ab9a32cc2c740f6e39d80d367ce5dcc28db8c71b79b28670546b8973e9d75f9",
+        "lightx2v_I2V_14B_480p_cfg_step_distill_rank64_bf16.safetensors": "85c4a61c30e0497aa44b91d93a893b624708461a56fe5485183b28fa07e2dfb3",
+        "wav2vec2-chinese-base_fp16.safetensors": "000813e441020f18cff844c969d2d5d4adc2a5ce46b2db1f23950b05d88805b4",
+        "umt5_xxl_fp8_e4m3fn_scaled.safetensors": "60cce120e4e6647514529d4605ada3429ee8b456ba6143c4e37fe3475c42d4b0"
+      },
+      "nodes": [
+        {
+          "role": "output",
+          "nodeId": "18",
+          "classType": "SaveVideo",
+          "inputName": "filename_prefix"
+        },
+        {
+          "role": "sampler",
+          "nodeId": "15",
+          "classType": "WanVideoSampler",
+          "inputName": "seed"
+        },
+        {
+          "role": "positivePrompt",
+          "nodeId": "5",
+          "classType": "VideoStudioNativeWanTextCached",
+          "inputName": "positive"
+        },
+        {
+          "role": "negativePrompt",
+          "nodeId": "5",
+          "classType": "VideoStudioNativeWanTextCached",
+          "inputName": "negative"
+        },
+        {
+          "role": "exactFrameTrim",
+          "nodeId": "19",
+          "classType": "ImageFromBatch",
+          "inputName": "length"
+        }
+      ],
+      "slots": [
+        {
+          "role": "firstFrame",
+          "nodeId": "1",
+          "classType": "LoadImage",
+          "inputName": "image",
+          "required": true
+        },
+        {
+          "role": "speakerAudio",
+          "nodeId": "2",
+          "classType": "LoadAudio",
+          "inputName": "audio",
+          "required": true
+        }
+      ],
+      "media": {
+        "defaultWidth": 832,
+        "defaultHeight": 480,
+        "allowedDimensions": [
+          {
+            "width": 832,
+            "height": 480
+          }
+        ],
+        "outputFrames": [
+          46
+        ],
+        "nativeFps": 25,
+        "allowedFps": [
+          25
+        ],
+        "exactFrameCount": true,
+        "preserveAudio": true
+      },
+      "notes": "sha256=72a67a330cad143a4988cd2b57b5c14d154ccff37c5f8ba85fd12bf073bff584 | Full accepted sync method; original per-shot dry voice; existing weights; audioCFG2; review only"
+    },
+    {
+      "id": "dialogue-sync-full-shot-3-i2v-v1",
+      "version": "dialogue-sync-full-shot-3-i2v-v1",
+      "fileName": "dialogue_sync_full_shot_3_i2v_v1_api.json",
+      "workflowType": "ImageToVideo",
+      "productionEligible": false,
+      "experimental": true,
+      "licenseStatus": "LOCAL_ONLY_PENDING_REVIEW",
+      "taskTypes": [
+        "ImageToVideo"
+      ],
+      "modelFiles": [
+        "wan2.1-i2v-14b-480p-Q4_K_M.gguf",
+        "Wan2_1-InfiniteTalk_Multi_Q8.gguf",
+        "Wan2_1_VAE_bf16.safetensors",
+        "lightx2v_I2V_14B_480p_cfg_step_distill_rank64_bf16.safetensors",
+        "wav2vec2-chinese-base_fp16.safetensors",
+        "umt5_xxl_fp8_e4m3fn_scaled.safetensors"
+      ],
+      "modelSha256": {
+        "wan2.1-i2v-14b-480p-Q4_K_M.gguf": "d91f7139acadb42ea05cdf97b311e5099f714f11fbe4d90916500e2f53cbba82",
+        "Wan2_1-InfiniteTalk_Multi_Q8.gguf": "2b9b1dc2fb0f0a351e688ad8dc7545bf90b2a2f20cd91953ac077510ef6b7bc0",
+        "Wan2_1_VAE_bf16.safetensors": "1ab9a32cc2c740f6e39d80d367ce5dcc28db8c71b79b28670546b8973e9d75f9",
+        "lightx2v_I2V_14B_480p_cfg_step_distill_rank64_bf16.safetensors": "85c4a61c30e0497aa44b91d93a893b624708461a56fe5485183b28fa07e2dfb3",
+        "wav2vec2-chinese-base_fp16.safetensors": "000813e441020f18cff844c969d2d5d4adc2a5ce46b2db1f23950b05d88805b4",
+        "umt5_xxl_fp8_e4m3fn_scaled.safetensors": "60cce120e4e6647514529d4605ada3429ee8b456ba6143c4e37fe3475c42d4b0"
+      },
+      "nodes": [
+        {
+          "role": "output",
+          "nodeId": "18",
+          "classType": "SaveVideo",
+          "inputName": "filename_prefix"
+        },
+        {
+          "role": "sampler",
+          "nodeId": "15",
+          "classType": "WanVideoSampler",
+          "inputName": "seed"
+        },
+        {
+          "role": "positivePrompt",
+          "nodeId": "5",
+          "classType": "VideoStudioNativeWanTextCached",
+          "inputName": "positive"
+        },
+        {
+          "role": "negativePrompt",
+          "nodeId": "5",
+          "classType": "VideoStudioNativeWanTextCached",
+          "inputName": "negative"
+        },
+        {
+          "role": "exactFrameTrim",
+          "nodeId": "19",
+          "classType": "ImageFromBatch",
+          "inputName": "length"
+        }
+      ],
+      "slots": [
+        {
+          "role": "firstFrame",
+          "nodeId": "1",
+          "classType": "LoadImage",
+          "inputName": "image",
+          "required": true
+        },
+        {
+          "role": "femaleAudio",
+          "nodeId": "2",
+          "classType": "LoadAudio",
+          "inputName": "audio",
+          "required": true
+        },
+        {
+          "role": "maleAudio",
+          "nodeId": "3",
+          "classType": "LoadAudio",
+          "inputName": "audio",
+          "required": true
+        }
+      ],
+      "media": {
+        "defaultWidth": 832,
+        "defaultHeight": 480,
+        "allowedDimensions": [
+          {
+            "width": 832,
+            "height": 480
+          }
+        ],
+        "outputFrames": [
+          151
+        ],
+        "nativeFps": 25,
+        "allowedFps": [
+          25
+        ],
+        "exactFrameCount": true,
+        "preserveAudio": true
+      },
+      "notes": "sha256=d7b9ef77b30459f84e3cd918b6d9c01901db8dbe44df07db61ce34e30dcb953f | Full accepted sync method; original per-shot dry voice; existing weights; audioCFG2; review only"
+    },
+    {
+      "id": "character-pack-klein4b-single-1536-v1",
+      "version": "character-pack-klein4b-single-1536-v1",
+      "fileName": "character_pack_klein4b_single_api.json",
+      "workflowType": "Image",
+      "productionEligible": false,
+      "experimental": true,
+      "licenseStatus": "APACHE_2_0_LOCAL_EXPERIMENT_PENDING_CONTENT_REVIEW",
+      "taskTypes": [
+        "Image",
+        "Keyframe"
+      ],
+      "modelFiles": [
+        "flux-2-klein-4b-fp8.safetensors",
+        "qwen_3_4b.safetensors",
+        "flux2-vae.safetensors"
+      ],
+      "modelSha256": {
+        "flux-2-klein-4b-fp8.safetensors": "97ed34fe0567e436200f2faee3939b88f2b5d99f8af2a4dc16532c4245c0ccb6",
+        "qwen_3_4b.safetensors": "6c671498573ac2f7a5501502ccce8d2b08ea6ca2f661c458e708f36b36edfc5a",
+        "flux2-vae.safetensors": "868fe7b343cc8f3a19dbcfcafbc3d5f888802be3f89bd81b65b3621a066ce8f3"
+      },
+      "nodes": [
+        {
+          "role": "diffusionModel",
+          "nodeId": "1",
+          "classType": "UNETLoader",
+          "inputName": "unet_name"
+        },
+        {
+          "role": "textEncoder",
+          "nodeId": "2",
+          "classType": "CLIPLoader",
+          "inputName": "clip_name"
+        },
+        {
+          "role": "vae",
+          "nodeId": "3",
+          "classType": "VAELoader",
+          "inputName": "vae_name"
+        },
+        {
+          "role": "positivePrompt",
+          "nodeId": "7",
+          "classType": "CLIPTextEncode",
+          "inputName": "text"
+        },
+        {
+          "role": "sampler",
+          "nodeId": "14",
+          "classType": "RandomNoise",
+          "inputName": "noise_seed"
+        },
+        {
+          "role": "schedule",
+          "nodeId": "13",
+          "classType": "Flux2Scheduler",
+          "inputName": "steps"
+        },
+        {
+          "role": "guidance",
+          "nodeId": "11",
+          "classType": "CFGGuider",
+          "inputName": "cfg"
+        },
+        {
+          "role": "output",
+          "nodeId": "18",
+          "classType": "SaveImage",
+          "inputName": "filename_prefix"
+        }
+      ],
+      "slots": [
+        {
+          "role": "firstFrame",
+          "nodeId": "4",
+          "classType": "LoadImage",
+          "inputName": "image",
+          "required": true
+        }
+      ],
+      "media": {
+        "defaultWidth": 1536,
+        "defaultHeight": 864,
+        "allowedDimensions": [
+          {
+            "width": 1536,
+            "height": 864
+          }
+        ],
+        "nativeFps": 1,
+        "allowedFps": [],
+        "exactFrameCount": false,
+        "preserveAudio": false
+      },
+      "notes": "sha256=87a19c9cf82b7db3481d41d6ceb1121d7453d96521c62603e30539bf44c32547 | Local experimental character reference pack. Explicit identity reference. 1536x864, 4-step distilled FP8, no automatic identity or production approval."
+    },
+    {
+      "id": "character-pack-klein4b-dual-1536-v1",
+      "version": "character-pack-klein4b-dual-1536-v1",
+      "fileName": "character_pack_klein4b_dual_api.json",
+      "workflowType": "Image",
+      "productionEligible": false,
+      "experimental": true,
+      "licenseStatus": "APACHE_2_0_LOCAL_EXPERIMENT_PENDING_CONTENT_REVIEW",
+      "taskTypes": [
+        "Image",
+        "Keyframe"
+      ],
+      "modelFiles": [
+        "flux-2-klein-4b-fp8.safetensors",
+        "qwen_3_4b.safetensors",
+        "flux2-vae.safetensors"
+      ],
+      "modelSha256": {
+        "flux-2-klein-4b-fp8.safetensors": "97ed34fe0567e436200f2faee3939b88f2b5d99f8af2a4dc16532c4245c0ccb6",
+        "qwen_3_4b.safetensors": "6c671498573ac2f7a5501502ccce8d2b08ea6ca2f661c458e708f36b36edfc5a",
+        "flux2-vae.safetensors": "868fe7b343cc8f3a19dbcfcafbc3d5f888802be3f89bd81b65b3621a066ce8f3"
+      },
+      "nodes": [
+        {
+          "role": "diffusionModel",
+          "nodeId": "1",
+          "classType": "UNETLoader",
+          "inputName": "unet_name"
+        },
+        {
+          "role": "textEncoder",
+          "nodeId": "2",
+          "classType": "CLIPLoader",
+          "inputName": "clip_name"
+        },
+        {
+          "role": "vae",
+          "nodeId": "3",
+          "classType": "VAELoader",
+          "inputName": "vae_name"
+        },
+        {
+          "role": "positivePrompt",
+          "nodeId": "7",
+          "classType": "CLIPTextEncode",
+          "inputName": "text"
+        },
+        {
+          "role": "sampler",
+          "nodeId": "14",
+          "classType": "RandomNoise",
+          "inputName": "noise_seed"
+        },
+        {
+          "role": "schedule",
+          "nodeId": "13",
+          "classType": "Flux2Scheduler",
+          "inputName": "steps"
+        },
+        {
+          "role": "guidance",
+          "nodeId": "11",
+          "classType": "CFGGuider",
+          "inputName": "cfg"
+        },
+        {
+          "role": "output",
+          "nodeId": "18",
+          "classType": "SaveImage",
+          "inputName": "filename_prefix"
+        },
+        {
+          "role": "wardrobePositiveReference",
+          "nodeId": "23",
+          "classType": "ReferenceLatent",
+          "inputName": "latent"
+        },
+        {
+          "role": "wardrobeNegativeReference",
+          "nodeId": "24",
+          "classType": "ReferenceLatent",
+          "inputName": "latent"
+        }
+      ],
+      "slots": [
+        {
+          "role": "firstFrame",
+          "nodeId": "4",
+          "classType": "LoadImage",
+          "inputName": "image",
+          "required": true
+        },
+        {
+          "role": "wardrobeReference",
+          "nodeId": "20",
+          "classType": "LoadImage",
+          "inputName": "image",
+          "required": true
+        }
+      ],
+      "media": {
+        "defaultWidth": 1536,
+        "defaultHeight": 864,
+        "allowedDimensions": [
+          {
+            "width": 1536,
+            "height": 864
+          }
+        ],
+        "nativeFps": 1,
+        "allowedFps": [],
+        "exactFrameCount": false,
+        "preserveAudio": false
+      },
+      "notes": "sha256=87a34754237b62f41404aac983f5b04496deae6139e8e52b85be96fcc3e08347 | Local experimental character reference pack. Explicit identity reference plus wardrobe/body reference. 1536x864, 4-step distilled FP8, no automatic identity or production approval."
+    },
+    {
+      "id": "character-story-klein4b-four-1536-v1",
+      "version": "character-story-klein4b-four-1536-v1",
+      "fileName": "character_story_klein4b_four_api.json",
+      "workflowType": "Image",
+      "productionEligible": false,
+      "experimental": true,
+      "licenseStatus": "APACHE_2_0_LOCAL_EXPERIMENT_PENDING_CONTENT_REVIEW",
+      "taskTypes": [
+        "Image",
+        "Keyframe"
+      ],
+      "modelFiles": [
+        "flux-2-klein-4b-fp8.safetensors",
+        "qwen_3_4b.safetensors",
+        "flux2-vae.safetensors"
+      ],
+      "modelSha256": {
+        "flux-2-klein-4b-fp8.safetensors": "97ed34fe0567e436200f2faee3939b88f2b5d99f8af2a4dc16532c4245c0ccb6",
+        "qwen_3_4b.safetensors": "6c671498573ac2f7a5501502ccce8d2b08ea6ca2f661c458e708f36b36edfc5a",
+        "flux2-vae.safetensors": "868fe7b343cc8f3a19dbcfcafbc3d5f888802be3f89bd81b65b3621a066ce8f3"
+      },
+      "nodes": [
+        {
+          "role": "diffusionModel",
+          "nodeId": "1",
+          "classType": "UNETLoader",
+          "inputName": "unet_name"
+        },
+        {
+          "role": "textEncoder",
+          "nodeId": "2",
+          "classType": "CLIPLoader",
+          "inputName": "clip_name"
+        },
+        {
+          "role": "vae",
+          "nodeId": "3",
+          "classType": "VAELoader",
+          "inputName": "vae_name"
+        },
+        {
+          "role": "positivePrompt",
+          "nodeId": "7",
+          "classType": "CLIPTextEncode",
+          "inputName": "text"
+        },
+        {
+          "role": "sampler",
+          "nodeId": "14",
+          "classType": "RandomNoise",
+          "inputName": "noise_seed"
+        },
+        {
+          "role": "schedule",
+          "nodeId": "13",
+          "classType": "Flux2Scheduler",
+          "inputName": "steps"
+        },
+        {
+          "role": "guidance",
+          "nodeId": "11",
+          "classType": "CFGGuider",
+          "inputName": "cfg"
+        },
+        {
+          "role": "output",
+          "nodeId": "18",
+          "classType": "SaveImage",
+          "inputName": "filename_prefix"
+        },
+        {
+          "role": "wardrobePositiveReference",
+          "nodeId": "23",
+          "classType": "ReferenceLatent",
+          "inputName": "latent"
+        },
+        {
+          "role": "wardrobeNegativeReference",
+          "nodeId": "24",
+          "classType": "ReferenceLatent",
+          "inputName": "latent"
+        },
+        {
+          "role": "secondIdentityPositive",
+          "nodeId": "33",
+          "classType": "ReferenceLatent",
+          "inputName": "latent"
+        },
+        {
+          "role": "secondIdentityNegative",
+          "nodeId": "34",
+          "classType": "ReferenceLatent",
+          "inputName": "latent"
+        },
+        {
+          "role": "secondWardrobePositive",
+          "nodeId": "43",
+          "classType": "ReferenceLatent",
+          "inputName": "latent"
+        },
+        {
+          "role": "secondWardrobeNegative",
+          "nodeId": "44",
+          "classType": "ReferenceLatent",
+          "inputName": "latent"
+        }
+      ],
+      "slots": [
+        {
+          "role": "firstFrame",
+          "nodeId": "4",
+          "classType": "LoadImage",
+          "inputName": "image",
+          "required": true
+        },
+        {
+          "role": "wardrobeReference",
+          "nodeId": "20",
+          "classType": "LoadImage",
+          "inputName": "image",
+          "required": true
+        },
+        {
+          "role": "secondIdentity",
+          "nodeId": "30",
+          "classType": "LoadImage",
+          "inputName": "image",
+          "required": true
+        },
+        {
+          "role": "secondWardrobe",
+          "nodeId": "40",
+          "classType": "LoadImage",
+          "inputName": "image",
+          "required": true
+        }
+      ],
+      "media": {
+        "defaultWidth": 1536,
+        "defaultHeight": 864,
+        "allowedDimensions": [
+          {
+            "width": 1536,
+            "height": 864
+          }
+        ],
+        "nativeFps": 1,
+        "allowedFps": [],
+        "exactFrameCount": false,
+        "preserveAudio": false
+      },
+      "notes": "sha256=c58f35344f3a453f3246c76b4115c7f159b10e24f0d10d560037f1cf3138416a | Two distinct identities, each with separate wardrobe input; static candidate requires actual inspection. Not H3 Ref2VA. Experimental, no production/publication eligibility."
+    },
+    {
+      "id": "character-scene-klein4b-five-locked-1536-v1",
+      "version": "character-scene-klein4b-five-locked-1536-v1",
+      "fileName": "character_scene_klein4b_five_locked_api.json",
+      "workflowType": "Image",
+      "productionEligible": false,
+      "experimental": true,
+      "licenseStatus": "APACHE_2_0_LOCAL_EXPERIMENT_PENDING_CONTENT_REVIEW",
+      "taskTypes": [
+        "Image",
+        "Keyframe"
+      ],
+      "modelFiles": [
+        "flux-2-klein-4b-fp8.safetensors",
+        "qwen_3_4b.safetensors",
+        "flux2-vae.safetensors"
+      ],
+      "modelSha256": {
+        "flux-2-klein-4b-fp8.safetensors": "97ed34fe0567e436200f2faee3939b88f2b5d99f8af2a4dc16532c4245c0ccb6",
+        "qwen_3_4b.safetensors": "6c671498573ac2f7a5501502ccce8d2b08ea6ca2f661c458e708f36b36edfc5a",
+        "flux2-vae.safetensors": "868fe7b343cc8f3a19dbcfcafbc3d5f888802be3f89bd81b65b3621a066ce8f3"
+      },
+      "nodes": [
+        {
+          "role": "diffusionModel",
+          "nodeId": "1",
+          "classType": "UNETLoader",
+          "inputName": "unet_name"
+        },
+        {
+          "role": "textEncoder",
+          "nodeId": "2",
+          "classType": "CLIPLoader",
+          "inputName": "clip_name"
+        },
+        {
+          "role": "vae",
+          "nodeId": "3",
+          "classType": "VAELoader",
+          "inputName": "vae_name"
+        },
+        {
+          "role": "positivePrompt",
+          "nodeId": "7",
+          "classType": "CLIPTextEncode",
+          "inputName": "text"
+        },
+        {
+          "role": "sampler",
+          "nodeId": "14",
+          "classType": "RandomNoise",
+          "inputName": "noise_seed"
+        },
+        {
+          "role": "schedule",
+          "nodeId": "13",
+          "classType": "Flux2Scheduler",
+          "inputName": "steps"
+        },
+        {
+          "role": "guidance",
+          "nodeId": "11",
+          "classType": "CFGGuider",
+          "inputName": "cfg"
+        },
+        {
+          "role": "output",
+          "nodeId": "18",
+          "classType": "SaveImage",
+          "inputName": "filename_prefix"
+        },
+        {
+          "role": "wardrobePositiveReference",
+          "nodeId": "23",
+          "classType": "ReferenceLatent",
+          "inputName": "latent"
+        },
+        {
+          "role": "wardrobeNegativeReference",
+          "nodeId": "24",
+          "classType": "ReferenceLatent",
+          "inputName": "latent"
+        },
+        {
+          "role": "secondIdentityPositive",
+          "nodeId": "33",
+          "classType": "ReferenceLatent",
+          "inputName": "latent"
+        },
+        {
+          "role": "secondIdentityNegative",
+          "nodeId": "34",
+          "classType": "ReferenceLatent",
+          "inputName": "latent"
+        },
+        {
+          "role": "secondWardrobePositive",
+          "nodeId": "43",
+          "classType": "ReferenceLatent",
+          "inputName": "latent"
+        },
+        {
+          "role": "secondWardrobeNegative",
+          "nodeId": "44",
+          "classType": "ReferenceLatent",
+          "inputName": "latent"
+        },
+        {
+          "role": "scenePositive",
+          "nodeId": "53",
+          "classType": "ReferenceLatent",
+          "inputName": "latent"
+        },
+        {
+          "role": "sceneNegative",
+          "nodeId": "54",
+          "classType": "ReferenceLatent",
+          "inputName": "latent"
+        },
+        {
+          "role": "backgroundMask",
+          "nodeId": "60",
+          "classType": "SolidMask",
+          "inputName": "width"
+        },
+        {
+          "role": "leftActorMask",
+          "nodeId": "61",
+          "classType": "SolidMask",
+          "inputName": "width"
+        },
+        {
+          "role": "rightActorMask",
+          "nodeId": "64",
+          "classType": "SolidMask",
+          "inputName": "width"
+        },
+        {
+          "role": "sceneCompositor",
+          "nodeId": "67",
+          "classType": "ImageCompositeMasked",
+          "inputName": "mask"
+        }
+      ],
+      "slots": [
+        {
+          "role": "firstFrame",
+          "nodeId": "4",
+          "classType": "LoadImage",
+          "inputName": "image",
+          "required": true
+        },
+        {
+          "role": "wardrobeReference",
+          "nodeId": "20",
+          "classType": "LoadImage",
+          "inputName": "image",
+          "required": true
+        },
+        {
+          "role": "secondIdentity",
+          "nodeId": "30",
+          "classType": "LoadImage",
+          "inputName": "image",
+          "required": true
+        },
+        {
+          "role": "secondWardrobe",
+          "nodeId": "40",
+          "classType": "LoadImage",
+          "inputName": "image",
+          "required": true
+        },
+        {
+          "role": "sceneReference",
+          "nodeId": "50",
+          "classType": "LoadImage",
+          "inputName": "image",
+          "required": true
+        }
+      ],
+      "media": {
+        "defaultWidth": 1536,
+        "defaultHeight": 864,
+        "allowedDimensions": [
+          {
+            "width": 1536,
+            "height": 864
+          }
+        ],
+        "nativeFps": 1,
+        "allowedFps": [],
+        "exactFrameCount": false,
+        "preserveAudio": false
+      },
+      "notes": "sha256=0767c59cf84d1c3d01ff6319698eea7d5cb241de35b79159f8d56664a8edbfec | Fixed-camera only. Four actor identity/wardrobe inputs plus explicit scene input. Final compositor preserves background outside two validated actor regions. Not general identity/scene control and not H3 Ref2VA. Content review required."
+    },
+    {
+      "id": "character-scene-klein4b-five-masked-locked-1536-v1",
+      "version": "character-scene-klein4b-five-masked-locked-1536-v1",
+      "fileName": "character_scene_klein4b_five_masked_locked_api.json",
+      "workflowType": "Image",
+      "productionEligible": false,
+      "experimental": true,
+      "licenseStatus": "APACHE_2_0_LOCAL_EXPERIMENT_PENDING_CONTENT_REVIEW",
+      "taskTypes": [
+        "Image",
+        "Keyframe"
+      ],
+      "modelFiles": [
+        "flux-2-klein-4b-fp8.safetensors",
+        "qwen_3_4b.safetensors",
+        "flux2-vae.safetensors"
+      ],
+      "modelSha256": {
+        "flux-2-klein-4b-fp8.safetensors": "97ed34fe0567e436200f2faee3939b88f2b5d99f8af2a4dc16532c4245c0ccb6",
+        "qwen_3_4b.safetensors": "6c671498573ac2f7a5501502ccce8d2b08ea6ca2f661c458e708f36b36edfc5a",
+        "flux2-vae.safetensors": "868fe7b343cc8f3a19dbcfcafbc3d5f888802be3f89bd81b65b3621a066ce8f3"
+      },
+      "nodes": [
+        {
+          "role": "diffusionModel",
+          "nodeId": "1",
+          "classType": "UNETLoader",
+          "inputName": "unet_name"
+        },
+        {
+          "role": "textEncoder",
+          "nodeId": "2",
+          "classType": "CLIPLoader",
+          "inputName": "clip_name"
+        },
+        {
+          "role": "vae",
+          "nodeId": "3",
+          "classType": "VAELoader",
+          "inputName": "vae_name"
+        },
+        {
+          "role": "positivePrompt",
+          "nodeId": "7",
+          "classType": "CLIPTextEncode",
+          "inputName": "text"
+        },
+        {
+          "role": "sampler",
+          "nodeId": "14",
+          "classType": "RandomNoise",
+          "inputName": "noise_seed"
+        },
+        {
+          "role": "schedule",
+          "nodeId": "13",
+          "classType": "Flux2Scheduler",
+          "inputName": "steps"
+        },
+        {
+          "role": "guidance",
+          "nodeId": "11",
+          "classType": "CFGGuider",
+          "inputName": "cfg"
+        },
+        {
+          "role": "output",
+          "nodeId": "18",
+          "classType": "SaveImage",
+          "inputName": "filename_prefix"
+        },
+        {
+          "role": "wardrobePositiveReference",
+          "nodeId": "23",
+          "classType": "ReferenceLatent",
+          "inputName": "latent"
+        },
+        {
+          "role": "wardrobeNegativeReference",
+          "nodeId": "24",
+          "classType": "ReferenceLatent",
+          "inputName": "latent"
+        },
+        {
+          "role": "secondIdentityPositive",
+          "nodeId": "33",
+          "classType": "ReferenceLatent",
+          "inputName": "latent"
+        },
+        {
+          "role": "secondIdentityNegative",
+          "nodeId": "34",
+          "classType": "ReferenceLatent",
+          "inputName": "latent"
+        },
+        {
+          "role": "secondWardrobePositive",
+          "nodeId": "43",
+          "classType": "ReferenceLatent",
+          "inputName": "latent"
+        },
+        {
+          "role": "secondWardrobeNegative",
+          "nodeId": "44",
+          "classType": "ReferenceLatent",
+          "inputName": "latent"
+        },
+        {
+          "role": "scenePositive",
+          "nodeId": "53",
+          "classType": "ReferenceLatent",
+          "inputName": "latent"
+        },
+        {
+          "role": "sceneNegative",
+          "nodeId": "54",
+          "classType": "ReferenceLatent",
+          "inputName": "latent"
+        },
+        {
+          "role": "backgroundMask",
+          "nodeId": "60",
+          "classType": "SolidMask",
+          "inputName": "width"
+        },
+        {
+          "role": "leftActorMask",
+          "nodeId": "61",
+          "classType": "SolidMask",
+          "inputName": "width"
+        },
+        {
+          "role": "rightActorMask",
+          "nodeId": "64",
+          "classType": "SolidMask",
+          "inputName": "width"
+        },
+        {
+          "role": "sceneCompositor",
+          "nodeId": "67",
+          "classType": "ImageCompositeMasked",
+          "inputName": "mask"
+        },
+        {
+          "role": "neutralSceneFill",
+          "nodeId": "68",
+          "classType": "EmptyImage",
+          "inputName": "width"
+        },
+        {
+          "role": "sceneHeadPoseExclusion",
+          "nodeId": "69",
+          "classType": "ImageCompositeMasked",
+          "inputName": "mask"
+        },
+        {
+          "role": "leftHeadMask",
+          "nodeId": "71",
+          "classType": "SolidMask",
+          "inputName": "width"
+        },
+        {
+          "role": "rightHeadMask",
+          "nodeId": "73",
+          "classType": "SolidMask",
+          "inputName": "width"
+        }
+      ],
+      "slots": [
+        {
+          "role": "firstFrame",
+          "nodeId": "4",
+          "classType": "LoadImage",
+          "inputName": "image",
+          "required": true
+        },
+        {
+          "role": "wardrobeReference",
+          "nodeId": "20",
+          "classType": "LoadImage",
+          "inputName": "image",
+          "required": true
+        },
+        {
+          "role": "secondIdentity",
+          "nodeId": "30",
+          "classType": "LoadImage",
+          "inputName": "image",
+          "required": true
+        },
+        {
+          "role": "secondWardrobe",
+          "nodeId": "40",
+          "classType": "LoadImage",
+          "inputName": "image",
+          "required": true
+        },
+        {
+          "role": "sceneReference",
+          "nodeId": "50",
+          "classType": "LoadImage",
+          "inputName": "image",
+          "required": true
+        }
+      ],
+      "media": {
+        "defaultWidth": 1536,
+        "defaultHeight": 864,
+        "allowedDimensions": [
+          {
+            "width": 1536,
+            "height": 864
+          }
+        ],
+        "nativeFps": 1,
+        "allowedFps": [],
+        "exactFrameCount": false,
+        "preserveAudio": false
+      },
+      "notes": "sha256=48e9b34ba74c248613e5fb0599d3f098ca0bf52378870d508e0eee7766e44834 | Scene conditioning blanks old head poses, retaining body composition. Final compositor uses original scene pixels outside actor regions. Fixed-camera preview only; identities, anatomy and seams require inspection. No H3 Ref2VA."
+    }
+  ]
+}

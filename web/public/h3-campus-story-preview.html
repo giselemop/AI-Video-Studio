@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>遗落的笔记本 · 校园短片</title>
+  <style>
+    *{box-sizing:border-box}body{margin:0;background:#111821;color:#edf2fa;font:16px/1.6 system-ui,"Microsoft YaHei",sans-serif}
+    main{max-width:1200px;margin:30px auto;padding:0 22px}h1{font-size:28px;margin:0 0 8px}p{color:#afbed1;margin:0 0 20px}
+    video{display:block;width:100%;aspect-ratio:16/9;object-fit:contain;background:#000;border:1px solid #364557;border-radius:12px}
+    nav{display:flex;gap:10px;flex-wrap:wrap;margin:18px 0}button{color:#eaf2ff;background:#223b50;border:1px solid #537089;border-radius:8px;padding:9px 18px;font:inherit;cursor:pointer}button:disabled{opacity:.45;cursor:wait}
+    button[aria-current=true]{background:#375d7c;border-color:#a7d6fb}a{color:#a7d6fb}#message{min-height:28px;color:#bac8d9}#message.error{color:#ffb4ac}
+    .note{font-size:14px;margin-top:20px}#download{display:inline-block;margin-top:14px}
+  </style>
+</head>
+<body><main>
+  <h1>遗落的笔记本</h1>
+  <p>一个普通校园午后，发现、寻找、归还与告别。约26秒，1080p、24帧，含中文旁白和字幕。</p>
+  <video id="story" controls playsinline preload="metadata" aria-label="校园剧情短片：遗落的笔记本"></video>
+  <nav aria-label="剧情章节">
+    <button data-shot="0" disabled>1 · 发现</button><button data-shot="1" disabled>2 · 拿起</button>
+    <button data-shot="2" disabled>3 · 寻找失主</button><button data-shot="3" disabled>4 · 归还</button><button data-shot="4" disabled>5 · 告别</button>
+  </nav>
+  <div id="message" role="status">正在加载短片…</div>
+  <a id="download" target="_blank" rel="noopener" hidden>单独打开视频</a>
+  <p class="note">本地AI生成的虚构人物和剧情预览。请结合动作、人物一致性和镜头衔接观看，仍需内容审核。</p>
+</main><script>
+  const video=document.querySelector('#story'),message=document.querySelector('#message'),buttons=[...document.querySelectorAll('[data-shot]')];
+  let ready=false;
+  try{
+    const path=new URLSearchParams(location.search).get('video')||'';
+    if(!/^Artifacts\/[^?#]+\.mp4$/i.test(path)||path.split('/').includes('..')||path.includes('\\')||path.includes(':')||path.includes('%'))throw Error('视频路径无效，请从本次剧情预览链接打开。');
+    video.src='/api/media?assetPath='+encodeURIComponent(path);
+    const link=document.querySelector('#download');link.href=video.src;link.hidden=false;
+  }catch(error){message.className='error';message.textContent=error.message;}
+  video.addEventListener('loadedmetadata',()=>{
+    if(video.videoWidth!==1920||video.videoHeight!==1080||Math.abs(video.duration-620/24)>.08){message.className='error';message.textContent='短片规格不符，请检查本次生成结果。';return;}
+    ready=true;buttons.forEach(b=>b.disabled=false);message.textContent='点击播放观看完整剧情，可跳到不同章节。';
+  });
+  video.addEventListener('error',()=>{message.className='error';message.textContent='视频加载失败，请确认本机服务和媒体文件可用。';});
+  buttons.forEach(button=>button.addEventListener('click',()=>{if(ready)video.currentTime=Number(button.dataset.shot)*124/24;}));
+  video.addEventListener('timeupdate',()=>{const shot=Math.min(4,Math.floor(video.currentTime/(124/24)));buttons.forEach(b=>b.setAttribute('aria-current',String(Number(b.dataset.shot)===shot)));});
+  video.addEventListener('ended',()=>message.textContent='已播放完毕。可以从任一章节重新观看。');
+</script></body></html>

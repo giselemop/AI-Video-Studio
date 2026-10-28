@@ -1,0 +1,9 @@
+# Installed only in SeedVR2/venv. CUDA/Torch are reused read-only from ComfyUI via shared_cuda.pth.
+omegaconf==2.4.0
+diffusers==0.41.0
+peft==0.21.2
+rotary_embedding_torch==0.9.1
+matplotlib==3.11.2
+opencv-python-headless==5.0.0.93
+accelerate==1.15.0
+huggingface-hub==1.33.0

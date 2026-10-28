@@ -6,13 +6,16 @@
   "scripts": {
     "dev": "vite --host 127.0.0.1 --port 18081",
     "build": "vite build",
-    "preview": "vite preview --host 127.0.0.1 --port 18081"
+    "preview": "vite preview --host 127.0.0.1 --port 18081",
+    "test:e2e": "playwright test",
+    "test:episode-output": "playwright test tests/episode-output.spec.js"
   },
   "dependencies": {
     "element-plus": "^2.9.11",
     "vue": "^3.5.13"
   },
   "devDependencies": {
+    "@playwright/test": "^1.62.1",
     "@vitejs/plugin-vue": "^5.2.3",
     "vite": "^6.2.6"
   }

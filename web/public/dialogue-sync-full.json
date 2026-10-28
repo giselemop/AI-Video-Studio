@@ -1,0 +1,173 @@
+{
+  "technicalStatus": "Passed",
+  "contentStatus": "NeedReview",
+  "publicationStatus": "Blocked",
+  "intro": "完整十秒口型版已完成文件核验：按原声驱动嘴形，双人保留原有视线与姿态；四句对白、完整声轨、字幕和三镜头切点保持。支持正常/半速及逐帧前后对比。",
+  "paths": [
+    "Artifacts/project-40/video/task-1346/v0001/v0001_dialogue_visual_same_voice_2k_10s_fbde21109519.mp4",
+    "Artifacts/project-42/video/task-1390/v0001/v0001_dialogue_sync_full_same_voice_2k_10s_d6cd24baf683.mp4"
+  ],
+  "seconds": 10,
+  "frames": 240,
+  "fps": 24,
+  "cutFrames": [
+    53,
+    96
+  ],
+  "origins": [
+    [
+      {
+        "primary": [
+          0.6118535399436951,
+          0.4369102418422699
+        ],
+        "male": [
+          0.6118535399436951,
+          0.4369102418422699
+        ],
+        "primaryMouth": [
+          0.6726588010787964,
+          0.6545313000679016
+        ],
+        "maleMouth": [
+          0.6726588010787964,
+          0.6545313000679016
+        ]
+      },
+      {
+        "primary": [
+          0.4359348714351654,
+          0.5381856560707092
+        ],
+        "male": [
+          0.4359348714351654,
+          0.5381856560707092
+        ],
+        "primaryMouth": [
+          0.44331979751586914,
+          0.7620283961296082
+        ],
+        "maleMouth": [
+          0.44331979751586914,
+          0.7620283961296082
+        ]
+      },
+      {
+        "primary": [
+          0.32133084535598755,
+          0.27061283588409424
+        ],
+        "male": [
+          0.6158663034439087,
+          0.2965153455734253
+        ],
+        "primaryMouth": [
+          0.35076552629470825,
+          0.348225861787796
+        ],
+        "maleMouth": [
+          0.6269829869270325,
+          0.3801184892654419
+        ]
+      }
+    ],
+    [
+      {
+        "primary": [
+          0.6101879477500916,
+          0.42278608679771423
+        ],
+        "male": [
+          0.6101879477500916,
+          0.42278608679771423
+        ],
+        "primaryMouth": [
+          0.6803193092346191,
+          0.6409648656845093
+        ],
+        "maleMouth": [
+          0.6803193092346191,
+          0.6409648656845093
+        ]
+      },
+      {
+        "primary": [
+          0.4221380352973938,
+          0.4882258176803589
+        ],
+        "male": [
+          0.4221380352973938,
+          0.4882258176803589
+        ],
+        "primaryMouth": [
+          0.3983498811721802,
+          0.6874232292175293
+        ],
+        "maleMouth": [
+          0.3983498811721802,
+          0.6874232292175293
+        ]
+      },
+      {
+        "primary": [
+          0.32167142629623413,
+          0.270257830619812
+        ],
+        "male": [
+          0.6154352426528931,
+          0.2976398766040802
+        ],
+        "primaryMouth": [
+          0.34992629289627075,
+          0.34835442900657654
+        ],
+        "maleMouth": [
+          0.626613199710846,
+          0.382660448551178
+        ]
+      }
+    ]
+  ],
+  "moments": [
+    {
+      "frame": 9,
+      "label": "女方起句",
+      "compare": "DialogueSyncFull20261025/comparisons/compare-009.png"
+    },
+    {
+      "frame": 19,
+      "label": "女方近景",
+      "compare": "DialogueSyncFull20261025/comparisons/compare-019.png"
+    },
+    {
+      "frame": 53,
+      "label": "第一处切点",
+      "compare": "DialogueSyncFull20261025/comparisons/compare-053.png"
+    },
+    {
+      "frame": 77,
+      "label": "男方回应",
+      "compare": "DialogueSyncFull20261025/comparisons/compare-077.png"
+    },
+    {
+      "frame": 96,
+      "label": "第二处切点",
+      "compare": "DialogueSyncFull20261025/comparisons/compare-096.png"
+    },
+    {
+      "frame": 127,
+      "label": "女方让步",
+      "compare": "DialogueSyncFull20261025/comparisons/compare-127.png"
+    },
+    {
+      "frame": 168,
+      "label": "男方收尾",
+      "compare": "DialogueSyncFull20261025/comparisons/compare-168.png"
+    },
+    {
+      "frame": 239,
+      "label": "末帧",
+      "compare": "DialogueSyncFull20261025/comparisons/compare-239.png"
+    }
+  ]
+}

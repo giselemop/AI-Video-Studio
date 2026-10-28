@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>窗边等候 · 林安全身远景试片</title>
+<style>
+:root{color-scheme:dark;background:#101820;color:#eef3f2;font-family:system-ui,"Microsoft YaHei",sans-serif}
+*{box-sizing:border-box}body{margin:0}main{max-width:1320px;margin:auto;padding:32px 24px 64px}
+nav{display:flex;gap:20px;flex-wrap:wrap}a{color:#a9ded2;text-decoration:none}
+h1{font-size:clamp(27px,4vw,40px);margin:26px 0 8px}h2{font-size:20px}
+p{color:#c7d4d9;line-height:1.72}.banner{border:1px solid #756a47;background:#2b2920;border-radius:12px;padding:14px 20px;margin:22px 0}
+.banner p{margin:5px 0;color:#f0e1bc}.grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.card{background:#1a2732;border:1px solid #314453;border-radius:12px;padding:20px;min-width:0}
+video,img{display:block;width:100%;aspect-ratio:16/9;object-fit:contain;background:#0a1118;border-radius:8px}
+img{cursor:zoom-in}.small{font-size:13px;overflow-wrap:anywhere}.error{color:#ffb6be}
+button{border:1px solid #688898;background:#294655;color:white;border-radius:7px;padding:9px 13px;cursor:pointer}
+details{margin-top:22px;border-top:1px solid #34485c;padding-top:16px}summary{cursor:pointer}
+pre{white-space:pre-wrap;overflow-wrap:anywhere;font-size:12px;max-height:360px;overflow:auto}
+dialog{width:1500px;max-width:96vw;border:1px solid #688898;border-radius:10px;background:#101820;color:white}
+dialog::backdrop{background:#000c}dialog img{width:100%;max-height:84vh;object-fit:contain;margin-top:12px}
+@media(max-width:850px){.grid{grid-template-columns:1fr}main{padding:22px 14px}}
+</style></head>
+<body><main>
+<nav><a href="/character-wide-cutaway.html">之前的远景切镜</a><a href="/character-story-15s.html">原15秒剧情</a><a href="/#character-library">人物参考库</a></nav>
+<h1>《窗边等候》林安全身远景</h1>
+<p>在之前的剧情里加入林安坐在窗边的全身画面，再接回原来的环境切镜和人物近景。</p>
+<div class="banner">
+  <strong>本地试片 · 内容待你审核</strong>
+  <p>原片没有拍到裤子和鞋子，这部分按人物设定补成深灰裤和白鞋；窗格、墙面与原片仍有细节差异，面部和手指也请留意。</p>
+  <p>新片约16.5秒：第三句旁白后移1.5秒，背景音乐略微放慢；原版本完整保留。</p>
+</div>
+<div class="grid">
+  <section class="card"><h2>加入全身远景的新版本</h2><p class="small" id="newInfo">读取真实任务</p><div id="newPlayer"></div>
+    <p>8.75–10.25秒为全身远景，随后保留无人窗景，再回到林安近景。</p><p class="error" id="newError"></p></section>
+  <section class="card"><h2>之前的15秒切镜版</h2><p class="small" id="oldInfo">读取真实任务</p><div id="oldPlayer"></div>
+    <p>对照上一个版本，原片与音轨不被覆盖。</p><p class="error" id="oldError"></p></section>
+</div>
+<section class="card" style="margin-top:20px"><h2>全身画面单独查看</h2>
+  <p class="small" id="wideInfo">读取真实任务</p><div id="widePlayer"></div>
+  <p>原始全身视频后半段出现无意义文字和张嘴；这里仅展示检查过的前1.5秒，默认静音。成片使用后期旁白和配乐。</p><p class="error" id="wideError"></p>
+</section>
+<div class="grid" style="margin-top:20px">
+  <section class="card"><h2>切镜前的林安</h2><img id="reference" alt="切镜前原剧情画面，点击放大"><p class="small">取自上一版实际切镜前一帧。</p></section>
+  <section class="card"><h2>全身关键帧</h2><img id="fullbody" alt="林安全身关键帧，点击放大"><p class="small">按同一画面派生，裤鞋和全身造型仍需审核。</p></section>
+</div>
+<details><summary>查看任务和来源</summary><pre id="trace"></pre></details>
+</main>
+<dialog id="zoom"><button id="closeZoom">关闭原图</button><img alt="参考原图放大"></dialog>
+<script>
+const data=__PAYLOAD__;
+const media=p=>'/api/media?assetPath='+encodeURIComponent(p);
+for(const [id,path] of [['reference',data.referencePath],['fullbody',data.imagePath]]){
+  const img=document.querySelector('#'+id);img.src=media(path);
+  img.onclick=()=>{document.querySelector('#zoom img').src=media(path);document.querySelector('#zoom').showModal()};
+}
+document.querySelector('#closeZoom').onclick=()=>document.querySelector('#zoom').close();
+document.querySelector('#trace').textContent=JSON.stringify(data,null,2);
+async function load(label,id,muted=false){
+  try{
+    const r=await fetch('/api/tasks/'+id);if(!r.ok)throw Error('读取任务失败 '+r.status);
+    const detail=await r.json();
+    const asset=detail.results.find(x=>x.available&&x.assetPath?.endsWith('.mp4'));
+    if(!asset)throw Error('任务没有可播放文件');
+    const v=document.createElement('video');v.src=media(asset.assetPath);v.controls=true;v.preload='metadata';v.muted=muted;
+    v.setAttribute('aria-label',label==='new'?'加入全身远景的新剧情视频':label==='old'?'之前的十五秒剧情视频':'全身远景原始片段');
+    v.onloadedmetadata=()=>{document.querySelector('#'+label+'Info').textContent='任务 #'+id+' · '+v.videoWidth+'×'+v.videoHeight+' · '+v.duration.toFixed(3)+'秒'};
+    v.onerror=()=>document.querySelector('#'+label+'Error').textContent='媒体加载失败';
+    document.querySelector('#'+label+'Player').replaceChildren(v);
+  }catch(e){document.querySelector('#'+label+'Error').textContent=e.message}
+}
+load('new',data.finalTaskId);load('old',data.previousTaskId);load('wide',data.videoTaskId,true);
+</script></body></html>

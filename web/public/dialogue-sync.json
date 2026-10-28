@@ -1,0 +1,135 @@
+{
+  "technicalStatus": "Passed",
+  "contentStatus": "NeedReview",
+  "intro": "两段小样已完成文件核验。女方按原声重做嘴形；双人保留原来的视线表演，替换嘴部驱动。可切换片段，用正常、半速和逐帧比较。",
+  "clips": [
+    {
+      "name": "close",
+      "label": "女方完整一句 · 2.000秒",
+      "paths": [
+        "Artifacts/project-41/video/task-1347/v0001/v0001_close_baseline_4c9d5c5a23b8.mp4",
+        "Artifacts/project-41/video/task-1366/v0001/v0001_close_sync_same_voice_fcee86bfc772.mp4"
+      ],
+      "driver": "Artifacts/project-41/video/task-1349/v0001/v0001_task_1349_task_1349_attempt_1_921b60d0_00001__2e9ea9601bed.mp4",
+      "seconds": 2.0,
+      "frames": 48,
+      "startSeconds": 0.20833333333333334,
+      "origins": [
+        {
+          "primary": [
+            0.6110383868217468,
+            0.43307045102119446
+          ],
+          "male": [
+            0.6110383868217468,
+            0.43307045102119446
+          ],
+          "mouth": [
+            0.6763200163841248,
+            0.6537927389144897
+          ]
+        },
+        {
+          "primary": [
+            0.6025357246398926,
+            0.43172335624694824
+          ],
+          "male": [
+            0.6025357246398926,
+            0.43172335624694824
+          ],
+          "mouth": [
+            0.6653205156326294,
+            0.6499439477920532
+          ]
+        }
+      ],
+      "moments": [
+        {
+          "frame": 0,
+          "label": "0.000秒定格",
+          "compare": "DialogueSync20261025/comparisons/close-000.png"
+        },
+        {
+          "frame": 12,
+          "label": "0.500秒定格",
+          "compare": "DialogueSync20261025/comparisons/close-012.png"
+        },
+        {
+          "frame": 26,
+          "label": "1.083秒定格",
+          "compare": "DialogueSync20261025/comparisons/close-026.png"
+        },
+        {
+          "frame": 47,
+          "label": "1.958秒定格",
+          "compare": "DialogueSync20261025/comparisons/close-047.png"
+        }
+      ]
+    },
+    {
+      "name": "wide",
+      "label": "男方回应与女方聆听 · 2.250秒",
+      "paths": [
+        "Artifacts/project-41/video/task-1348/v0001/v0001_wide_baseline_674b76781c25.mp4",
+        "Artifacts/project-41/video/task-1370/v0001/v0001_wide_sync_same_voice_bf56ee5ae8b6.mp4"
+      ],
+      "driver": "Artifacts/project-41/video/task-1350/v0001/v0001_task_1350_task_1350_attempt_1_949f1c6e_00001__3fdb0bf93cf9.mp4",
+      "seconds": 2.25,
+      "frames": 54,
+      "startSeconds": 6.25,
+      "origins": [
+        {
+          "primary": [
+            0.3250121474266052,
+            0.2825242280960083
+          ],
+          "male": [
+            0.5965127944946289,
+            0.2609182298183441
+          ],
+          "mouth": [
+            0.5840510129928589,
+            0.3412349820137024
+          ]
+        },
+        {
+          "primary": [
+            0.3268986642360687,
+            0.2822144627571106
+          ],
+          "male": [
+            0.5967739820480347,
+            0.26211342215538025
+          ],
+          "mouth": [
+            0.5814489126205444,
+            0.34543925523757935
+          ]
+        }
+      ],
+      "moments": [
+        {
+          "frame": 0,
+          "label": "0.000秒定格",
+          "compare": "DialogueSync20261025/comparisons/wide-000.png"
+        },
+        {
+          "frame": 12,
+          "label": "0.500秒定格",
+          "compare": "DialogueSync20261025/comparisons/wide-012.png"
+        },
+        {
+          "frame": 26,
+          "label": "1.083秒定格",
+          "compare": "DialogueSync20261025/comparisons/wide-026.png"
+        },
+        {
+          "frame": 53,
+          "label": "2.208秒定格",
+          "compare": "DialogueSync20261025/comparisons/wide-053.png"
+        }
+      ]
+    }
+  ]
+}

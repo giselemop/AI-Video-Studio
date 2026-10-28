@@ -1,0 +1,14 @@
+{
+  "technicalStatus": "Passed",
+  "contentStatus": "NeedReview",
+  "outputs": {
+    "optimized": "Artifacts/project-36/video/task-1281/v0001/v0001_skin_optimized_2k_2s_9ef8cf60f678.mp4",
+    "original": "Artifacts/project-36/video/task-1281/v0002/v0002_skin_original_720p_2s_10b5bdd02315.mp4",
+    "qhd": "Artifacts/project-36/video/task-1281/v0003/v0003_skin_current_2k_2s_2b68d6fda686.mp4"
+  },
+  "samplesPrefix": "SkinPilot20261024/compare-face-",
+  "line": "哟，约会回来了？",
+  "startFrame": 5,
+  "frameCount": 48,
+  "fps": 24
+}

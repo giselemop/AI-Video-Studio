@@ -1,0 +1,4 @@
+# Library inference only; torch/torchaudio are reused from the existing CUDA runtime.
+qwen-tts==0.1.1
+transformers==4.57.3
+accelerate==1.12.0

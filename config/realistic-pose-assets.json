@@ -1,0 +1,8 @@
+{
+  "repository": "xinsir/controlnet-openpose-sdxl-1.0",
+  "revision": "23f966cd5cfdd3f7729c903e243d87152162d2b7",
+  "file": "diffusion_pytorch_model.safetensors",
+  "target": "controlnet/xinsir_openpose_sdxl_1.0.safetensors",
+  "size": 2502139104,
+  "sha256": "b8524e557a7df60d081f5d4a0eb109967d107df217943bf88c2d99b9ebcc06c5"
+}

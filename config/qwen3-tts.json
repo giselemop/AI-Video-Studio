@@ -1,0 +1,23 @@
+{
+  "repository": "Qwen/Qwen3-TTS-12Hz-1.7B-CustomVoice",
+  "revision": "0c0e3051f131929182e2c023b9537f8b1c68adfe",
+  "modelDirectory": "C:\\install\\AI\\Models\\TTS\\Qwen3-TTS-12Hz-1.7B-CustomVoice",
+  "python": "C:\\install\\AI\\Qwen3TTS\\venv\\Scripts\\python.exe",
+  "attention": "sdpa",
+  "dtype": "bfloat16",
+  "defaultSpeaker": "Vivian",
+  "maxTextCharacters": 500,
+  "maxInstructionCharacters": 300,
+  "maxNewTokens": 2048,
+  "timeoutSeconds": 600,
+  "minFreeVramMiB": 6144,
+  "files": [
+    "config.json", "generation_config.json", "merges.txt", "preprocessor_config.json",
+    "tokenizer_config.json", "vocab.json", "speech_tokenizer/config.json",
+    "speech_tokenizer/configuration.json", "speech_tokenizer/preprocessor_config.json"
+  ],
+  "weights": [
+    { "file": "model.safetensors", "size": 3833402552, "sha256": "38b1d5971bdbd982b561cccec982669a53b0537c3cf5e9bd4778ed07bb2f5137" },
+    { "file": "speech_tokenizer/model.safetensors", "size": 682293092, "sha256": "836b7b357f5ea43e889936a3709af68dfe3751881acefe4ecf0dbd30ba571258" }
+  ]
+}

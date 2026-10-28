@@ -1,0 +1,523 @@
+{
+  "1": {
+    "class_type": "UNETLoader",
+    "inputs": {
+      "unet_name": "flux-2-klein-4b-fp8.safetensors",
+      "weight_dtype": "default"
+    }
+  },
+  "2": {
+    "class_type": "CLIPLoader",
+    "inputs": {
+      "clip_name": "qwen_3_4b.safetensors",
+      "type": "flux2",
+      "device": "cpu"
+    }
+  },
+  "3": {
+    "class_type": "VAELoader",
+    "inputs": {
+      "vae_name": "flux2-vae.safetensors"
+    }
+  },
+  "4": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "female-reference.png"
+    }
+  },
+  "5": {
+    "class_type": "ImageScaleToTotalPixels",
+    "inputs": {
+      "image": [
+        "4",
+        0
+      ],
+      "upscale_method": "lanczos",
+      "megapixels": 1.0,
+      "resolution_steps": 1
+    }
+  },
+  "6": {
+    "class_type": "VAEEncode",
+    "inputs": {
+      "pixels": [
+        "5",
+        0
+      ],
+      "vae": [
+        "3",
+        0
+      ]
+    }
+  },
+  "7": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "text": "Reference photograph of the same adult character. Preserve exact identity and the specified complete wardrobe. One person only, neutral pose and soft studio lighting.",
+      "clip": [
+        "2",
+        0
+      ]
+    }
+  },
+  "8": {
+    "class_type": "ReferenceLatent",
+    "inputs": {
+      "conditioning": [
+        "7",
+        0
+      ],
+      "latent": [
+        "6",
+        0
+      ]
+    }
+  },
+  "9": {
+    "class_type": "ConditioningZeroOut",
+    "inputs": {
+      "conditioning": [
+        "7",
+        0
+      ]
+    }
+  },
+  "10": {
+    "class_type": "ReferenceLatent",
+    "inputs": {
+      "conditioning": [
+        "9",
+        0
+      ],
+      "latent": [
+        "6",
+        0
+      ]
+    }
+  },
+  "11": {
+    "class_type": "CFGGuider",
+    "inputs": {
+      "model": [
+        "1",
+        0
+      ],
+      "positive": [
+        "53",
+        0
+      ],
+      "negative": [
+        "54",
+        0
+      ],
+      "cfg": 1.0
+    }
+  },
+  "12": {
+    "class_type": "KSamplerSelect",
+    "inputs": {
+      "sampler_name": "euler"
+    }
+  },
+  "13": {
+    "class_type": "Flux2Scheduler",
+    "inputs": {
+      "steps": 4,
+      "width": 1536,
+      "height": 864
+    }
+  },
+  "14": {
+    "class_type": "RandomNoise",
+    "inputs": {
+      "noise_seed": 20261024
+    }
+  },
+  "15": {
+    "class_type": "EmptyFlux2LatentImage",
+    "inputs": {
+      "width": 1536,
+      "height": 864,
+      "batch_size": 1
+    }
+  },
+  "16": {
+    "class_type": "SamplerCustomAdvanced",
+    "inputs": {
+      "noise": [
+        "14",
+        0
+      ],
+      "guider": [
+        "11",
+        0
+      ],
+      "sampler": [
+        "12",
+        0
+      ],
+      "sigmas": [
+        "13",
+        0
+      ],
+      "latent_image": [
+        "15",
+        0
+      ]
+    }
+  },
+  "17": {
+    "class_type": "VAEDecode",
+    "inputs": {
+      "samples": [
+        "16",
+        0
+      ],
+      "vae": [
+        "3",
+        0
+      ]
+    }
+  },
+  "18": {
+    "class_type": "SaveImage",
+    "inputs": {
+      "images": [
+        "67",
+        0
+      ],
+      "filename_prefix": "CharacterReferencePack20261026/dual"
+    }
+  },
+  "20": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "character-full-body-anchor.png"
+    }
+  },
+  "21": {
+    "class_type": "ImageScaleToTotalPixels",
+    "inputs": {
+      "image": [
+        "20",
+        0
+      ],
+      "upscale_method": "lanczos",
+      "megapixels": 1.0,
+      "resolution_steps": 1
+    }
+  },
+  "22": {
+    "class_type": "VAEEncode",
+    "inputs": {
+      "pixels": [
+        "21",
+        0
+      ],
+      "vae": [
+        "3",
+        0
+      ]
+    }
+  },
+  "23": {
+    "class_type": "ReferenceLatent",
+    "inputs": {
+      "conditioning": [
+        "8",
+        0
+      ],
+      "latent": [
+        "22",
+        0
+      ]
+    }
+  },
+  "24": {
+    "class_type": "ReferenceLatent",
+    "inputs": {
+      "conditioning": [
+        "10",
+        0
+      ],
+      "latent": [
+        "22",
+        0
+      ]
+    }
+  },
+  "30": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "actor-b-reference.png"
+    }
+  },
+  "31": {
+    "class_type": "ImageScaleToTotalPixels",
+    "inputs": {
+      "image": [
+        "30",
+        0
+      ],
+      "upscale_method": "lanczos",
+      "megapixels": 1.0,
+      "resolution_steps": 1
+    }
+  },
+  "32": {
+    "class_type": "VAEEncode",
+    "inputs": {
+      "pixels": [
+        "31",
+        0
+      ],
+      "vae": [
+        "3",
+        0
+      ]
+    }
+  },
+  "33": {
+    "class_type": "ReferenceLatent",
+    "inputs": {
+      "conditioning": [
+        "23",
+        0
+      ],
+      "latent": [
+        "32",
+        0
+      ]
+    }
+  },
+  "34": {
+    "class_type": "ReferenceLatent",
+    "inputs": {
+      "conditioning": [
+        "24",
+        0
+      ],
+      "latent": [
+        "32",
+        0
+      ]
+    }
+  },
+  "40": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "actor-b-reference.png"
+    }
+  },
+  "41": {
+    "class_type": "ImageScaleToTotalPixels",
+    "inputs": {
+      "image": [
+        "40",
+        0
+      ],
+      "upscale_method": "lanczos",
+      "megapixels": 1.0,
+      "resolution_steps": 1
+    }
+  },
+  "42": {
+    "class_type": "VAEEncode",
+    "inputs": {
+      "pixels": [
+        "41",
+        0
+      ],
+      "vae": [
+        "3",
+        0
+      ]
+    }
+  },
+  "43": {
+    "class_type": "ReferenceLatent",
+    "inputs": {
+      "conditioning": [
+        "33",
+        0
+      ],
+      "latent": [
+        "42",
+        0
+      ]
+    }
+  },
+  "44": {
+    "class_type": "ReferenceLatent",
+    "inputs": {
+      "conditioning": [
+        "34",
+        0
+      ],
+      "latent": [
+        "42",
+        0
+      ]
+    }
+  },
+  "50": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "frozen-scene-composition.png"
+    }
+  },
+  "51": {
+    "class_type": "ImageScaleToTotalPixels",
+    "inputs": {
+      "image": [
+        "50",
+        0
+      ],
+      "upscale_method": "lanczos",
+      "megapixels": 1.0,
+      "resolution_steps": 1
+    }
+  },
+  "52": {
+    "class_type": "VAEEncode",
+    "inputs": {
+      "pixels": [
+        "51",
+        0
+      ],
+      "vae": [
+        "3",
+        0
+      ]
+    }
+  },
+  "53": {
+    "class_type": "ReferenceLatent",
+    "inputs": {
+      "conditioning": [
+        "43",
+        0
+      ],
+      "latent": [
+        "52",
+        0
+      ]
+    }
+  },
+  "54": {
+    "class_type": "ReferenceLatent",
+    "inputs": {
+      "conditioning": [
+        "44",
+        0
+      ],
+      "latent": [
+        "52",
+        0
+      ]
+    }
+  },
+  "60": {
+    "class_type": "SolidMask",
+    "inputs": {
+      "value": 0.0,
+      "width": 1536,
+      "height": 864
+    }
+  },
+  "61": {
+    "class_type": "SolidMask",
+    "inputs": {
+      "value": 1.0,
+      "width": 420,
+      "height": 814
+    }
+  },
+  "62": {
+    "class_type": "FeatherMask",
+    "inputs": {
+      "mask": [
+        "61",
+        0
+      ],
+      "left": 32,
+      "top": 32,
+      "right": 32,
+      "bottom": 0
+    }
+  },
+  "63": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "60",
+        0
+      ],
+      "source": [
+        "62",
+        0
+      ],
+      "x": 300,
+      "y": 50,
+      "operation": "add"
+    }
+  },
+  "64": {
+    "class_type": "SolidMask",
+    "inputs": {
+      "value": 1.0,
+      "width": 430,
+      "height": 856
+    }
+  },
+  "65": {
+    "class_type": "FeatherMask",
+    "inputs": {
+      "mask": [
+        "64",
+        0
+      ],
+      "left": 32,
+      "top": 32,
+      "right": 32,
+      "bottom": 0
+    }
+  },
+  "66": {
+    "class_type": "MaskComposite",
+    "inputs": {
+      "destination": [
+        "63",
+        0
+      ],
+      "source": [
+        "65",
+        0
+      ],
+      "x": 820,
+      "y": 8,
+      "operation": "add"
+    }
+  },
+  "67": {
+    "class_type": "ImageCompositeMasked",
+    "inputs": {
+      "destination": [
+        "50",
+        0
+      ],
+      "source": [
+        "17",
+        0
+      ],
+      "x": 0,
+      "y": 0,
+      "resize_source": false,
+      "mask": [
+        "66",
+        0
+      ]
+    }
+  }
+}

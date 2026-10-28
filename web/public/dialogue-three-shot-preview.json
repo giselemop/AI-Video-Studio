@@ -1,0 +1,112 @@
+{
+  "finalPath": "Artifacts/project-34/video/task-1263/v0001/v0001_dialogue_three_shot_local_10s_1b677efb8f9e.mp4",
+  "posterPath": "DialogueThreeShot20261023/final-poster.jpg",
+  "previousPath": "Artifacts/project-33/video/task-1246/v0001/v0001_two_person_dialogue_local_9.5s_8931528782f6.mp4",
+  "mixPath": "DialogueThreeShot20261023/audio/dialogue-room-10s.wav",
+  "durationSeconds": 10,
+  "technicalStatus": "Passed",
+  "contentStatus": "NeedReview",
+  "shots": [
+    {
+      "index": 1,
+      "label": "女方近景",
+      "startSeconds": 0.0,
+      "endSeconds": 2.2083333333333335
+    },
+    {
+      "index": 2,
+      "label": "男方反打",
+      "startSeconds": 2.2083333333333335,
+      "endSeconds": 4.0
+    },
+    {
+      "index": 3,
+      "label": "双人收尾",
+      "startSeconds": 4.0,
+      "endSeconds": 10.0
+    }
+  ],
+  "lines": [
+    {
+      "index": 1,
+      "role": "female",
+      "text": "哟，约会回来了？",
+      "voice": "qwen3:Vivian",
+      "instruction": "年轻女性自然口语，轻轻笑着问一句，节奏紧凑，约会两字清晰，结尾轻微上扬。",
+      "taskId": 1253,
+      "attempt": 3,
+      "startSeconds": 0.4,
+      "endSeconds": 2.0789166666666667,
+      "durationSeconds": 1.6789166666666666,
+      "sourcePath": "Artifacts\\project-34\\audio\\task-1253\\v0001\\v0001_three_shot_01_female_attempt3_ead98b377c89.wav",
+      "sourceSha256": "ead98b377c897213d6fedbe8d471a12633b23187e8b5e93912997fe9918166e3",
+      "sourceStartSample": 26,
+      "sourceEndSample": 40320,
+      "removedLeadingSeconds": 0.0010833333333333333,
+      "removedTrailingSeconds": 0.0,
+      "nextResponseGapSeconds": 0.22,
+      "emotionLabel": "含笑打趣"
+    },
+    {
+      "index": 2,
+      "role": "male",
+      "text": "哼，要你管。",
+      "voice": "qwen3:Dylan",
+      "instruction": "年轻男性带笑地佯装不服，短促轻声，哼后马上接话，说到管字立即收住。",
+      "taskId": 1252,
+      "attempt": 2,
+      "startSeconds": 2.2989166666666665,
+      "endSeconds": 3.818041666666667,
+      "durationSeconds": 1.519125,
+      "sourcePath": "Artifacts\\project-34\\audio\\task-1252\\v0001\\v0001_three_shot_02_male_attempt2_70c79d01013c.wav",
+      "sourceSha256": "70c79d01013c93b32f56d519a94bca52e1bb09b2da25ad3194ed714de7ea8865",
+      "sourceStartSample": 21,
+      "sourceEndSample": 36480,
+      "removedLeadingSeconds": 0.000875,
+      "removedTrailingSeconds": 0.0,
+      "nextResponseGapSeconds": 0.34,
+      "emotionLabel": "佯装不服"
+    },
+    {
+      "index": 3,
+      "role": "female",
+      "text": "好啦，不逗你了。",
+      "voice": "qwen3:Vivian",
+      "instruction": "同一位成年年轻女性，看出对方假装不服，带一点笑意自然让步。‘好啦’轻巧温柔，直接接‘不逗你了’，中间仅短暂自然换气，不拖长、不作朗诵停顿。尾音柔和，声音比刚才稍轻，语速自然。只说给定台词，不加词，不另发笑声。",
+      "taskId": 1249,
+      "attempt": 1,
+      "startSeconds": 4.158041666666667,
+      "endSeconds": 6.2370833333333335,
+      "durationSeconds": 2.0790416666666665,
+      "sourcePath": "Artifacts\\project-34\\audio\\task-1249\\v0001\\v0001_three_shot_03_female_9e66b181b041.wav",
+      "sourceSha256": "9e66b181b041419893ac03ab94e1688b4041f7e5403645eeed17c1ec014e4c0e",
+      "sourceStartSample": 23,
+      "sourceEndSample": 49920,
+      "removedLeadingSeconds": 0.0009583333333333333,
+      "removedTrailingSeconds": 0.0,
+      "nextResponseGapSeconds": 0.2,
+      "emotionLabel": "温柔让步"
+    },
+    {
+      "index": 4,
+      "role": "male",
+      "text": "这还差不多。",
+      "voice": "qwen3:Dylan",
+      "instruction": "同一位成年年轻男性，听见对方让步，忍住笑、轻松满意地接话。像对熟人随口回答，嘴角有笑意，‘这还’连贯，‘差不多’轻轻收尾，正常口语速度，不摆架子、不夸张、不喊。只说给定台词，不加词，不另发笑声。",
+      "taskId": 1250,
+      "attempt": 1,
+      "startSeconds": 6.437083333333334,
+      "endSeconds": 7.555666666666666,
+      "durationSeconds": 1.1185833333333333,
+      "sourcePath": "Artifacts\\project-34\\audio\\task-1250\\v0001\\v0001_three_shot_04_male_7a0af9fd6076.wav",
+      "sourceSha256": "7a0af9fd6076f13cc73716cb21ac468b26f86719744d4afe0f5e2bbcd20c8686",
+      "sourceStartSample": 34,
+      "sourceEndSample": 26880,
+      "removedLeadingSeconds": 0.0014166666666666668,
+      "removedTrailingSeconds": 0.0,
+      "nextResponseGapSeconds": null,
+      "emotionLabel": "轻松满意"
+    }
+  ],
+  "note": "同人物、同台词，先确定对白节奏，再生成三个镜头。请重点比较语气、眼神反应和口型。"
+}

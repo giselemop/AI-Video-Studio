@@ -1,0 +1,87 @@
+"""Update project archives from the sealed evidence, without changing generated media."""
+from inventory import ROOT, OUT, read
+
+if __name__=='__main__':
+ s=read(OUT/'acceptance-summary.json');assert s['technical']=='Passed' and s['newSelectedImages']==16
+ report='''# 人物提示词统一与问题参考图修复验收（2026-10-27）
+
+用户授权：统一完善所有人物的面部、头颈、手臂手部、躯干腿脚和视角描述；只重生成有问题的参考图；逐张检查并完成测试验收。
+
+本轮完成本地部署。技术 **Passed**，助手可见缺陷检查 **Passed**，人物精细相似度、衣料细节与最终内容仍 **NeedReview**，发布 **Blocked**。没有自动人工批准或冻结新库版本。
+
+## 实际结果
+
+7位真实人物，每人3张近照＋6张全身，共63个不同图像槽位；47张原图保留，16张新修复图登记为NeedReview。24个真实Studio生成任务（1526–1549），8张首轮方向失败候选排除并保留。每槽最多两次修复，GPU串行。
+
+| 人物 | 替换槽位 | 新参考ID |
+| --- | --- | --- |
+| 林安 | 正面全身、左前侧全身、右前侧全身 | 100、107、109 |
+| 周言 | 左前侧全身 | 106 |
+| 许知夏 | 左前侧全身、右侧全身、右前侧全身 | 101、99、102 |
+| 陈屿 | 左前侧全身、右前侧全身 | 108、103 |
+| 苏晚晴 | 左前侧全身、右前侧全身 | 110、104 |
+| 赵明远 | 左前侧全身、右前侧全身、右侧全身 | 111、112、114 |
+| 沈玉兰 | 左前侧全身、右前侧全身 | 105、113 |
+
+许知夏原任务1479/参考64的双向两张脸在新任务1526/参考99中消除。旧文件、原生成检查点和5个不可变库版本的哈希保持；明确失败且未被人工批准的原候选记录Rejected，有既有人工批准时不自动改写。原库版本如引用已拒绝旧图，仍保持不可用；用户审核新候选后才能冻结新版本。
+
+## 统一规则与实际发现
+
+- `config/character-reference-prompts.json` 是共享规则，版本 `character-anatomy-v2`。C#工作台和Python两批人物生成入口共用；历史已冻结请求原样返回，不用新模板重写旧参数。
+- 固定人物五官/年龄/发型描述与当前视角可见性分离；身份图只定义身份，服装图只定义服装。明确单头单脸、正常后脑、单颈和头身同向。
+- 全身加入肩肘腕、手掌可见手指、胸廓腰骨盆、髋膝踝与鞋底落地要求；允许自然遮挡，不强求侧面远侧眼睛、手臂和腿脚全部露出。近照只保留上衣领口，不拼接裤鞋或小全身图。
+- 单纯加长提示词仍使首轮8张前侧图回到正面：必须按实际方向判Failed。第二次将目标方向提前，并使用已有同方向近照作身份输入，避免正面全身参考压过目标方向。
+- 新工作台在存在已批准、属于同一人物的同方向标准近照时，前侧全身优先使用该近照与单参考工作流；衣服继续由已确认设定约束。未批准素材不能充当正式确认锚点。
+- 新修复候选通过既有真实队列和工作流准入生成，收集时记录真实任务、人物、方向、景别、完整原请求和SHA256，不产生人脸分数或人工批准。
+- 7位设定记录增加共享规则版本指针；林安、周言缺少的体型字段仅从原不可变版本的既有bodyRatio补齐，未发明新的身份特征。
+
+## 验收证据
+
+证据根：`C:\\install\\AI\\Data\\CharacterReferenceRepair20261027`。
+
+| 检查 | 结果与边界 |
+| --- | --- |
+| .NET构建/发布 | Passed，0警告/0错误；本机18080部署，ComfyUI未重启 |
+| Vue构建 | Passed，仅已有Rollup注释/包体警告 |
+| C#提示词矩阵 | Passed，27种视角/景别/参考数量组合＋3种非法输入 |
+| Python与C#一致性/历史保护 | Passed，100项，无新GPU提交 |
+| 实际API解析/拒绝边界 | Passed，12项；7人真实身份提示词解析，非法方向/种子/未批准锚点拒绝；无生成任务新增 |
+| 人物库自测 | Passed，16项 |
+| 媒体与来源 | Passed，556项；63张全量解码/尺寸/哈希，24个任务原生PNG执行提示词/seed、真实Comfy执行与来源记录、输入文件保护、候选收集重放无重复 |
+| 逐张目检 | 63项逐图记录；头脸/头颈、方向、构图，及全身可见肩臂手指、躯干腿脚/鞋子。无身份分数或量化角度声明 |
+| 实际浏览器 | 63/63原生1536×864图片加载，7人63条提示词；3次原图放大/关闭，工作台提示词展开、旧图Rejected/新图NeedReview可见；console error 0 |
+| 已完成状态 | Passed，再提交被只读检查点拒绝，无新增GPU任务 |
+
+GPU为RTX 4070 12GB，观测Comfy并发最大1。24任务耗时合计约1206秒；任务上报显存峰值6602MiB是任务采样值，不宣称硬件绝对峰值。无新模型、云调用、视频生成或发布。
+
+主要文件：`run.json`、`acceptance-summary.json`、`per-image-inspection.json`、`selected.json`、`verification.json`、`prompt-tests.json`、`api-tests.json`、`browser-checks.json`、`completed-state-test.json`、`receipts/`、`inspect/`。
+
+## 查看和恢复
+
+- [逐张查看63图及提示词](http://127.0.0.1:18080/character-reference-repair.html)
+- [人物参考库](http://127.0.0.1:18080/#character-library)，进入“人物创建与定型”检查新旧候选。
+- 原图点击可放大。新的16张均待用户最终审核；细微五官、衣料纹理、表情偏好和跨视角一致性不能仅靠本轮目检证明完全一致。
+- `run.json` 已completed=true，禁止清空后重跑。之后若用户提出新的具体缺陷，应创建新修复记录，保留本轮任务和判定；不能借重试自动批准或发布。
+- 分支main，接管基准提交d6ec38d；本轮保留原有脏工作区，未提交或推送Git。
+'''
+ target=ROOT/'docs/CHARACTER_PROMPT_REPAIR_20261027.md';target.write_text(report,encoding='utf-8')
+ block='''<!-- character-prompt-repair-20261027:start -->
+> 2026-10-27：人物参考提示词统一为character-anatomy-v2，7人63槽逐张目检，16张新修复候选＋47张原图。24个真实本地任务/8张方向失败候选保留排除；556项媒体来源、100项跨语言提示词、12项实际API、16项人物库自测及63图真实浏览器加载Passed。技术/助手可见缺陷检查Passed；细节内容NeedReview，发布Blocked。无自动批准、新库冻结、新模型、云调用或视频；旧原图/检查点/5个不可变版本保留。新图在候选中待用户复核，旧拒绝版本不会被伪装成可用。恢复Data/CharacterReferenceRepair20261027/run.json，completed=true禁止重复生成。见[验收报告](docs/CHARACTER_PROMPT_REPAIR_20261027.md)、[63图汇总](http://127.0.0.1:18080/character-reference-repair.html)。
+<!-- character-prompt-repair-20261027:end -->
+
+'''
+ for name in ['项目状态.md','待办事项.md','变更记录.md','PROJECT_STATE.md','NEXT_STAGE.md','CHANGELOG.md','docs/ACCEPTANCE_REPORT.md','docs/FIX_HISTORY.md']:
+    p=ROOT/name;old=p.read_text(encoding='utf-8-sig');assert '<!-- character-prompt-repair-20261027:start -->' not in old
+    text=block.replace('(docs/CHARACTER_PROMPT_REPAIR_20261027.md)','(CHARACTER_PROMPT_REPAIR_20261027.md)') if name.startswith('docs/') else block
+    p.write_text(text+old,encoding='utf-8')
+ p=ROOT/'docs/验收标准.md';p.write_text('''## 2026-10-27 人物参考图验收补充
+
+人物参考图必须逐图检查头脸、头颈、肩臂手部、躯干腿脚、完整鞋子及方向遮挡；近照不要求画外肢体。前侧应同时体现头部与身体斜前方关系；严格侧面只露近侧眼，背面不可见五官。单纯文件成功/九槽齐全不能算方向或身份合格。助手目检、人工批准与不可变版本冻结分开记录；失败保留、每槽最多两次定向修复。见[本轮验收](CHARACTER_PROMPT_REPAIR_20261027.md)。
+
+'''+p.read_text(encoding='utf-8-sig'),encoding='utf-8')
+ p=ROOT/'docs/开发说明.md';p.write_text('''## 2026-10-27 统一人物参考提示词
+
+修改共享规则使用`config/character-reference-prompts.json`；C# `CharacterReferencePrompts` 与Python `tools/character_prompt_policy.py`共用。工作台状态API返回九图预览，历史任务未带promptPolicy时保留旧验证文字。`dotnet run --project server/VideoStudio.Server.csproj -- --character-prompt-self-test`检查矩阵，`tools/character_reference_repair/test_policy.py`检查跨语言与冻结旧请求保护，`test_api.py`仅解析不生成。修复记录已完成，不能重复submit；新问题建立独立记录并保留来源。详见[修复验收](CHARACTER_PROMPT_REPAIR_20261027.md)。
+
+'''+p.read_text(encoding='utf-8-sig'),encoding='utf-8')
+ print('Chinese project archives and acceptance report updated from sealed evidence.')

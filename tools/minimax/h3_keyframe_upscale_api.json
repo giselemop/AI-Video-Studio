@@ -1,0 +1,7 @@
+{
+  "1": { "class_type": "LoadImage", "inputs": { "image": "source.png" } },
+  "2": { "class_type": "UpscaleModelLoader", "inputs": { "model_name": "RealESRGAN_x2plus.pth" } },
+  "3": { "class_type": "ImageUpscaleWithModel", "inputs": { "upscale_model": ["2", 0], "image": ["1", 0] } },
+  "4": { "class_type": "ImageScale", "inputs": { "image": ["3", 0], "upscale_method": "lanczos", "width": 1376, "height": 768, "crop": "center" } },
+  "5": { "class_type": "SaveImage", "inputs": { "images": ["4", 0], "filename_prefix": "h3_quality/first_frame" } }
+}

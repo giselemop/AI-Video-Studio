@@ -1,0 +1,125 @@
+{
+  "technicalStatus": "Passed",
+  "contentStatus": "NeedReview",
+  "publicationStatus": "Blocked",
+  "intro": "十秒三镜头新版本已完成文件核验：原四句对白、完整原声、字幕及镜头切点保持。支持正常/半速、声音切换与逐帧前后对比。",
+  "paths": [
+    "Artifacts/project-37/video/task-1306/v0001/v0001_face_acting_three_shot_same_dialogue_2k_10s_f6b4a2109e12.mp4",
+    "Artifacts/project-40/video/task-1346/v0001/v0001_dialogue_visual_same_voice_2k_10s_fbde21109519.mp4"
+  ],
+  "seconds": 10,
+  "frames": 240,
+  "fps": 24,
+  "cutFrames": [
+    53,
+    96
+  ],
+  "origins": [
+    [
+      {
+        "primary": [
+          0.6317043304443359,
+          0.5816307663917542
+        ],
+        "male": [
+          0.6317043304443359,
+          0.5816307663917542
+        ]
+      },
+      {
+        "primary": [
+          0.2227797508239746,
+          0.5789743661880493
+        ],
+        "male": [
+          0.2227797508239746,
+          0.5789743661880493
+        ]
+      },
+      {
+        "primary": [
+          0.288907527923584,
+          0.25535619258880615
+        ],
+        "male": [
+          0.49771928787231445,
+          0.2703806757926941
+        ]
+      }
+    ],
+    [
+      {
+        "primary": [
+          0.6118535399436951,
+          0.4369102418422699
+        ],
+        "male": [
+          0.6118535399436951,
+          0.4369102418422699
+        ]
+      },
+      {
+        "primary": [
+          0.4359348714351654,
+          0.5381856560707092
+        ],
+        "male": [
+          0.4359348714351654,
+          0.5381856560707092
+        ]
+      },
+      {
+        "primary": [
+          0.32133084535598755,
+          0.27061283588409424
+        ],
+        "male": [
+          0.6158663034439087,
+          0.2965153455734253
+        ]
+      }
+    ]
+  ],
+  "moments": [
+    {
+      "frame": 9,
+      "label": "眨眼关键帧",
+      "compare": "DialogueVisual20261025/comparisons/compare-009.png"
+    },
+    {
+      "frame": 19,
+      "label": "女方近景",
+      "compare": "DialogueVisual20261025/comparisons/compare-019.png"
+    },
+    {
+      "frame": 53,
+      "label": "第一处切点",
+      "compare": "DialogueVisual20261025/comparisons/compare-053.png"
+    },
+    {
+      "frame": 77,
+      "label": "男方回应",
+      "compare": "DialogueVisual20261025/comparisons/compare-077.png"
+    },
+    {
+      "frame": 96,
+      "label": "第二处切点",
+      "compare": "DialogueVisual20261025/comparisons/compare-096.png"
+    },
+    {
+      "frame": 127,
+      "label": "女方让步",
+      "compare": "DialogueVisual20261025/comparisons/compare-127.png"
+    },
+    {
+      "frame": 168,
+      "label": "男方收尾",
+      "compare": "DialogueVisual20261025/comparisons/compare-168.png"
+    },
+    {
+      "frame": 239,
+      "label": "末帧",
+      "compare": "DialogueVisual20261025/comparisons/compare-239.png"
+    }
+  ]
+}

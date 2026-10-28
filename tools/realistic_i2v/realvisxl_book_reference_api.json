@@ -1,0 +1,154 @@
+{
+  "1": {
+    "class_type": "CheckpointLoaderSimple",
+    "inputs": {
+      "ckpt_name": "RealVisXL_V5.0_fp16.safetensors"
+    }
+  },
+  "2": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "clip": [
+        "1",
+        1
+      ],
+      "text": "One closed red hardcover notebook resting flat on a wooden bench seat, white paper edges, natural light and contact shadow, realistic photograph"
+    }
+  },
+  "3": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "clip": [
+        "1",
+        1
+      ],
+      "text": "open book, bag, multiple books, letters, text, logo, deformed book, cartoon"
+    }
+  },
+  "4": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "book-layout.png"
+    }
+  },
+  "5": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "book-edit-mask.png"
+    }
+  },
+  "6": {
+    "class_type": "ImageToMask",
+    "inputs": {
+      "image": [
+        "5",
+        0
+      ],
+      "channel": "red"
+    }
+  },
+  "7": {
+    "class_type": "VAEEncodeTiled",
+    "inputs": {
+      "pixels": [
+        "4",
+        0
+      ],
+      "vae": [
+        "1",
+        2
+      ],
+      "tile_size": 512,
+      "overlap": 64,
+      "temporal_size": 64,
+      "temporal_overlap": 8
+    }
+  },
+  "8": {
+    "class_type": "SetLatentNoiseMask",
+    "inputs": {
+      "samples": [
+        "7",
+        0
+      ],
+      "mask": [
+        "6",
+        0
+      ]
+    }
+  },
+  "9": {
+    "class_type": "KSampler",
+    "inputs": {
+      "model": [
+        "1",
+        0
+      ],
+      "positive": [
+        "2",
+        0
+      ],
+      "negative": [
+        "3",
+        0
+      ],
+      "latent_image": [
+        "8",
+        0
+      ],
+      "seed": 2026102207,
+      "steps": 24,
+      "cfg": 5.0,
+      "sampler_name": "dpmpp_sde",
+      "scheduler": "karras",
+      "denoise": 0.28
+    }
+  },
+  "10": {
+    "class_type": "VAEDecodeTiled",
+    "inputs": {
+      "samples": [
+        "9",
+        0
+      ],
+      "vae": [
+        "1",
+        2
+      ],
+      "tile_size": 512,
+      "overlap": 64,
+      "temporal_size": 64,
+      "temporal_overlap": 8
+    }
+  },
+  "11": {
+    "class_type": "ImageCompositeMasked",
+    "inputs": {
+      "destination": [
+        "4",
+        0
+      ],
+      "source": [
+        "10",
+        0
+      ],
+      "x": 0,
+      "y": 0,
+      "resize_source": false,
+      "mask": [
+        "6",
+        0
+      ]
+    }
+  },
+  "12": {
+    "class_type": "SaveImage",
+    "inputs": {
+      "images": [
+        "11",
+        0
+      ],
+      "filename_prefix": "realistic_i2v/book_reference"
+    }
+  }
+}

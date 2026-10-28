@@ -1,0 +1,11 @@
+{
+  "1": { "class_type": "CheckpointLoaderSimple", "inputs": { "ckpt_name": "v1-5-pruned-emaonly-fp16.safetensors" } },
+  "2": { "class_type": "CLIPTextEncode", "inputs": { "clip": ["1", 1], "text": "Architectural photograph of the same empty red brick university courtyard, straight window mullions, regular brick mortar, distinct green leaves, natural morning light, restrained colors, crisp realistic material detail." } },
+  "3": { "class_type": "CLIPTextEncode", "inputs": { "clip": ["1", 1], "text": "people, text, watermark, painterly, plastic, oversaturated, halos, blurry foliage, warped windows, melted bricks, duplicate objects" } },
+  "4": { "class_type": "LoadImage", "inputs": { "image": "reference.png" } },
+  "5": { "class_type": "ImageScale", "inputs": { "image": ["4", 0], "upscale_method": "lanczos", "width": 1920, "height": 1088, "crop": "center" } },
+  "6": { "class_type": "VAEEncodeTiled", "inputs": { "pixels": ["5", 0], "vae": ["1", 2], "tile_size": 512, "overlap": 64, "temporal_size": 64, "temporal_overlap": 8 } },
+  "7": { "class_type": "KSampler", "inputs": { "model": ["1", 0], "positive": ["2", 0], "negative": ["3", 0], "latent_image": ["6", 0], "seed": 2026102001, "steps": 24, "cfg": 4.0, "sampler_name": "dpmpp_2m", "scheduler": "karras", "denoise": 0.18 } },
+  "8": { "class_type": "VAEDecodeTiled", "inputs": { "samples": ["7", 0], "vae": ["1", 2], "tile_size": 512, "overlap": 64, "temporal_size": 64, "temporal_overlap": 8 } },
+  "9": { "class_type": "SaveImage", "inputs": { "images": ["8", 0], "filename_prefix": "h3_refined1080/first_frame" } }
+}

@@ -131,6 +131,9 @@ public sealed partial class StudioRepository
     public async Task<bool> EpisodeHasOpenBlockingIssueAsync(long episodeId, CancellationToken ct = default)
         => Convert.ToInt32(await _db.ScalarAsync("SELECT COUNT(*) FROM qa_issues WHERE episode_id=@episode AND status='Open' AND severity IN ('Critical','Error')", c => StudioDb.Add(c, "@episode", episodeId), ct), CultureInfo.InvariantCulture) > 0;
 
+    public async Task<int> OpenBlockingIssueCountAsync(long episodeId, CancellationToken ct = default)
+        => Convert.ToInt32(await _db.ScalarAsync("SELECT COUNT(*) FROM qa_issues WHERE episode_id=@episode AND status='Open' AND severity IN ('Critical','Error')", c => StudioDb.Add(c, "@episode", episodeId), ct), CultureInfo.InvariantCulture);
+
     public async Task<bool> AllEpisodeShotsPassedAsync(long episodeId, CancellationToken ct = default)
         => Convert.ToInt32(await _db.ScalarAsync(@"SELECT CASE WHEN COUNT(*)>0 AND SUM(CASE WHEN qa_status='Passed' THEN 0 ELSE 1 END)=0 THEN 1 ELSE 0 END
             FROM shots WHERE episode_id=@episode", c => StudioDb.Add(c, "@episode", episodeId), ct), CultureInfo.InvariantCulture) == 1;

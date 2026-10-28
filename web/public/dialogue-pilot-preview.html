@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>午后双人对白 · 本地样片</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#111720;color:#edf1f6;font:16px/1.7 system-ui,"Microsoft YaHei",sans-serif}main{max-width:1180px;margin:auto;padding:36px 24px}h1{font-size:28px;line-height:1.3;margin:8px 0 14px}p{color:#b5c0ce}video{display:block;width:100%;max-height:72vh;background:#080b10;border-radius:14px}button,a{color:inherit}button{padding:10px 15px;border:1px solid #3d5066;border-radius:9px;background:#21364a;cursor:pointer}button:hover{background:#315471}.row{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:16px 0}.tag{color:#79dcbb}.muted{font-size:14px;color:#9caabc}.lines{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:24px 0}.line{text-align:left;background:#182531}.line span{display:block;font-size:13px;color:#b2c0cf}details{border-top:1px solid #2c3b4d;padding:20px 0;margin-top:30px}#status{font-variant-numeric:tabular-nums}@media(max-width:650px){main{padding:22px 12px}.lines{grid-template-columns:1fr}h1{font-size:23px}}
+</style></head><body><main>
+<div class="tag">纯本地 · 双人对白样片</div><h1>一句打趣，一句回应</h1>
+<p>左侧女性，米色针织外套；右侧男性，橄榄绿外套。观察说话人的嘴型，以及另一人的倾听反应。</p>
+<video id="result" controls playsinline preload="metadata"></video>
+<div class="row"><button id="start">从头完整播放</button><button id="pause">暂停</button><span id="status" class="muted">正在读取样片信息…</span></div>
+<div id="lines" class="lines"></div><p id="note" class="muted"></p>
+<details><summary>上一版对照</summary><p class="muted">这是此前的31秒版本，用于比较人物配音和口型。</p><video id="previous" controls playsinline preload="none"></video></details>
+</main><script>
+const result=document.querySelector('#result'),previous=document.querySelector('#previous'),status=document.querySelector('#status');
+function media(path){return '/api/media?assetPath='+encodeURIComponent(path)}
+function refresh(){status.textContent=`${result.currentTime.toFixed(2)} / ${Number.isFinite(result.duration)?result.duration.toFixed(2):'—'} 秒 · ${result.videoWidth}×${result.videoHeight} · 音量 ${Math.round(result.volume*100)}%${result.muted?'（静音）':''}${result.ended?' · 播放结束':''}`}
+for(const e of ['loadedmetadata','timeupdate','volumechange','ended','pause','play'])result.addEventListener(e,refresh);
+result.addEventListener('play',()=>previous.pause());previous.addEventListener('play',()=>result.pause());
+result.addEventListener('error',()=>{status.textContent='视频读取失败，请刷新页面重试'});
+document.querySelector('#start').onclick=()=>{result.currentTime=0;result.muted=false;result.volume=1;result.play()};
+document.querySelector('#pause').onclick=()=>result.pause();
+fetch('/dialogue-pilot-preview.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('not ready');return r.json()}).then(d=>{
+ result.src=media(d.finalPath);result.poster=media(d.posterPath);previous.src=media(d.previousPath);
+ document.querySelector('#note').textContent=d.note;
+ for(const line of d.lines){const b=document.createElement('button');b.className='line';b.textContent=(line.role==='female'?'女：':'男：')+line.text;const sub=document.createElement('span');sub.textContent=line.emotionLabel;b.append(sub);b.onclick=()=>{result.currentTime=line.startSeconds;result.play()};document.querySelector('#lines').append(b)}
+}).catch(()=>{status.textContent='样片仍在制作中，完成后刷新即可观看。'});
+</script></body></html>

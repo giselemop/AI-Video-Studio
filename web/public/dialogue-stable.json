@@ -1,0 +1,178 @@
+{
+  "technicalStatus": "Passed",
+  "contentStatus": "NeedReview",
+  "publicationStatus": "Blocked",
+  "intro": "稳定768p验证版：1366×768 / 24FPS / 10秒。固定眨眼时点、统一切镜姿态，保留原声、四句字幕和53/96帧切点。左侧为上一版2560×1440后期成片；右侧跳过神经超分。动作源仍为832×480，身体动作仍受静态参考图限制。",
+  "paths": [
+    "Artifacts/project-42/video/task-1390/v0001/v0001_dialogue_sync_full_same_voice_2k_10s_d6cd24baf683.mp4",
+    "Artifacts/project-43/video/task-1406/v0001/v0001_dialogue_stable768_same_voice_10s_8f41438ba485.mp4"
+  ],
+  "seconds": 10,
+  "frames": 240,
+  "fps": 24,
+  "cutFrames": [
+    53,
+    96
+  ],
+  "origins": [
+    [
+      {
+        "primary": [
+          0.6101879477500916,
+          0.42278608679771423
+        ],
+        "male": [
+          0.6101879477500916,
+          0.42278608679771423
+        ],
+        "primaryMouth": [
+          0.6803193092346191,
+          0.6409648895263672
+        ],
+        "maleMouth": [
+          0.6803193092346191,
+          0.6409648895263672
+        ]
+      },
+      {
+        "primary": [
+          0.4221380352973938,
+          0.4882258176803589
+        ],
+        "male": [
+          0.4221380352973938,
+          0.4882258176803589
+        ],
+        "primaryMouth": [
+          0.3983498811721802,
+          0.6874232398139106
+        ],
+        "maleMouth": [
+          0.3983498811721802,
+          0.6874232398139106
+        ]
+      },
+      {
+        "primary": [
+          0.32167142629623413,
+          0.270257830619812
+        ],
+        "male": [
+          0.6154352426528931,
+          0.2976398766040802
+        ],
+        "primaryMouth": [
+          0.3499263048171997,
+          0.3483544243706597
+        ],
+        "maleMouth": [
+          0.626613187789917,
+          0.3826604631212023
+        ]
+      }
+    ],
+    [
+      {
+        "primary": [
+          0.6114093065261841,
+          0.432207316160202
+        ],
+        "male": [
+          0.6114093065261841,
+          0.432207316160202
+        ],
+        "primaryMouth": [
+          0.6747875213623047,
+          0.6508449130588108
+        ],
+        "maleMouth": [
+          0.6747875213623047,
+          0.6508449130588108
+        ]
+      },
+      {
+        "primary": [
+          0.4396933913230896,
+          0.5319910049438477
+        ],
+        "male": [
+          0.4396933913230896,
+          0.5319910049438477
+        ],
+        "primaryMouth": [
+          0.44877257347106936,
+          0.7490704006618923
+        ],
+        "maleMouth": [
+          0.44877257347106936,
+          0.7490704006618923
+        ]
+      },
+      {
+        "primary": [
+          0.32091203331947327,
+          0.2700023055076599
+        ],
+        "male": [
+          0.6148473620414734,
+          0.29771679639816284
+        ],
+        "primaryMouth": [
+          0.3497427701950073,
+          0.34853214687771267
+        ],
+        "maleMouth": [
+          0.6260936737060547,
+          0.38291316562228733
+        ]
+      }
+    ]
+  ],
+  "moments": [
+    {
+      "frame": 3,
+      "label": "开头眨眼",
+      "compare": "DialogueStable20261025/comparisons/compare-003.png"
+    },
+    {
+      "frame": 24,
+      "label": "固定眨眼",
+      "compare": "DialogueStable20261025/comparisons/compare-024.png"
+    },
+    {
+      "frame": 53,
+      "label": "第一切点",
+      "compare": "DialogueStable20261025/comparisons/compare-053.png"
+    },
+    {
+      "frame": 77,
+      "label": "男方回应",
+      "compare": "DialogueStable20261025/comparisons/compare-077.png"
+    },
+    {
+      "frame": 95,
+      "label": "4秒切镜前",
+      "compare": "DialogueStable20261025/comparisons/compare-095.png"
+    },
+    {
+      "frame": 96,
+      "label": "4秒切镜后",
+      "compare": "DialogueStable20261025/comparisons/compare-096.png"
+    },
+    {
+      "frame": 127,
+      "label": "女方让步",
+      "compare": "DialogueStable20261025/comparisons/compare-127.png"
+    },
+    {
+      "frame": 168,
+      "label": "男方收尾",
+      "compare": "DialogueStable20261025/comparisons/compare-168.png"
+    },
+    {
+      "frame": 239,
+      "label": "末帧",
+      "compare": "DialogueStable20261025/comparisons/compare-239.png"
+    }
+  ]
+}

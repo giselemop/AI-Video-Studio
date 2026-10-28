@@ -1,0 +1,97 @@
+{
+  "id": "flux2-klein4b-keyframe-local-1024-v1",
+  "version": "flux2-klein4b-keyframe-local-1024-v1",
+  "fileName": "flux2_klein4b_keyframe_api.json",
+  "workflowType": "Image",
+  "productionEligible": false,
+  "experimental": true,
+  "licenseStatus": "APACHE_2_0_LOCAL_EXPERIMENT_PENDING_CONTENT_REVIEW",
+  "taskTypes": [
+    "Image",
+    "Keyframe"
+  ],
+  "modelFiles": [
+    "flux-2-klein-4b-fp8.safetensors",
+    "qwen_3_4b.safetensors",
+    "flux2-vae.safetensors"
+  ],
+  "modelSha256": {
+    "flux-2-klein-4b-fp8.safetensors": "97ed34fe0567e436200f2faee3939b88f2b5d99f8af2a4dc16532c4245c0ccb6",
+    "qwen_3_4b.safetensors": "6c671498573ac2f7a5501502ccce8d2b08ea6ca2f661c458e708f36b36edfc5a",
+    "flux2-vae.safetensors": "868fe7b343cc8f3a19dbcfcafbc3d5f888802be3f89bd81b65b3621a066ce8f3"
+  },
+  "nodes": [
+    {
+      "role": "diffusionModel",
+      "nodeId": "1",
+      "classType": "UNETLoader",
+      "inputName": "unet_name"
+    },
+    {
+      "role": "textEncoder",
+      "nodeId": "2",
+      "classType": "CLIPLoader",
+      "inputName": "clip_name"
+    },
+    {
+      "role": "vae",
+      "nodeId": "3",
+      "classType": "VAELoader",
+      "inputName": "vae_name"
+    },
+    {
+      "role": "positivePrompt",
+      "nodeId": "7",
+      "classType": "CLIPTextEncode",
+      "inputName": "text"
+    },
+    {
+      "role": "sampler",
+      "nodeId": "14",
+      "classType": "RandomNoise",
+      "inputName": "noise_seed"
+    },
+    {
+      "role": "schedule",
+      "nodeId": "13",
+      "classType": "Flux2Scheduler",
+      "inputName": "steps"
+    },
+    {
+      "role": "guidance",
+      "nodeId": "11",
+      "classType": "CFGGuider",
+      "inputName": "cfg"
+    },
+    {
+      "role": "output",
+      "nodeId": "18",
+      "classType": "SaveImage",
+      "inputName": "filename_prefix"
+    }
+  ],
+  "slots": [
+    {
+      "role": "firstFrame",
+      "nodeId": "4",
+      "classType": "LoadImage",
+      "inputName": "image",
+      "required": true
+    }
+  ],
+  "media": {
+    "defaultWidth": 1024,
+    "defaultHeight": 576,
+    "allowedDimensions": [
+      {
+        "width": 1024,
+        "height": 576
+      }
+    ],
+    "nativeFps": 1,
+    "allowedFps": [],
+    "exactFrameCount": false,
+    "preserveAudio": false
+  },
+  "notes": "sha256=949195db4763cf7b42dd8545f634ac1c7f61d0055f4062091411adecc3f0459c | Local-only FLUX.2 Klein 4B distilled FP8 reference edit, Qwen3-4B BF16 text encoder on CPU, 4-step Euler CFG1. Apache 2.0 model artifacts. Frozen six-candidate visual evaluation only; generation and identity/content approval remain distinct."
+}
