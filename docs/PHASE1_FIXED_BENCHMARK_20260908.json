@@ -1,0 +1,52 @@
+{
+  "schemaVersion": "2026-09-08.fixed-video-capability-benchmark.v1",
+  "benchmarkId": "VS-FIXED-CAPABILITY-001",
+  "purpose": "剧情无关的身份、动作、连续性和对白能力基准；同一输入资产可对比不同模型与工作流",
+  "status": "DefinedNotRun",
+  "policy": {
+    "gpuConcurrency": 1,
+    "maxTargetedRetriesPerShot": 2,
+    "crossModelSeedComparison": false,
+    "humanReviewRequired": true,
+    "publishAllowedWithoutHumanReview": false,
+    "preserveFailedEvidence": true
+  },
+  "requiredAssets": {
+    "identityMaster": "待登录后从受控角色资产库选择；不得使用独立相似图替代",
+    "sceneMaster": "固定单场景、固定服装、固定道具；版本和许可待登记",
+    "motionSource": "授权真人动作、用户/自摄视频、授权动作库或可复核骨骼动画；缺少则标记Blocked",
+    "voiceSource": "预演可用系统TTS；正式对白必须人工试听并记录许可"
+  },
+  "cases": [
+    { "caseId": "C01", "group": "face", "label": "正面微表情", "action": "一次自然眨眼与轻微呼吸", "shotType": "近景", "hardChecks": ["单人", "脸不变形", "无闪烁", "服装不变"] },
+    { "caseId": "C02", "group": "face", "label": "左转头", "action": "向左小角度转头并停住", "shotType": "近景", "hardChecks": ["左右眼结构稳定", "耳朵/发型稳定", "不穿模"] },
+    { "caseId": "C03", "group": "face", "label": "右转头", "action": "向右小角度转头并停住", "shotType": "近景", "hardChecks": ["左右眼结构稳定", "耳朵/发型稳定", "不穿模"] },
+    { "caseId": "C04", "group": "body", "label": "半身抬手", "action": "抬起一只手离开身体并停住", "shotType": "半身", "hardChecks": ["手指数量正常", "肩臂连接正常", "身体比例稳定"] },
+    { "caseId": "C05", "group": "body", "label": "全身走路", "action": "向前完成一步并停住", "shotType": "全身", "hardChecks": ["双脚可见", "脚底不滑", "重心转移合理", "无额外人物"] },
+    { "caseId": "C06", "group": "body", "label": "坐下", "action": "面对固定椅子完成坐下并停住", "shotType": "全身/中全景", "hardChecks": ["椅子位置稳定", "膝盖和脚合理", "臀部与椅面接触", "重心合理"] },
+    { "caseId": "C07", "group": "object", "label": "拿杯子", "action": "手接触桌面单个杯子并抬至胸口", "shotType": "半身", "hardChecks": ["手杯接触可信", "杯子数量不变", "遮挡关系合理", "手指不畸形"] },
+    { "caseId": "C08", "group": "object", "label": "开门", "action": "走到固定门边、握把并打开一小段", "shotType": "中全景", "hardChecks": ["门轴关系稳定", "手与把手接触", "脚步和重心合理", "空间关系不跳变"] },
+    { "caseId": "C09", "group": "audio", "label": "短句对白", "action": "说出一条短句，包含停顿和情绪", "shotType": "中近景", "hardChecks": ["对白时长明确", "口型与音频同步", "无削波", "字幕时间码正确"] },
+    { "caseId": "C10", "group": "occlusion", "label": "遮挡后露脸", "action": "固定前景遮挡人物后移开并再次露脸", "shotType": "中景", "hardChecks": ["遮挡前后身份一致", "服装和发型一致", "无新增人物", "无遮挡穿透"] },
+    { "caseId": "C11", "group": "lighting", "label": "不同光照身份保持", "action": "同一人物在冷光与暖光下各保持一个短镜头", "shotType": "半身", "hardChecks": ["脸型和五官一致", "服装材质稳定", "光照变化可解释", "肤色不跳变"] },
+    { "caseId": "C12", "group": "continuity", "label": "相邻镜头连续性", "action": "同一动作拆为相邻两个镜头，首尾状态匹配", "shotType": "中景/半身", "hardChecks": ["动作状态连续", "道具位置连续", "时间光线连续", "剪辑点无跳变"] }
+  ],
+  "recordPerRun": [
+    "modelId/modelVersion",
+    "workflowPath/workflowHash",
+    "inputAssetVersions",
+    "motionSourceId/license",
+    "seed/width/height/frames/fps/precision",
+    "startedAt/finishedAt/durationMs",
+    "peakGpuMiB/peakMemoryMiB/diskDeltaBytes",
+    "outputPath/outputSha256",
+    "technicalStatus/contentStatus/releaseStatus",
+    "hardRejects/manualReviewer/reviewNote"
+  ],
+  "gate": {
+    "technicalPass": "可解码、参数符合、无任务/文件对账错误",
+    "contentPass": "人工确认身份、动作完成、手脚、重心、遮挡、接触、光影和连续性",
+    "releasePass": "技术通过、内容通过、音频/字幕/许可/AI标识/发布包齐全且版本锁定",
+    "automaticMetricsAreAdvisory": true
+  }
+}

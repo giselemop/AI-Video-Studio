@@ -1,3 +1,7 @@
+<!-- character-story-20261027:start -->
+> 2026-10-27：Administrator applied migrations010 and011; live type constraint, review table and foreign keys verified. No parallel story system or fake asset approvals. Verified SQL backups retained; do not shrink the constraint after new typed records exist. 详见[本轮验收](CHARACTER_STORY_ACCEPTANCE_20261027.md)。
+<!-- character-story-20261027:end -->
+
 # AI Video Studio 数据库说明
 
 ## 1. 基本信息
